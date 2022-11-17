@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aida.Sdk.Mini", "Aida.Sdk.Mini\src\Aida.Sdk.Mini\Aida.Sdk.Mini.csproj", "{8CD59B9F-223D-4D4E-9E42-AF7FB31F8F2E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aida.Samples.Integration.UI", "Aida.Samples.Integration.UI\Aida.Samples.Integration.UI.csproj", "{851C52F6-847D-42D4-8F0A-82684F0BC82F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aida.Samples.PcScGatewayApiUsageDemo", "Aida.Samples.PcScGatewayApi\Aida.Samples.PcScGatewayApiUsageDemo.csproj", "{CA4D6D49-3EE9-4208-BD19-D642F61C08AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aida.Samples.WebhooksReceiverConsole", "Aida.Samples.WebhooksReceiverConsole\Aida.Samples.WebhooksReceiverConsole.csproj", "{E4167B3E-5C08-4BDF-83BD-DE64C1ACFDBF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{068562CE-C2F2-4FDE-9F02-D2A9A8595C1D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		csharp-generator-config.json = csharp-generator-config.json
+		generate_client.ps1 = generate_client.ps1
+		openapitools.json = openapitools.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8CD59B9F-223D-4D4E-9E42-AF7FB31F8F2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CD59B9F-223D-4D4E-9E42-AF7FB31F8F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CD59B9F-223D-4D4E-9E42-AF7FB31F8F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CD59B9F-223D-4D4E-9E42-AF7FB31F8F2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{851C52F6-847D-42D4-8F0A-82684F0BC82F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{851C52F6-847D-42D4-8F0A-82684F0BC82F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{851C52F6-847D-42D4-8F0A-82684F0BC82F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{851C52F6-847D-42D4-8F0A-82684F0BC82F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA4D6D49-3EE9-4208-BD19-D642F61C08AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA4D6D49-3EE9-4208-BD19-D642F61C08AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA4D6D49-3EE9-4208-BD19-D642F61C08AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA4D6D49-3EE9-4208-BD19-D642F61C08AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4167B3E-5C08-4BDF-83BD-DE64C1ACFDBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4167B3E-5C08-4BDF-83BD-DE64C1ACFDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4167B3E-5C08-4BDF-83BD-DE64C1ACFDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4167B3E-5C08-4BDF-83BD-DE64C1ACFDBF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {81F64B93-ADDE-423F-BFA6-A14AA55ACB53}
+	EndGlobalSection
+EndGlobal
