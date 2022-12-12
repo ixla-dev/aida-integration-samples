@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Status** | **WorkflowSchedulerStatus** |  | [optional] 
+**Errors** | [**List&lt;WorkflowSchedulerErrorCodes&gt;**](WorkflowSchedulerErrorCodes.md) |  | [optional] 
 **QueueSize** | **int** |  | [optional] 
 **QueuedOrderIds** | **List&lt;int&gt;** |  | [optional] 
 **ErrorDetails** | **string** |  | [optional] 

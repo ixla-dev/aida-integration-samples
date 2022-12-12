@@ -19,6 +19,7 @@ namespace Aida.Samples.Integration.UI.Forms
 
         private readonly AppState _appState;
 
+
         public JobStatusForm(
             AppState appState,
             MachineInterface machineInterface)
@@ -38,6 +39,13 @@ namespace Aida.Samples.Integration.UI.Forms
                 if (c.ValueType == typeof(DateTime) || c.ValueType == typeof(DateTime?))
                     c.DefaultCellStyle.Format = "MM/dd HH:mm:ss";
             }
+
+            _machineInterface.ConnectionStateChanged += (_, args) =>
+            {
+                if (args.Current is MachineInterfaceConnectionState.Disconnected)
+                    StopPollingJobs();
+                return Task.CompletedTask;
+            };
         }
 
         private void JobStatusForm_Load(object sender, EventArgs e)
@@ -45,20 +53,23 @@ namespace Aida.Samples.Integration.UI.Forms
             StartPollingJobs();
         }
 
+
+        private void StopPollingJobs()
+        {
+            if (_pollJobsCancellation == null) return;
+            try
+            {
+                _pollJobsCancellation.Cancel();
+                _pollJobsCancellation.Dispose();
+            }
+            catch
+            {
+            }
+        }
+
         private void StartPollingJobs()
         {
-            if (_pollJobsCancellation != null)
-            {
-                try
-                {
-                    _pollJobsCancellation.Cancel();
-                    _pollJobsCancellation.Dispose();
-                }
-                catch
-                {
-                }
-            }
-
+            StopPollingJobs();
             _pollJobsCancellation = new CancellationTokenSource();
             Task.Run(async () =>
             {
@@ -66,23 +77,21 @@ namespace Aida.Samples.Integration.UI.Forms
                 {
                     try
                     {
-                        if (_appState.SelectedJobTemplate != null)
+                        if (_appState.SelectedJobTemplate == null) continue;
+                        var result = (await _machineInterface.FetchJobsAsync(_appState.SelectedJobTemplate.Id).ConfigureAwait(false)).ToList();
+                        RunInUIThread(dataGridJobs, () =>
                         {
-                            var result = (await _machineInterface.FetchJobsAsync(_appState.SelectedJobTemplate.Id).ConfigureAwait(false)).ToList();
-                            RunInUIThread(dataGridJobs, () =>
+                            for (var i = 1; i <= result.Count; i++)
                             {
-                                for (var i = 1; i <= result.Count; i++)
-                                {
-                                    var index = i - 1;
-                                    if (i > Jobs.Count) Jobs.Add(result.ElementAt(index));
-                                    else Jobs[index].Update(result.ElementAt(index));
-                                }
-                            });
-                        }
+                                var index = i - 1;
+                                if (i > Jobs.Count) Jobs.Add(result.ElementAt(index));
+                                else Jobs[index].Update(result.ElementAt(index));
+                            }
+                        });
                     }
                     catch
                     {
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                     }
                 }
             });
@@ -104,10 +113,16 @@ namespace Aida.Samples.Integration.UI.Forms
             if (row.DataBoundItem is AidaJob data)
                 _ = Task.Run(async () =>
                 {
-                    await _machineInterface.SignalExternalProcessOutcomeAsync(
-                        data.WorkflowId,
-                        Sdk.Mini.Model.ExternalProcessOutcome.Faulted
-                    ).ConfigureAwait(false);
+                    try
+                    {
+                        await _machineInterface.SignalExternalProcessOutcomeAsync(
+                            data.WorkflowId,
+                            Sdk.Mini.Model.ExternalProcessOutcome.Faulted
+                        ).ConfigureAwait(false);
+                    }
+                    catch
+                    {
+                    }
                 });
         }
 
@@ -119,10 +134,16 @@ namespace Aida.Samples.Integration.UI.Forms
             {
                 _ = Task.Run(async () =>
                 {
-                    await _machineInterface.SignalExternalProcessOutcomeAsync(
-                        data.WorkflowId,
-                        Sdk.Mini.Model.ExternalProcessOutcome.Completed
-                    ).ConfigureAwait(false);
+                    try
+                    {
+                        await _machineInterface.SignalExternalProcessOutcomeAsync(
+                            data.WorkflowId,
+                            Sdk.Mini.Model.ExternalProcessOutcome.Completed
+                        ).ConfigureAwait(false);
+                    }
+                    catch
+                    {
+                    }
                 });
             }
         }

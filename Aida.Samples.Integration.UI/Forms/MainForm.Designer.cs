@@ -41,6 +41,8 @@ namespace Aida.Samples.Integration.UI.Forms
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnConnect = new System.Windows.Forms.Button();
             this.grpBoxPersoData = new System.Windows.Forms.GroupBox();
+            this.lblBatchId = new System.Windows.Forms.Label();
+            this.txtBatchId = new System.Windows.Forms.TextBox();
             this.pnlDataControls = new System.Windows.Forms.Panel();
             this.btnInsertRecord = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -190,6 +192,8 @@ namespace Aida.Samples.Integration.UI.Forms
             // 
             // grpBoxPersoData
             // 
+            this.grpBoxPersoData.Controls.Add(this.lblBatchId);
+            this.grpBoxPersoData.Controls.Add(this.txtBatchId);
             this.grpBoxPersoData.Controls.Add(this.pnlDataControls);
             this.grpBoxPersoData.Controls.Add(this.pnlSchedulerControls);
             this.grpBoxPersoData.Controls.Add(this.pnlJobTemplate);
@@ -201,6 +205,23 @@ namespace Aida.Samples.Integration.UI.Forms
             this.grpBoxPersoData.TabIndex = 5;
             this.grpBoxPersoData.TabStop = false;
             this.grpBoxPersoData.Text = "Personalization Data";
+            // 
+            // lblBatchId
+            // 
+            this.lblBatchId.AutoSize = true;
+            this.lblBatchId.Location = new System.Drawing.Point(9, 60);
+            this.lblBatchId.Name = "lblBatchId";
+            this.lblBatchId.Size = new System.Drawing.Size(47, 15);
+            this.lblBatchId.TabIndex = 15;
+            this.lblBatchId.Text = "BatchId";
+            // 
+            // txtBatchId
+            // 
+            this.txtBatchId.Location = new System.Drawing.Point(95, 57);
+            this.txtBatchId.Name = "txtBatchId";
+            this.txtBatchId.Size = new System.Drawing.Size(508, 23);
+            this.txtBatchId.TabIndex = 14;
+            this.txtBatchId.TextChanged += new System.EventHandler(this.txtBatchId_TextChanged);
             // 
             // pnlDataControls
             // 
@@ -348,9 +369,9 @@ namespace Aida.Samples.Integration.UI.Forms
             // 
             this.listPersoRecordsToSend.FormattingEnabled = true;
             this.listPersoRecordsToSend.ItemHeight = 15;
-            this.listPersoRecordsToSend.Location = new System.Drawing.Point(5, 56);
+            this.listPersoRecordsToSend.Location = new System.Drawing.Point(5, 86);
             this.listPersoRecordsToSend.Name = "listPersoRecordsToSend";
-            this.listPersoRecordsToSend.Size = new System.Drawing.Size(605, 244);
+            this.listPersoRecordsToSend.Size = new System.Drawing.Size(605, 214);
             this.listPersoRecordsToSend.TabIndex = 3;
             // 
             // MainForm
@@ -376,6 +397,7 @@ namespace Aida.Samples.Integration.UI.Forms
             this.flowLayoutPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.grpBoxPersoData.ResumeLayout(false);
+            this.grpBoxPersoData.PerformLayout();
             this.pnlDataControls.ResumeLayout(false);
             this.pnlSchedulerControls.ResumeLayout(false);
             this.pnlJobTemplate.ResumeLayout(false);
@@ -412,6 +434,8 @@ namespace Aida.Samples.Integration.UI.Forms
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Button btnInsertRecord;
         private System.Windows.Forms.Button btnResume;
+        private System.Windows.Forms.Label lblBatchId;
+        private System.Windows.Forms.TextBox txtBatchId;
     }
 }
 

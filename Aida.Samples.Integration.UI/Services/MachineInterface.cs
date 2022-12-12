@@ -1,8 +1,5 @@
-﻿#define RESTSHARP_CLIENT
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Aida.Samples.Integration.UI.Extensions;
@@ -30,7 +27,7 @@ namespace Aida.Samples.Integration.UI.Services
         public MachineInterfaceConnectionState Current { get; set; }
     }
 
-    public class WorkflowSchdeulerStateChangedEventArgs
+    public class WorkflowSchedulerStateChangedEventArgs
     {
         public WorkflowSchedulerStateDto Previous { get; set; }
         public WorkflowSchedulerStateDto Current { get; set; }
@@ -41,43 +38,41 @@ namespace Aida.Samples.Integration.UI.Services
     /// </summary>
     public class MachineInterface
     {
-        private string                  _apiAddress;
-        private string                  _dbConnectionString;
+        private string _apiAddress;
+        private string _dbConnectionString;
         private CancellationTokenSource _pollCancellation;
 
-
-        public  WorkflowSchedulerStateDto       WorkflowSchedulerState;
-        private NpgsqlConnection                _dbConnection;
-        public  MachineInterfaceConnectionState _connectionState = MachineInterfaceConnectionState.Disconnected;
+        public WorkflowSchedulerStateDto WorkflowSchedulerState;
+        private NpgsqlConnection _dbConnection;
+        public MachineInterfaceConnectionState _connectionState = MachineInterfaceConnectionState.Disconnected;
 
         public MachineInterfaceConnectionState ConnectionState
         {
             get => _connectionState;
             set
             {
-                if (value != _connectionState)
-                {
-                    var previous = _connectionState;
-                    _connectionState = value;
+                if (value == _connectionState) return;
 
-                    ConnectionStateChanged?.Invoke(this, new MachineInterfaceConnectionStateChangedArgs
-                    {
-                        IpAddress = _apiAddress,
-                        DbConnectionString = _dbConnectionString,
-                        Previous = previous,
-                        Current = value
-                    });
-                    UpdateState(new WorkflowSchedulerStateDto
-                    {
-                        Status = null
-                    });
-                }
+                var previous = _connectionState;
+                _connectionState = value;
+
+                ConnectionStateChanged?.Invoke(this, new MachineInterfaceConnectionStateChangedArgs
+                {
+                    IpAddress = _apiAddress,
+                    DbConnectionString = _dbConnectionString,
+                    Previous = previous,
+                    Current = value
+                });
+                UpdateState(new WorkflowSchedulerStateDto
+                {
+                    Status = null
+                });
             }
         }
 
         private readonly IConfiguration _configuration;
         public delegate Task MachineInterfaceConnectionStateChanged(object sender, MachineInterfaceConnectionStateChangedArgs args);
-        public delegate Task WorkflowSchedulerStateChangedHandler(object sender, WorkflowSchdeulerStateChangedEventArgs args);
+        public delegate Task WorkflowSchedulerStateChangedHandler(object sender, WorkflowSchedulerStateChangedEventArgs args);
         public event WorkflowSchedulerStateChangedHandler WorkflowSchedulerStateChanged;
         public event MachineInterfaceConnectionStateChanged ConnectionStateChanged;
 
@@ -100,13 +95,22 @@ namespace Aida.Samples.Integration.UI.Services
         /// <returns></returns>
         public async Task ConnectAsync(TimeSpan? timeout)
         {
-            ConnectionState = MachineInterfaceConnectionState.Connecting;
-            await ConnectToMachineApi(timeout).ConfigureAwait(false);
-            await ConnectToExchangeDatabase().ConfigureAwait(false);
-            ConnectionState = WorkflowSchedulerState != null && _dbConnection.State == System.Data.ConnectionState.Open
-                ? MachineInterfaceConnectionState.Connected
-                : MachineInterfaceConnectionState.Disconnected;
+            try
+            {
+                ConnectionState = MachineInterfaceConnectionState.Connecting;
+                await ConnectToMachineApi(timeout).ConfigureAwait(false);
+                await ConnectToExchangeDatabase().ConfigureAwait(false);
+                ConnectionState = WorkflowSchedulerState != null && _dbConnection.State == System.Data.ConnectionState.Open
+                    ? MachineInterfaceConnectionState.Connected
+                    : MachineInterfaceConnectionState.Disconnected;
+            }
+            catch
+            {
+                ConnectionState = MachineInterfaceConnectionState.Disconnected;
+                throw;
+            }
         }
+
 
         /// <summary>
         /// </summary>
@@ -114,8 +118,15 @@ namespace Aida.Samples.Integration.UI.Services
         /// <returns></returns>
         public async Task ConnectToMachineApi(TimeSpan? timeout)
         {
-            // just send a requrest so we know we are able to reach the machine
-            await GetWorkflowSchedulerStateAsync(timeout).ConfigureAwait(false);
+            try
+            {
+                // just send a request so we know we are able to reach the machine
+                await GetWorkflowSchedulerStateAsync(timeout).ConfigureAwait(false);
+            }
+            catch (ApiException)
+            {
+                ConnectionState = MachineInterfaceConnectionState.Disconnected;
+            }
         }
 
         /// <summary>
@@ -123,7 +134,21 @@ namespace Aida.Samples.Integration.UI.Services
         /// <returns></returns>
         public async Task ConnectToExchangeDatabase()
         {
+            if (_dbConnection != null)
+            {
+                await _dbConnection.DisposeAsync();
+                _dbConnection = null;
+            }
+
             _dbConnection = new NpgsqlConnection(_dbConnectionString);
+            _dbConnection.StateChange += (_, args) =>
+            {
+                if (args.CurrentState != System.Data.ConnectionState.Broken) return;
+                {
+                    _dbConnection.Close();
+                    StopPollingState();
+                }
+            };
             await _dbConnection.OpenAsync();
         }
 
@@ -131,13 +156,10 @@ namespace Aida.Samples.Integration.UI.Services
         /// Get all the JobTemplates configured on the system
         /// </summary>
         /// <returns>List of JobTemplates</returns>
-        public async Task<List<JobTemplateDto>> GetAvailableJobTemplatesAsync()
+        public async Task<List<JobTemplateDto>> GetAvailableJobTemplatesAsync(TimeSpan? timeout = null)
         {
-            List<JobTemplateDto> jobTemplates;
-            using var            x = new IntegrationApi(_apiAddress);
-            jobTemplates = (await x.FindJobTemplatesAsync()).Items;
-
-            return jobTemplates;
+            using var api = GetClient(timeout);
+            return (await api.FindJobTemplatesAsync().ConfigureAwait(false)).Items;
         }
 
         /// <summary>
@@ -147,10 +169,8 @@ namespace Aida.Samples.Integration.UI.Services
         /// <returns>List of Entities</returns>
         public List<EntityDescriptor> GetEntitiesPerJobTemplate(int jobTemplateId)
         {
-            List<EntityDescriptor> entities;
-            using var              x = new IntegrationApi(_apiAddress);
-            entities = x.GetEntityDescriptorsByJobTemplateId(jobTemplateId);
-            return entities;
+            using var api = GetClient();
+            return api.GetEntityDescriptorsByJobTemplateId(jobTemplateId);
         }
 
         /// <summary>
@@ -161,9 +181,9 @@ namespace Aida.Samples.Integration.UI.Services
         /// <param name="records">List of PersonalizationRecords</param>
         public void PushPersonalizationDataToExchangeDatabase(int jobTemplateId, List<PersonalizationRecord> records)
         {
-            DataExchangeTableDefinition etlDefinition;
-            using var                   etl = new IntegrationApi(_apiAddress);
-            etlDefinition = etl.GetDataExchangeTableDefinition(jobTemplateId);
+            using var etl = GetClient();
+
+            var etlDefinition = etl.GetDataExchangeTableDefinition(jobTemplateId);
             foreach (var r in records)
             {
                 var ins = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, r.Fields);
@@ -172,7 +192,7 @@ namespace Aida.Samples.Integration.UI.Services
         }
 
         /// <summary>
-        /// Helper method that inserts a record in the shared datatabase table. This is used 
+        /// Helper method that inserts a record in the shared database table. This is used 
         /// to avoid having to populate records manually while testing.
         /// </summary>
         /// <param name="jobTemplateId">
@@ -180,21 +200,21 @@ namespace Aida.Samples.Integration.UI.Services
         /// given job template, which contains the connection information for the shared database
         /// </param>
         /// <returns></returns>
-        public async Task InsertMockRecord(int jobTemplateId)
+        public async Task InsertMockRecord(int jobTemplateId, string batchId)
         {
-            var       record = new PersonalizationRecord();
-            using var api    = new IntegrationApi(_apiAddress);
-            var       fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(jobTemplateId).ConfigureAwait(false);
-            var       job    = await api.GetJobTemplateByIdAsync(jobTemplateId).ConfigureAwait(false);
+            using var api = GetClient();
+
+            var record = new PersonalizationRecord();
+            var fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(jobTemplateId).ConfigureAwait(false);
+            var job = await api.GetJobTemplateByIdAsync(jobTemplateId).ConfigureAwait(false);
 
             foreach (var f in fields)
             {
                 if (f.ValueType is EntityFieldValueType.String)
                 {
-                    if (f.EntityName.StartsWith("FE_"))
-                        record.Fields.Add(new PersonalizationField(f.EntityName, "123123"));
-                    else
-                        record.Fields.Add(new PersonalizationField(f.EntityName, f.EntityName));
+                    record.Fields.Add(f.EntityName.StartsWith("FE_")
+                        ? new PersonalizationField(f.EntityName, "123123")
+                        : new PersonalizationField(f.EntityName, f.EntityName));
                 }
             }
 
@@ -203,56 +223,69 @@ namespace Aida.Samples.Integration.UI.Services
 
             if ((job.MagStripeConfiguration?.Operations ?? MagneticStripeOperations.None) != MagneticStripeOperations.None)
             {
-                record.Fields.Add(new PersonalizationField("magnetic_track_1_w", "VALUETRACK1"));
-                record.Fields.Add(new PersonalizationField("magnetic_track_2_w", "VALUETRACK2"));
-                record.Fields.Add(new PersonalizationField("magnetic_track_3_w", "VALUETRACK3"));
+                record.Fields.Add(new PersonalizationField("magnetic_track_1_w", "TRACK 1"));
+                record.Fields.Add(new PersonalizationField("magnetic_track_2_w", "123456789"));
+                record.Fields.Add(new PersonalizationField("magnetic_track_3_w", "1234"));
             }
 
+            record.Fields.Add(new PersonalizationField("batch_id", batchId));
+
             var etlDefinition = await api.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
-            var statement     = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
+            var statement = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
             await statement.ExecuteNonQueryAsync().ConfigureAwait(false);
         }
 
         public async Task<WorkflowSchedulerStateDto> ResumeSchedulerAsync()
         {
-            using var api = new IntegrationApi(_apiAddress);
+            using var api = GetClient();
             await api.ResumeWorkflowSchedulerAsync().ConfigureAwait(false);
             return await api.GetWorkflowSchedulerStateAsync().ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Starts the workflow scheduler for the given Jobtemplate
+        /// Starts the workflow scheduler for the given JobTemplate
         /// </summary>
-        /// <param name="jobTemplateId">ID of the JobTemplate to start</param>
-        public async Task<WorkflowSchedulerStateDto> StartWorkflowSchedulerAsync(int jobTemplateId)
+        /// <param name="jobTemplateName"></param>
+        public async Task StartWorkflowSchedulerAsync(string jobTemplateName, string batchId)
         {
-            var startupParams = new WorkflowSchedulerStartupParamsDto()
+            using var api = GetClient();
+            var startupParams = new WorkflowSchedulerStartupParamsDto
             {
-                JobTemplateId = jobTemplateId,
+                JobTemplateName = jobTemplateName,
                 DisableRedPointer = false,
                 DryRun = true,
                 NoReset = false,
                 SkipEntityUpdates = false,
                 StopAfter = -1,
                 TaskAllocationStrategy = null,
-                WorkflowTypeName = _configuration.GetValue<string>("WorkflowTypeName")
+                WorkflowTypeName = _configuration.GetValue<string>("WorkflowTypeName"),
+                MetadataFields = new Dictionary<string, object>
+                {
+                    ["Field"] = "Some data you might need in your process that we are not storing",
+                    ["Another"] = "This fields will be sent back to you in webhooks"
+                },
+                FilterJobsBy = new List<FilterDto> { new("batch_id", new List<string> { batchId }) }
             };
-            using var api = new IntegrationApi(_apiAddress);
-
             var state = await GetWorkflowSchedulerStateAsync();
-            if (state.Status == WorkflowSchedulerStatus.Running) return state;
-
-            state = await api.StartWorkflowSchedulerAsync(startupParams);
-            UpdateState(state);
-            return state;
+            if (state.Status == WorkflowSchedulerStatus.Running) return;
+            try
+            {
+                state = await api.StartWorkflowSchedulerAsync(startupParams).ConfigureAwait(false);
+                UpdateState(state);
+            }
+            catch
+            {
+                state = await api.GetWorkflowSchedulerStateAsync().ConfigureAwait(false);
+                UpdateState(state);
+            }
         }
         /// <summary>
         /// Stops all currently running workflows
         /// </summary>
         public async Task StopPersonalizationCycleAsync()
         {
-            using var scheduler = new IntegrationApi(_apiAddress);
-            var       state     = await scheduler.StopWorkflowSchedulerAsync(true);
+            using var scheduler = GetClient();
+            var state = await scheduler.StopWorkflowSchedulerAsync(true);
             UpdateState(state);
         }
 
@@ -262,12 +295,7 @@ namespace Aida.Samples.Integration.UI.Services
         /// <returns></returns>
         public async Task<WorkflowSchedulerStateDto> GetWorkflowSchedulerStateAsync(TimeSpan? timeout = null)
         {
-            using var httpClient = new HttpClient();
-            using var scheduler = new IntegrationApi(new Configuration
-            {
-                BasePath = _apiAddress,
-                Timeout = timeout.HasValue ? (int)timeout.Value.TotalMilliseconds : 2000,
-            });
+            using var scheduler = GetClient();
             var state = await scheduler
                 .GetWorkflowSchedulerStateAsync()
                 .ConfigureAwait(false);
@@ -282,16 +310,14 @@ namespace Aida.Samples.Integration.UI.Services
         /// <param name="state"></param>
         private void UpdateState(WorkflowSchedulerStateDto state)
         {
-            if (state.Status != WorkflowSchedulerState?.Status)
+            if (state.Status == WorkflowSchedulerState?.Status) return;
+            var previous = WorkflowSchedulerState;
+            WorkflowSchedulerState = state;
+            WorkflowSchedulerStateChanged?.Invoke(this, new WorkflowSchedulerStateChangedEventArgs
             {
-                var previous = WorkflowSchedulerState;
-                WorkflowSchedulerState = state;
-                WorkflowSchedulerStateChanged?.Invoke(this, new WorkflowSchdeulerStateChangedEventArgs
-                {
-                    Current = state,
-                    Previous = previous
-                });
-            }
+                Current = state,
+                Previous = previous
+            });
         }
 
         /// <summary>
@@ -307,7 +333,7 @@ namespace Aida.Samples.Integration.UI.Services
             string errorReason = null,
             WorkflowAction? requiredAction = null)
         {
-            var api = new IntegrationApi(_apiAddress);
+            var api = GetClient();
             await api.SignalExternalProcessCompletedAsync(
                 // tells the server to dispatch the signal asynchronously 
                 waitForCompletion: false,
@@ -332,19 +358,24 @@ namespace Aida.Samples.Integration.UI.Services
         {
             try
             {
-                var       etl        = new IntegrationApi(_apiAddress);
-                var       definition = await etl.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
-                using var cmd        = _dbConnection.CreateCommand();
+                var etl = GetClient();
+                var definition = await etl.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
+
+                await using var cmd = _dbConnection.CreateCommand();
+
                 cmd.CommandText = $@"select * from ""{definition.TableName}"" order by job_id desc offset @offset limit @limit";
                 cmd.Parameters.AddWithValue("@offset", offset);
                 cmd.Parameters.AddWithValue("@limit", limit);
-                using var reader = cmd.ExecuteReader();
-                var       list   = new List<AidaJob>();
+
+                await using var reader = cmd.ExecuteReader();
+
+                var list = new List<AidaJob>();
                 while (reader.Read())
                 {
                     var job = new AidaJob
                     {
                         JobId = reader.ReadInt32("job_id"),
+                        BatchId = reader.ReadNullableString("batch_id"),
                         JobErrorCode = reader.ReadNullableString("job_error_code"),
                         LastExecutedActivity = reader.ReadNullableString("last_executed_activity_name"),
                         ExecutingActivity = reader.ReadNullableString("current_activity_name"),
@@ -361,7 +392,6 @@ namespace Aida.Samples.Integration.UI.Services
                         JobStatus = Enum.Parse<JobStatus>(reader.ReadString("job_status"))
                     };
                     list.Add(job);
-                    ;
                 }
 
                 return list;
@@ -370,6 +400,16 @@ namespace Aida.Samples.Integration.UI.Services
             {
                 return Array.Empty<AidaJob>();
             }
+        }
+
+        private IntegrationApi GetClient(TimeSpan? timeout = null)
+        {
+            timeout ??= TimeSpan.FromSeconds(1);
+            return new IntegrationApi(new Configuration
+            {
+                BasePath = _apiAddress,
+                Timeout = (int)timeout.Value.TotalMilliseconds
+            });
         }
 
         public void StopPollingState()

@@ -10,7 +10,7 @@ namespace Aida.Samples.Integration.UI
 {
     public class Startup
     {
-        protected IConfiguration Configuration { get; set; }
+        protected IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,8 +21,8 @@ namespace Aida.Samples.Integration.UI
             services.AddOptions();
             services.AddControllers()
                 .AddJsonOptions(options => options
-                .JsonSerializerOptions
-                .Converters.Add(new JsonStringEnumConverter()));
+                    .JsonSerializerOptions
+                    .Converters.Add(new JsonStringEnumConverter()));
             services.AddLogging(logging => logging.AddConsole().SetMinimumLevel(LogLevel.Trace));
             services.AddSingleton<WebhooksHandler>();
             services.AddSingleton<MainForm>();

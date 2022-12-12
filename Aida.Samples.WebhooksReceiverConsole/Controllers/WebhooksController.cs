@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Aida.Samples.WebhooksReceiverConsole.Services.Messaging;
 using Aida.Sdk.Mini.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,11 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
             if (message == null) return BadRequest();
             // If the payload does not contain a known message type we short-circuit the request
             // and respond with 400 bad request to the client
-            _logger.LogInformation("Message {@Type} received", message.GetType().Name);
+            _logger.LogInformation("Received Message {@Message}", JsonSerializer.Serialize(receivedMessage, new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Converters = { new JsonStringEnumConverter() }
+            }));
             // Add the message in an unbounded blocking collection for farther processing 
             messageQueue.AddMessage(message);
             return Ok();
@@ -58,15 +63,16 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
             if (jsonString is null) return null;
             return messageType switch
             {
-                MessageType.WorkflowSchedulerStarted => JsonSerializer.Deserialize<WorkflowSchedulerStartedMessage>(jsonString, _jsonOptions),
-                MessageType.WorkflowSchedulerStopped => JsonSerializer.Deserialize<WorkflowSchedulerStoppedMessage>(jsonString, _jsonOptions),
-                MessageType.EncoderLoaded            => JsonSerializer.Deserialize<EncoderLoadedMessage>(jsonString, _jsonOptions),
-                MessageType.OcrExecuted              => JsonSerializer.Deserialize<OcrExecutedMessage>(jsonString, _jsonOptions),
-                MessageType.WorkflowCancelled        => JsonSerializer.Deserialize<WorkflowCancelledMessage>(jsonString, _jsonOptions),
-                MessageType.WorkflowCompleted        => JsonSerializer.Deserialize<WorkflowCompletedMessage>(jsonString, _jsonOptions),
-                MessageType.WorkflowFaulted          => JsonSerializer.Deserialize<WorkflowFaultedMessage>(jsonString, _jsonOptions),
-                MessageType.FeederEmpty              => JsonSerializer.Deserialize<FeederEmptyMessage>(jsonString, _jsonOptions),
-                _                                    => null
+                MessageType.WorkflowSchedulerStarted   => JsonSerializer.Deserialize<WorkflowSchedulerStartedMessage>(jsonString, _jsonOptions),
+                MessageType.WorkflowSchedulerSuspended => JsonSerializer.Deserialize<WorkflowSchedulerProcessSuspendedMessage>(jsonString, _jsonOptions),
+                MessageType.WorkflowSchedulerStopped   => JsonSerializer.Deserialize<WorkflowSchedulerStoppedMessage>(jsonString, _jsonOptions),
+                MessageType.EncoderLoaded              => JsonSerializer.Deserialize<EncoderLoadedMessage>(jsonString, _jsonOptions),
+                MessageType.OcrExecuted                => JsonSerializer.Deserialize<OcrExecutedMessage>(jsonString, _jsonOptions),
+                MessageType.WorkflowCancelled          => JsonSerializer.Deserialize<WorkflowCancelledMessage>(jsonString, _jsonOptions),
+                MessageType.WorkflowCompleted          => JsonSerializer.Deserialize<WorkflowCompletedMessage>(jsonString, _jsonOptions),
+                MessageType.WorkflowFaulted            => JsonSerializer.Deserialize<WorkflowFaultedMessage>(jsonString, _jsonOptions),
+                MessageType.FeederEmpty                => JsonSerializer.Deserialize<FeederEmptyMessage>(jsonString, _jsonOptions),
+                _                                      => null
             };
         }
     }

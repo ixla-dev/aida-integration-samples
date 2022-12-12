@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Aida.Sdk.Mini.Api;
@@ -17,6 +18,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
     public class MessagesBackgroundWorker : IHostedService
     {
         private readonly MessageCollection                 _messages;
+        private readonly JsonSerializerOptions             _jsonSerializerOptions;
         private readonly IntegrationApi                    _api;
         private readonly ILogger<MessagesBackgroundWorker> _logger;
 
@@ -25,6 +27,11 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
             IntegrationApi api,
             ILogger<MessagesBackgroundWorker> logger)
         {
+            _jsonSerializerOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Converters = { new JsonStringEnumConverter() }
+            };
             _api = api;
             _messages = messages;
             _logger = logger;
@@ -79,18 +86,19 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                             // These are notifications that indicate that the workflow was suspended
 
                             // The workflow was suspended because AIDA was not able to get the card 
-                            // from the feeder. In these case the firmware gives us a "FeederEmpty" error
-                            // which we propagate to the rest of the application 
-                            case FeederEmptyMessage:
-                                // Intentionally block until we receive user input 
-                                Console.WriteLine("\n\nFeeder empty\nPress enter to retry");
-                                Console.ReadLine();
+                            // from the feeder or it was about to move a card in the engraving position but open interlocks where found.
+                            case WorkflowSchedulerProcessSuspendedMessage suspended:
 
-                                _logger.LogInformation("Resuming workflow scheduler");
-                                // AIDA will resume the suspended workflow which will try again to get the card
-                                // from the feeder. If it fails, the same notification with the same JobId will 
-                                // be sent again. The only difference will be the MessageId
-                                await _api.ResumeWorkflowSchedulerAsync(cancellationToken);
+                                switch (suspended.ErrorCode)
+                                {
+                                    case JobErrorCodes.FeederEmpty:
+                                        // Intentionally block until we receive user input 
+                                        Console.WriteLine("\n\nFeeder empty\nLoad the input feeder with cards and press the 'Resume' button");
+                                        break;
+                                    case JobErrorCodes.OpenInterlock:
+                                        Console.WriteLine("\n\n Mark activity suspended.Open interlocks detected.Please verify all interlocks are properly locked, then click the 'Resume'");
+                                        break;
+                                }
                                 break;
 
                             // These events require the receiving application to invoke SignalExternalProcessCompleted.
@@ -146,7 +154,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                     };
 
                     _logger.LogInformation("Chip personalization completed. Sending completion signal to AIDA {BasePath} {Message}",
-                        _api.GetBasePath(), JsonSerializer.Serialize(responseMessage, new JsonSerializerOptions { WriteIndented = true }));
+                        _api.GetBasePath(), JsonSerializer.Serialize(responseMessage, _jsonSerializerOptions));
 
                     await _api.SignalExternalProcessCompletedAsync(
                         // tell AIDA to dispatch the completion signal and resume 

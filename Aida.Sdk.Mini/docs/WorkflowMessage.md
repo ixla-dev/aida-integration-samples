@@ -6,12 +6,14 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Discriminator** | **string** |  | 
 **JobId** | **string** |  | [optional] 
+**BatchId** | **string** |  | [optional] 
 **CorrelationId** | **string** |  | [optional] 
 **MessageId** | **string** |  | [optional] 
 **WorkflowInstanceId** | **string** |  | [optional] 
-**ErrorCode** | **JobErrorCodes** |  | [optional] 
 **MessageType** | **MessageType** |  | [optional] 
 **JobStatus** | **JobStatus** |  | [optional] 
+**ErrorCode** | **JobErrorCodes** |  | [optional] 
+**AdditionalMetadata** | **Dictionary&lt;string, Object&gt;** |  | [optional] 
 **PersonalizationTasks** | [**List&lt;PersonalizationTask&gt;**](PersonalizationTask.md) |  | [optional] 
 **DocumentProduced** | **bool** |  | [optional] 
 

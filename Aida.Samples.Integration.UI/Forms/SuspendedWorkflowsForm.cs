@@ -18,12 +18,8 @@ namespace Aida.Samples.Integration.UI.Forms
             dataGridView1.DataSource = _webhooksHandler.MessagesToProcess;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.MultiSelect = false;
-            _webhooksHandler.MessageReceived += (sender, e) => {
-                ThreadSafeUpdateGrid();
-            };
-            _webhooksHandler.MessageHandled += (sender, e) => {
-                ThreadSafeUpdateGrid();
-            };
+            _webhooksHandler.MessageReceived += (sender, e) => { ThreadSafeUpdateGrid(); };
+            _webhooksHandler.MessageHandled += (sender, e) => { ThreadSafeUpdateGrid(); };
         }
 
         private async void BtnResume_Click(object sender, System.EventArgs e)
@@ -40,19 +36,22 @@ namespace Aida.Samples.Integration.UI.Forms
 
         public void ThreadSafeUpdateGrid()
         {
-            Action func = () => (BindingContext[dataGridView1.DataSource] as CurrencyManager).Refresh();
+            void Func() => (BindingContext[dataGridView1.DataSource] as CurrencyManager)?.Refresh();
             if (dataGridView1.InvokeRequired)
-                dataGridView1.Invoke(func, Array.Empty<object>());
-            else {
-                func();
+                dataGridView1.Invoke((Action)Func, Array.Empty<object>());
+            else
+            {
+                Func();
             }
         }
 
-        private void UIThreadExec(Action action) { 
+        private void UIThreadExec(Action action)
+        {
             if (InvokeRequired)
             {
                 Invoke(action);
-            } else
+            }
+            else
             {
                 action();
             }

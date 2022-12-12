@@ -14,29 +14,37 @@ namespace Aida.Samples.Integration.UI.Forms
 {
     public partial class MainForm : Form
     {
-        private CancellationTokenSource _pollCancellation = new CancellationTokenSource();
-        private readonly IConfiguration _configuration;
-        private ILogger _logger;
-        private IServiceProvider _serviceProvider;
+        private          CancellationTokenSource _pollCancellation = new();
+        private readonly IConfiguration          _configuration;
+        private readonly ILogger<MainForm>       _logger;
+        private readonly IServiceProvider        _serviceProvider;
         public AppState AppState { get; set; }
 
         private MachineInterface _machineInterface;
+
         public MainForm(
             IConfiguration configuration,
-            ILogger<MainForm> logger, IServiceProvider serviceProvider)
+            ILogger<MainForm> logger,
+            IServiceProvider serviceProvider)
         {
             _configuration = configuration;
             _logger = logger;
             _serviceProvider = serviceProvider;
-            AppState = new AppState { };
-
+            AppState = new AppState
+            {
+                Connected = false,
+                ApiBaseUrl = null,
+                DbConnectionString = null,
+                SelectedJobTemplate = null,
+                WorkflowSchedulerStatus = WorkflowSchedulerStatus.Stopped
+            };
             InitializeComponent();
         }
 
         private void OpenSuspendedWorkflowsForm()
         {
             var handler = _serviceProvider.GetRequiredService<WebhooksHandler>();
-            handler.MessageReceived += (sender, e) =>
+            handler.MessageReceived += (_, e) =>
             {
                 if (e.MessageType is MessageType.FeederEmpty)
                 {
@@ -44,21 +52,26 @@ namespace Aida.Samples.Integration.UI.Forms
                     {
                         var result = UiThreadExec(() =>
                         {
-                            var buttons = MessageBoxButtons.RetryCancel;
+                            const MessageBoxButtons buttons = MessageBoxButtons.RetryCancel;
                             return MessageBox.Show("Feeder empty. Please reload the machine and press ok.", "Feeder Empty", buttons);
                         });
-                        if (result == DialogResult.Retry) 
-                            Task.Run(async () => await _machineInterface.ResumeSchedulerAsync().ConfigureAwait(false));
-                        if (result == DialogResult.Cancel)
-                            Task.Run(async () => await _machineInterface.StopPersonalizationCycleAsync().ConfigureAwait(false));
+                        switch (result)
+                        {
+                            case DialogResult.Retry:
+                                Task.Run(async () => await _machineInterface.ResumeSchedulerAsync().ConfigureAwait(false));
+                                break;
+                            case DialogResult.Cancel:
+                                Task.Run(async () => await _machineInterface.StopPersonalizationCycleAsync().ConfigureAwait(false));
+                                break;
+                        }
                     });
-
                 }
             };
             handler.ApiBaseUrl = AppState.ApiBaseUrl;
             var form = new SuspendedWorkflowsForm(handler);
             form.Show();
         }
+
         private void OpenJobsStatusForm()
         {
             var form = new JobStatusForm(AppState, _machineInterface);
@@ -69,6 +82,7 @@ namespace Aida.Samples.Integration.UI.Forms
         {
             try
             {
+                var defaultTimeout = TimeSpan.FromSeconds(1);
                 //Create an instance of MachineInterface class, used to interact with the system
                 AppState.ApiBaseUrl = TxtIpAddress.Text;
                 AppState.DbConnectionString = TxtConnectionString.Text;
@@ -76,19 +90,19 @@ namespace Aida.Samples.Integration.UI.Forms
                 _machineInterface = new MachineInterface(TxtIpAddress.Text, TxtConnectionString.Text, _configuration);
                 _machineInterface.WorkflowSchedulerStateChanged += WorkflowScheduler_StateChanged;
                 _machineInterface.ConnectionStateChanged += MachineInterface_ConnectionStateChanged;
-                await _machineInterface.ConnectAsync(timeout: TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+                await _machineInterface.ConnectAsync(timeout: defaultTimeout).ConfigureAwait(false);
+                _machineInterface.StartPollingState();
 
                 //retrieve the list of JobTemplates to allow the user to choose the JobTemplate he'll working with
                 var jobTemplates = await _machineInterface.GetAvailableJobTemplatesAsync().ConfigureAwait(false);
 
-                var items = jobTemplates.Select(_ => new JobTemplateItem()
+                var items = jobTemplates.Select(_ => new JobTemplateItem
                 {
                     Name = _.Name,
-                    Id = _.Id.Value,
+                    Id = _.Id!.Value,
                     Description = _.Description
                 }).ToArray();
 
-                _machineInterface.StartPollingState();
 
                 UiThreadExec(() =>
                 {
@@ -114,10 +128,16 @@ namespace Aida.Samples.Integration.UI.Forms
             }
             catch (Exception ex)
             {
-                _machineInterface.StopPollingState();
-                MessageBox.Show(ex.ToString(), "Connection Failed");
+                MessageBox.Show("Connection Failed");
             }
         }
+
+        private void Disconnect()
+        {
+            _machineInterface.StopPollingState();
+        }
+
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             //PLEASE NOTE:
@@ -135,19 +155,15 @@ namespace Aida.Samples.Integration.UI.Forms
             do
             {
                 //Initialize and show a form that allows to input personalization data
-                using (var frmIns = _serviceProvider.GetRequiredService<InsertDataForm>())
+                using var frmIns = _serviceProvider.GetRequiredService<InsertDataForm>();
+                res = frmIns.Initialize(entities).ShowDialog();
+
+                if (res is DialogResult.OK or DialogResult.Retry)
                 {
-                    res = frmIns.Initialize(entities).ShowDialog();
-
-                    if (res == DialogResult.OK || res == DialogResult.Retry)
-                    {
-                        //Add the record with the personalization data to a listbox
-                        listPersoRecordsToSend.Items.Add(frmIns.Record);
-                    }
+                    //Add the record with the personalization data to a listbox
+                    listPersoRecordsToSend.Items.Add(frmIns.Record);
                 }
-            }
-            while (res == DialogResult.Retry);
-
+            } while (res == DialogResult.Retry);
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -166,7 +182,7 @@ namespace Aida.Samples.Integration.UI.Forms
 
             //Writes the list of records to the Exchange Database
             _machineInterface.PushPersonalizationDataToExchangeDatabase(((JobTemplateItem)cmbJobTemplates.SelectedItem).Id,
-                                                      recordCopy.Select(_ => (PersonalizationRecord)_).ToList());
+                recordCopy.Select(_ => (PersonalizationRecord)_).ToList());
 
             listPersoRecordsToSend.Items.Clear();
         }
@@ -184,30 +200,37 @@ namespace Aida.Samples.Integration.UI.Forms
         }
         private async void btnStart_Click(object sender, EventArgs e)
         {
-            var item = ((JobTemplateItem)cmbJobTemplates.SelectedItem);
+            var item = (JobTemplateItem)cmbJobTemplates.SelectedItem;
             if (item is null)
             {
                 MessageBox.Show("Please select a job template from the drop down menu");
                 return;
             }
-            var id = item.Id;
+
             await Task.Run(async () =>
             {
-                var state = await _machineInterface.GetWorkflowSchedulerStateAsync();
-                if (state.Status == WorkflowSchedulerStatus.Running && state.CurrentJobTemplate.Id != id)
-                    await _machineInterface.StopPersonalizationCycleAsync();
-                //Starts the workflow scheduler for the given JobTemplate, the system will now start personalizing supports
-                await _machineInterface.StartWorkflowSchedulerAsync(id);
+                try
+                {
+                    var state = await _machineInterface.GetWorkflowSchedulerStateAsync().ConfigureAwait(false);
+                    if (state.Status == WorkflowSchedulerStatus.Running && state.CurrentJobTemplate.Name != item.Name)
+                        await _machineInterface.StopPersonalizationCycleAsync().ConfigureAwait(false);
+                    //Starts the workflow scheduler for the given JobTemplate, the system will now start personalizing supports
+                    await _machineInterface.StartWorkflowSchedulerAsync(item.Name, txtBatchId.Text).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString(), "Failed to start workflow scheduler");
+                }
             }).ConfigureAwait(false);
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            var dbUser = _configuration.GetSection("MachineInterface:DbUser").Get<string>();
+            var dbUser     = _configuration.GetSection("MachineInterface:DbUser").Get<string>();
             var dbPassword = _configuration.GetSection("MachineInterface:DbPassword").Get<string>();
-            var dbPort = _configuration.GetSection("MachineInterface:DbPort").Get<int>();
-            var ipAddress = _configuration.GetSection("MachineInterface:IpAddress").Get<string>();
-            var baseUrl = $"http://{ipAddress}:5000";
+            var dbPort     = _configuration.GetSection("MachineInterface:DbPort").Get<int>();
+            var ipAddress  = _configuration.GetSection("MachineInterface:IpAddress").Get<string>();
+            var baseUrl    = $"http://{ipAddress}:5000";
 
             var builder = new NpgsqlConnectionStringBuilder();
             builder.Host = ipAddress;
@@ -241,16 +264,21 @@ namespace Aida.Samples.Integration.UI.Forms
         }
 
         private void SetWindowTitle(string text) => UiThreadExec(() => Text = text);
-        private async Task WorkflowScheduler_StateChanged(object sender, WorkflowSchdeulerStateChangedEventArgs args)
+
+        private async Task WorkflowScheduler_StateChanged(object sender, WorkflowSchedulerStateChangedEventArgs args)
         {
             UpdateUi(args.Current.Status, args.Current.CurrentJobTemplate);
         }
+
         private void UpdateUi(WorkflowSchedulerStatus? status, JobTemplateDto? currentJob = null)
         {
             UiThreadExec(() =>
             {
+                var errorCode = _machineInterface.WorkflowSchedulerState?.Errors?.Any() ?? false
+                              ? _machineInterface.WorkflowSchedulerState?.Errors?.First().ToString() ?? "Ok"
+                              : "Ok";
                 if (status != null)
-                    SetWindowTitle($"{_machineInterface.ConnectionState} (Scheduler: {_machineInterface.WorkflowSchedulerState.Status})");
+                    SetWindowTitle($"{_machineInterface.ConnectionState} (Scheduler: {_machineInterface.WorkflowSchedulerState.Status}, {errorCode}))");
                 else
                     SetWindowTitle($"{_machineInterface.ConnectionState}");
 
@@ -273,6 +301,7 @@ namespace Aida.Samples.Integration.UI.Forms
                 btnStop.Refresh();
             });
         }
+
         private void UpdateSelectedJob(JobTemplateDto jobTemplate)
         {
             foreach (JobTemplateItem item in cmbJobTemplates.Items)
@@ -284,6 +313,7 @@ namespace Aida.Samples.Integration.UI.Forms
                 }
             }
         }
+
         private void EnableDataControls(bool enabled)
         {
             UiThreadExec(() =>
@@ -292,6 +322,7 @@ namespace Aida.Samples.Integration.UI.Forms
                 foreach (Control c in pnlDataControls.Controls) c.Enabled = enabled;
             });
         }
+
         private void EnableJobTemplateSelection(bool enabled)
         {
             UiThreadExec(() =>
@@ -301,12 +332,14 @@ namespace Aida.Samples.Integration.UI.Forms
                     c.Enabled = enabled;
             });
         }
+
         public T UiThreadExec<T>(Control control, Func<T> fn, params object[] args)
         {
             args ??= Array.Empty<object>();
             if (control.InvokeRequired) return (T)control.Invoke(fn, args);
             return fn();
         }
+
         private void UiThreadExec(Control control, Action action, params object[] args)
         {
             args ??= Array.Empty<object>();
@@ -318,13 +351,16 @@ namespace Aida.Samples.Integration.UI.Forms
         {
             return UiThreadExec<T>(this, fn, args);
         }
+
         private void UiThreadExec(Action action, params object[] args)
         {
             UiThreadExec(this, action, args);
         }
+
         private void TxtConnectionString_TextChanged(object sender, EventArgs e)
         {
         }
+
         private void btnInsertRecord_Click(object sender, EventArgs e)
         {
             var item = (JobTemplateItem)cmbJobTemplates.SelectedItem;
@@ -333,12 +369,11 @@ namespace Aida.Samples.Integration.UI.Forms
                 MessageBox.Show("Please select a job template from the drop down menu");
                 return;
             }
+
             var id = item.Id;
-            Task.Run(async () =>
-            {
-                await _machineInterface.InsertMockRecord(id);
-            });
+            Task.Run(async () => { await _machineInterface.InsertMockRecord(id, txtBatchId.Text); });
         }
+
         private void cmbJobTemplates_SelectedIndexChanged(object sender, EventArgs e)
         {
             AppState.SelectedJobTemplate = (JobTemplateItem)cmbJobTemplates.SelectedItem;
@@ -347,6 +382,11 @@ namespace Aida.Samples.Integration.UI.Forms
         private void btnResume_Click(object sender, EventArgs e)
         {
             Task.Run(async () => await _machineInterface.ResumeSchedulerAsync());
+        }
+
+        private void txtBatchId_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

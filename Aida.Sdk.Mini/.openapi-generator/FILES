@@ -27,6 +27,7 @@ docs/ExternalProcessCompletedMessage.md
 docs/ExternalProcessOutcome.md
 docs/FeederEmptyMessage.md
 docs/FileDto.md
+docs/FilterDto.md
 docs/HatchFlags.md
 docs/HatchPairDto.md
 docs/HatchSettingsDto.md
@@ -106,6 +107,8 @@ docs/WorkflowInstanceStateChangedEventArgs.md
 docs/WorkflowInstanceSummaryModel.md
 docs/WorkflowMessage.md
 docs/WorkflowMessages.md
+docs/WorkflowSchedulerErrorCodes.md
+docs/WorkflowSchedulerProcessSuspendedMessage.md
 docs/WorkflowSchedulerStartedMessage.md
 docs/WorkflowSchedulerStartupParamsDto.md
 docs/WorkflowSchedulerStateDto.md
@@ -139,6 +142,7 @@ src/Aida.Sdk.Mini.Test/Model/ExternalProcessCompletedMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/ExternalProcessOutcomeTests.cs
 src/Aida.Sdk.Mini.Test/Model/FeederEmptyMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/FileDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/FilterDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/HatchFlagsTests.cs
 src/Aida.Sdk.Mini.Test/Model/HatchPairDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/HatchSettingsDtoTests.cs
@@ -217,6 +221,8 @@ src/Aida.Sdk.Mini.Test/Model/WorkflowInstanceStateChangedEventArgsTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowInstanceSummaryModelTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowMessagesTests.cs
+src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerErrorCodesTests.cs
+src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerProcessSuspendedMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStartedMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStartupParamsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStateDtoTests.cs
@@ -267,6 +273,7 @@ src/Aida.Sdk.Mini/Model/ExternalProcessCompletedMessage.cs
 src/Aida.Sdk.Mini/Model/ExternalProcessOutcome.cs
 src/Aida.Sdk.Mini/Model/FeederEmptyMessage.cs
 src/Aida.Sdk.Mini/Model/FileDto.cs
+src/Aida.Sdk.Mini/Model/FilterDto.cs
 src/Aida.Sdk.Mini/Model/HatchFlags.cs
 src/Aida.Sdk.Mini/Model/HatchPairDto.cs
 src/Aida.Sdk.Mini/Model/HatchSettingsDto.cs
@@ -345,6 +352,8 @@ src/Aida.Sdk.Mini/Model/WorkflowInstanceStateChangedEventArgs.cs
 src/Aida.Sdk.Mini/Model/WorkflowInstanceSummaryModel.cs
 src/Aida.Sdk.Mini/Model/WorkflowMessage.cs
 src/Aida.Sdk.Mini/Model/WorkflowMessages.cs
+src/Aida.Sdk.Mini/Model/WorkflowSchedulerErrorCodes.cs
+src/Aida.Sdk.Mini/Model/WorkflowSchedulerProcessSuspendedMessage.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStartedMessage.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStartupParamsDto.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStateDto.cs

@@ -7,6 +7,21 @@ namespace Aida.Samples.Integration.UI.Model
 {
     public class AidaJob : INotifyPropertyChanged
     {
+
+        private string _batchId;
+
+        public string BatchId
+        {
+            get => _batchId;
+            set
+            {
+                if (value == _batchId) return;
+                _batchId = value;
+                OnPropertyChanged();
+            }
+
+        }
+
         private int _jobId;
 
         public int JobId
