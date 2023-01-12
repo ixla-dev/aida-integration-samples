@@ -79,8 +79,15 @@ namespace Aida.Samples.Integration.UI.Forms
                     {
                         if (_appState.SelectedJobTemplate == null) continue;
                         var result = (await _machineInterface.FetchJobsAsync(_appState.SelectedJobTemplate.Id).ConfigureAwait(false)).ToList();
+
                         RunInUIThread(dataGridJobs, () =>
                         {
+                            if (result.Count == 0)
+                            {
+                                Jobs.Clear();
+                                return;
+                            }
+
                             for (var i = 1; i <= result.Count; i++)
                             {
                                 var index = i - 1;

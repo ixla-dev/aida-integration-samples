@@ -24,9 +24,9 @@ namespace Aida.Samples.Integration.UI
             fieldList += ", job_status";
             valuePlaceHolders += ", @job_status";
 
-            var correlationId = "job:" + Guid.NewGuid().ToString();
-            var insert = $@"INSERT INTO ""public"".""{tableName}"" (""correlation_id"", {fieldList}) VALUES ( @correlation_id, {valuePlaceHolders})";
-            var cmd = new NpgsqlCommand(insert, connection);
+            var correlationId = "job:" + Guid.NewGuid();
+            var insert        = $@"INSERT INTO ""public"".""{tableName}"" (""correlation_id"", {fieldList}) VALUES ( @correlation_id, {valuePlaceHolders})";
+            var cmd           = new NpgsqlCommand(insert, connection);
 
             foreach (var f in fields)
                 cmd.Parameters.AddWithValue(f.FieldName, f.Data);

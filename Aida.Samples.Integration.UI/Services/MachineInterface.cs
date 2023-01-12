@@ -370,6 +370,7 @@ namespace Aida.Samples.Integration.UI.Services
                 await using var reader = cmd.ExecuteReader();
 
                 var list = new List<AidaJob>();
+
                 while (reader.Read())
                 {
                     var job = new AidaJob

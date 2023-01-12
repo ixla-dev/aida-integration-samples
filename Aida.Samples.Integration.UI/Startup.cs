@@ -4,7 +4,6 @@ using Aida.Samples.Integration.UI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Aida.Samples.Integration.UI
 {
@@ -23,7 +22,6 @@ namespace Aida.Samples.Integration.UI
                 .AddJsonOptions(options => options
                     .JsonSerializerOptions
                     .Converters.Add(new JsonStringEnumConverter()));
-            services.AddLogging(logging => logging.AddConsole().SetMinimumLevel(LogLevel.Trace));
             services.AddSingleton<WebhooksHandler>();
             services.AddSingleton<MainForm>();
             services.AddTransient<InsertDataForm>();

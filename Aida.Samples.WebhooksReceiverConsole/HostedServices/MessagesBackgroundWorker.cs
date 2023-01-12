@@ -141,7 +141,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
         private async Task MockChipEncodingPersonalization(WorkflowMessage message)
         {
             _logger.LogInformation("Running chip personalization for job: {JobId}", message.JobId);
-            await Task.Delay(3000).ConfigureAwait(false);
+            await Task.Delay(15000).ConfigureAwait(false);
 
             _ = Task.Run(async () =>
             {

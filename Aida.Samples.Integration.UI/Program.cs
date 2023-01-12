@@ -16,7 +16,7 @@ namespace Aida.Samples.Integration.UI
         [STAThread]
         static void Main(string[] args)
         {
-            var host = CreateHostBuilder().Build();
+            var       host   = CreateHostBuilder(args).Build();
             using var sScope = host.Services.CreateScope();
             _ = Task.Run(async () => await host.RunAsync());
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
@@ -25,12 +25,13 @@ namespace Aida.Samples.Integration.UI
             Application.Run(sScope.ServiceProvider.GetRequiredService<MainForm>());
         }
 
-        static IHostBuilder CreateHostBuilder()
+        static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host
-                .CreateDefaultBuilder()
+                .CreateDefaultBuilder(args)
                 .UseConsoleLifetime()
-                .ConfigureWebHostDefaults(conf => conf.UseStartup<Startup>());
+                .ConfigureWebHostDefaults(conf =>
+                    conf.UseStartup<Startup>());
         }
     }
 }
