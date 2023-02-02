@@ -38,13 +38,13 @@ namespace Aida.Samples.Integration.UI.Services
     /// </summary>
     public class MachineInterface
     {
-        private string _apiAddress;
-        private string _dbConnectionString;
+        private string                  _apiAddress;
+        private string                  _dbConnectionString;
         private CancellationTokenSource _pollCancellation;
 
-        public WorkflowSchedulerStateDto WorkflowSchedulerState;
-        private NpgsqlConnection _dbConnection;
-        public MachineInterfaceConnectionState _connectionState = MachineInterfaceConnectionState.Disconnected;
+        public  WorkflowSchedulerStateDto       WorkflowSchedulerState;
+        private NpgsqlConnection                _dbConnection;
+        public  MachineInterfaceConnectionState _connectionState = MachineInterfaceConnectionState.Disconnected;
 
         public MachineInterfaceConnectionState ConnectionState
         {
@@ -206,7 +206,7 @@ namespace Aida.Samples.Integration.UI.Services
 
             var record = new PersonalizationRecord();
             var fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(jobTemplateId).ConfigureAwait(false);
-            var job = await api.GetJobTemplateByIdAsync(jobTemplateId).ConfigureAwait(false);
+            var job    = await api.GetJobTemplateByIdAsync(jobTemplateId).ConfigureAwait(false);
 
             foreach (var f in fields)
             {
@@ -218,9 +218,6 @@ namespace Aida.Samples.Integration.UI.Services
                 }
             }
 
-            // the magnetic stripe operations are enabled, the system uses these values 
-            // to write them 
-
             if ((job.MagStripeConfiguration?.Operations ?? MagneticStripeOperations.None) != MagneticStripeOperations.None)
             {
                 record.Fields.Add(new PersonalizationField("magnetic_track_1_w", "TRACK 1"));
@@ -231,7 +228,7 @@ namespace Aida.Samples.Integration.UI.Services
             record.Fields.Add(new PersonalizationField("batch_id", batchId));
 
             var etlDefinition = await api.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
-            var statement = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
+            var statement     = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
             await statement.ExecuteNonQueryAsync().ConfigureAwait(false);
         }
 
@@ -285,7 +282,7 @@ namespace Aida.Samples.Integration.UI.Services
         public async Task StopPersonalizationCycleAsync()
         {
             using var scheduler = GetClient();
-            var state = await scheduler.StopWorkflowSchedulerAsync(true);
+            var       state     = await scheduler.StopWorkflowSchedulerAsync(true);
             UpdateState(state);
         }
 
@@ -354,11 +351,11 @@ namespace Aida.Samples.Integration.UI.Services
         /// <param name="offset"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<AidaJob>> FetchJobsAsync(int jobTemplateId, int offset = 0, int limit = 50)
+        public async Task<IEnumerable<AidaJobViewModel>> FetchJobsAsync(int jobTemplateId, int offset = 0, int limit = 50)
         {
             try
             {
-                var etl = GetClient();
+                var etl        = GetClient();
                 var definition = await etl.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
 
                 await using var cmd = _dbConnection.CreateCommand();
@@ -369,11 +366,11 @@ namespace Aida.Samples.Integration.UI.Services
 
                 await using var reader = cmd.ExecuteReader();
 
-                var list = new List<AidaJob>();
+                var list = new List<AidaJobViewModel>();
 
                 while (reader.Read())
                 {
-                    var job = new AidaJob
+                    var job = new AidaJobViewModel
                     {
                         JobId = reader.ReadInt32("job_id"),
                         BatchId = reader.ReadNullableString("batch_id"),
@@ -399,7 +396,7 @@ namespace Aida.Samples.Integration.UI.Services
             }
             catch (Exception)
             {
-                return Array.Empty<AidaJob>();
+                return Array.Empty<AidaJobViewModel>();
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Aida.Samples.Integration.UI.Model;
 using Aida.Samples.Integration.UI.Services;
+using Aida.Sdk.Mini.Model;
 
 namespace Aida.Samples.Integration.UI.Forms
 {
@@ -18,8 +19,8 @@ namespace Aida.Samples.Integration.UI.Forms
             dataGridView1.DataSource = _webhooksHandler.MessagesToProcess;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.MultiSelect = false;
-            _webhooksHandler.MessageReceived += (sender, e) => { ThreadSafeUpdateGrid(); };
-            _webhooksHandler.MessageHandled += (sender, e) => { ThreadSafeUpdateGrid(); };
+            _webhooksHandler.MessageReceived += (_, _) => { ThreadSafeUpdateGrid(); };
+            _webhooksHandler.MessageHandled += (_, _) => { ThreadSafeUpdateGrid(); };
         }
 
         private async void BtnResume_Click(object sender, System.EventArgs e)

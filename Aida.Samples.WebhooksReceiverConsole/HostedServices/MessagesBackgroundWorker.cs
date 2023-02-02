@@ -58,8 +58,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                             _logger.LogInformation("Job id: {JobId}, status: {Status}", message.JobId, message.JobStatus);
                             _logger.LogInformation("Completed Tasks: {Executed}/{Total}",
                                 message.PersonalizationTasks.Where(p => p.Status is PersonalizationTaskStatus.Completed).ToList().Count,
-                                message.PersonalizationTasks.Count
-                            );
+                                message.PersonalizationTasks.Count);
                             _logger.LogInformation("Document Produced: {DocumentProduced}", message.DocumentProduced);
                         }
 
@@ -99,10 +98,10 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                                         Console.WriteLine("\n\n Mark activity suspended.Open interlocks detected.Please verify all interlocks are properly locked, then click the 'Resume'");
                                         break;
                                 }
+
                                 break;
 
                             // These events require the receiving application to invoke SignalExternalProcessCompleted.
-
                             // The card is positioned in the SmartCard reader. AIDA is waiting the external application
                             // to signal the completion (and outcome) of the operation.
                             case EncoderLoadedMessage encoderLoaded:

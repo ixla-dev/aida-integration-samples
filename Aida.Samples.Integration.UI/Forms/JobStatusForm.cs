@@ -14,7 +14,7 @@ namespace Aida.Samples.Integration.UI.Forms
     public partial class JobStatusForm : Form
     {
         private CancellationTokenSource? _pollJobsCancellation;
-        public BindingList<AidaJob> Jobs { get; } = new();
+        public BindingList<AidaJobViewModel> Jobs { get; } = new();
         public readonly MachineInterface _machineInterface;
 
         private readonly AppState _appState;
@@ -117,7 +117,7 @@ namespace Aida.Samples.Integration.UI.Forms
         {
             if (dataGridJobs.SelectedRows.Count <= 0) return;
             var row = dataGridJobs.SelectedRows[0];
-            if (row.DataBoundItem is AidaJob data)
+            if (row.DataBoundItem is AidaJobViewModel data)
                 _ = Task.Run(async () =>
                 {
                     try
@@ -137,7 +137,7 @@ namespace Aida.Samples.Integration.UI.Forms
         {
             if (dataGridJobs.SelectedRows.Count <= 0) return;
             var row = dataGridJobs.SelectedRows[0];
-            if (row.DataBoundItem is AidaJob data)
+            if (row.DataBoundItem is AidaJobViewModel data)
             {
                 _ = Task.Run(async () =>
                 {
@@ -162,7 +162,7 @@ namespace Aida.Samples.Integration.UI.Forms
             if (e.RowIndex > grid.Rows.Count - 1)
                 return;
             var row = grid.Rows[e.RowIndex];
-            var job = row.DataBoundItem as AidaJob;
+            var job = row.DataBoundItem as AidaJobViewModel;
             if (job?.WorkflowStatus is not Sdk.Mini.Model.WorkflowStatus.Suspended)
                 return;
             grid.ClearSelection();

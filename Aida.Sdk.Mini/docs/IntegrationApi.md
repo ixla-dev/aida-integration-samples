@@ -2787,7 +2787,7 @@ catch (ApiException e)
 
 <a name="stopworkflowscheduler"></a>
 # **StopWorkflowScheduler**
-> WorkflowSchedulerStateDto StopWorkflowScheduler (bool? stopAllRunningWorkflows = null)
+> WorkflowSchedulerStateDto StopWorkflowScheduler (bool? stopAllRunningWorkflows = null, JobErrorCodes? errorCode = null)
 
 
 
@@ -2816,10 +2816,11 @@ namespace Example
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
             var stopAllRunningWorkflows = true;  // bool? |  (optional) 
+            var errorCode = (JobErrorCodes) "NoErrors";  // JobErrorCodes? |  (optional) 
 
             try
             {
-                WorkflowSchedulerStateDto result = apiInstance.StopWorkflowScheduler(stopAllRunningWorkflows);
+                WorkflowSchedulerStateDto result = apiInstance.StopWorkflowScheduler(stopAllRunningWorkflows, errorCode);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -2839,7 +2840,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    ApiResponse<WorkflowSchedulerStateDto> response = apiInstance.StopWorkflowSchedulerWithHttpInfo(stopAllRunningWorkflows);
+    ApiResponse<WorkflowSchedulerStateDto> response = apiInstance.StopWorkflowSchedulerWithHttpInfo(stopAllRunningWorkflows, errorCode);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -2857,6 +2858,7 @@ catch (ApiException e)
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
 | **stopAllRunningWorkflows** | **bool?** |  | [optional]  |
+| **errorCode** | **JobErrorCodes?** |  | [optional]  |
 
 ### Return type
 

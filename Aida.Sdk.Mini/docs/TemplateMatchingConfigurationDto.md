@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **DisplayName** | **string** |  | [optional] 
 **Description** | **string** |  | [optional] 
 **Threshold** | **double** |  | [optional] 
+**WarpPerspective** | **bool** |  | [optional] 
 **ScannerId** | **string** |  | [optional] 
 **AcquisitionPresetName** | **string** |  | [optional] 
 **CreatedAt** | **DateTime?** |  | [optional] 

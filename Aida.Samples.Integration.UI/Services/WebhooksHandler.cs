@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Aida.Sdk.Mini.Api;
 using Aida.Sdk.Mini.Model;
@@ -11,59 +12,58 @@ namespace Aida.Samples.Integration.UI.Services
     {
         public string ApiBaseUrl { get; set; }
 
-        public delegate void MessageReceivedHandler(WebhooksHandler handler, Model.WorkflowMessage message);
-        public delegate void MessageHandledHandler(WebhooksHandler sender, Model.WorkflowMessage message);
+        public delegate void MessageReceivedHandler(WebhooksHandler handler, WorkflowMessage message);
+        public delegate void MessageHandledHandler(WebhooksHandler sender, WorkflowMessage message);
 
         public event MessageReceivedHandler MessageReceived;
         public event MessageHandledHandler MessageHandled;
-        public List<Model.WorkflowMessage> MessagesToProcess { get; set; } = new();
-        public bool ContainsMessage(Model.WorkflowMessage message)
+        public List<WorkflowMessage> MessagesToProcess { get; set; } = new();
+        public bool ContainsMessage(WorkflowMessage message)
             => MessagesToProcess.Any(m => string.Equals(m.WorkflowInstanceId, message.WorkflowInstanceId));
 
-        public Model.WorkflowMessage GetMessageByIndex(int index) => MessagesToProcess[index];
-        public Model.WorkflowMessage GetMessageByWorkflowInstanceId(string workflowInstanceId)
+        public WorkflowMessage GetMessageByIndex(int index) => MessagesToProcess[index];
+        public WorkflowMessage GetMessageByWorkflowInstanceId(string workflowInstanceId)
             => MessagesToProcess.FirstOrDefault(m => string.Equals(m.WorkflowInstanceId, workflowInstanceId));
         public IConfiguration _configuration;
+
         public WebhooksHandler(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public void Add(Model.WorkflowMessage message, bool force = false)
+        public void Add(WorkflowMessage message, bool force = false)
         {
             if (!ContainsMessage(message))
                 MessagesToProcess.Add(message);
             MessageReceived?.Invoke(this, message);
         }
 
-        public void Remove(Model.WorkflowMessage message)
+        public void Remove(WorkflowMessage message)
         {
             if (ContainsMessage(message))
                 MessagesToProcess.Remove(message);
             MessageHandled?.Invoke(this, message);
         }
 
-
-        public void OnWorkflowFaulted(Model.WorkflowFaultedMessage message)
+        public void OnWorkflowFaulted(WorkflowFaultedMessage message)
         {
             var m = GetMessageByWorkflowInstanceId(message.WorkflowInstanceId);
-            if (m != null)
-                Remove(m);
+            if (m != null) Remove(m);
         }
 
-        public void OnFeederEmpty(Model.FeederEmptyMessage feederEmpty)
+        public void OnFeederEmpty(FeederEmptyMessage feederEmpty)
         {
             Add(feederEmpty);
         }
 
-        public void OnWorkflowCompleted(Model.WorkflowCompletedMessage message)
+        public void OnWorkflowCompleted(WorkflowCompletedMessage message)
         {
             var m = GetMessageByWorkflowInstanceId(message.WorkflowInstanceId);
             if (m != null)
                 Remove(m);
         }
 
-        public async Task MarkRejected(Model.WorkflowMessage message)
+        public async Task MarkRejected(WorkflowMessage message)
         {
             // For the sake of simplicity i didn't add timeout/retry logic here 
             // but it might be a good idea, since transient failures are always possible 
@@ -86,7 +86,7 @@ namespace Aida.Samples.Integration.UI.Services
                 }).ConfigureAwait(false);
         }
 
-        public async Task MarkCompleted(Model.WorkflowMessage message)
+        public async Task MarkCompleted(WorkflowMessage message)
         {
             using var api = new IntegrationApi(ApiBaseUrl);
             await api.SignalExternalProcessCompletedAsync(

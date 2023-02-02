@@ -5,7 +5,7 @@ using Aida.Sdk.Mini.Model;
 
 namespace Aida.Samples.Integration.UI.Model
 {
-    public class AidaJob : INotifyPropertyChanged
+    public class AidaJobViewModel : INotifyPropertyChanged
     {
 
         private string _batchId;
@@ -186,13 +186,13 @@ namespace Aida.Samples.Integration.UI.Model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void Update(AidaJob job)
+        public void Update(AidaJobViewModel jobViewModel)
         {
             foreach (var p in GetType().GetProperties(
                          System.Reflection.BindingFlags.Public |
                          System.Reflection.BindingFlags.Instance))
             {
-                p.SetValue(this, p.GetValue(job));
+                p.SetValue(this, p.GetValue(jobViewModel));
             }
         }
     }
