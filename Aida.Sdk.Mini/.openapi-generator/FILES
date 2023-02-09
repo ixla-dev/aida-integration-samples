@@ -96,6 +96,7 @@ docs/SupportSide.md
 docs/TemplateMatchingConfigurationDto.md
 docs/TransportStatusFlags.md
 docs/VersionOptions.md
+docs/WebhookReceiverHealthCheckMessage.md
 docs/WebhooksTargetDto.md
 docs/WorkflowAction.md
 docs/WorkflowBlueprintSummaryModel.md
@@ -210,6 +211,7 @@ src/Aida.Sdk.Mini.Test/Model/SupportSideTests.cs
 src/Aida.Sdk.Mini.Test/Model/TemplateMatchingConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/TransportStatusFlagsTests.cs
 src/Aida.Sdk.Mini.Test/Model/VersionOptionsTests.cs
+src/Aida.Sdk.Mini.Test/Model/WebhookReceiverHealthCheckMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/WebhooksTargetDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowActionTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowBlueprintSummaryModelPagedListTests.cs
@@ -341,6 +343,7 @@ src/Aida.Sdk.Mini/Model/SupportSide.cs
 src/Aida.Sdk.Mini/Model/TemplateMatchingConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/TransportStatusFlags.cs
 src/Aida.Sdk.Mini/Model/VersionOptions.cs
+src/Aida.Sdk.Mini/Model/WebhookReceiverHealthCheckMessage.cs
 src/Aida.Sdk.Mini/Model/WebhooksTargetDto.cs
 src/Aida.Sdk.Mini/Model/WorkflowAction.cs
 src/Aida.Sdk.Mini/Model/WorkflowBlueprintSummaryModel.cs

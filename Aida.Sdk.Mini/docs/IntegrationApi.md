@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**AidaV1ScannerLayoutsImportValidateGet**](IntegrationApi.md#aidav1scannerlayoutsimportvalidateget) | **GET** /aida/v1/scanner/layouts/import/_validate |  |
 | [**ApiV1PcscGatewayReleaseContextPost**](IntegrationApi.md#apiv1pcscgatewayreleasecontextpost) | **POST** /api/v1/pcsc-gateway/release-context |  |
 | [**CreateJobTemplate**](IntegrationApi.md#createjobtemplate) | **POST** /aida/v1/scanner/job-templates |  |
 | [**DeleteJobTemplate**](IntegrationApi.md#deletejobtemplate) | **DELETE** /aida/v1/scanner/job-templates/{id} |  |
@@ -27,6 +28,7 @@ All URIs are relative to *http://localhost*
 | [**GetWorkflowRegistry**](IntegrationApi.md#getworkflowregistry) | **GET** /aida/v1/workflow-scheduler/workflow-registry |  |
 | [**GetWorkflowSchedulerState**](IntegrationApi.md#getworkflowschedulerstate) | **GET** /aida/v1/workflow-scheduler/state |  |
 | [**ImportLayoutFile**](IntegrationApi.md#importlayoutfile) | **POST** /aida/v1/scanner/layouts/import |  |
+| [**RenameLayout**](IntegrationApi.md#renamelayout) | **PUT** /aida/v1/scanner/layouts/{id} |  |
 | [**ResumeWorkflowScheduler**](IntegrationApi.md#resumeworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/resume |  |
 | [**SignalExternalProcessCompleted**](IntegrationApi.md#signalexternalprocesscompleted) | **POST** /aida/v1/workflow-scheduler/workflows/signal/external-process-completed | Notifies a suspended workflow instance when that the external process has completed execution |
 | [**SmartCardConnect**](IntegrationApi.md#smartcardconnect) | **POST** /api/v1/pcsc-gateway/{readerIndex}/smart-card/connect | Invoke SCardConnect on the specified reader. The card handle (hCard) is held server side  until the next time Connect is invoked |
@@ -38,6 +40,98 @@ All URIs are relative to *http://localhost*
 | [**UploadLayoutFile**](IntegrationApi.md#uploadlayoutfile) | **POST** /aida/v1/scanner/layouts/upload |  |
 | [**ValidateJobTemplateName**](IntegrationApi.md#validatejobtemplatename) | **POST** /aida/v1/scanner/job-templates/validate-name |  |
 | [**ValidateLayoutName**](IntegrationApi.md#validatelayoutname) | **POST** /aida/v1/scanner/layouts/validate-name |  |
+
+<a name="aidav1scannerlayoutsimportvalidateget"></a>
+# **AidaV1ScannerLayoutsImportValidateGet**
+> void AidaV1ScannerLayoutsImportValidateGet (string layoutName = null, string filename = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class AidaV1ScannerLayoutsImportValidateGetExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var layoutName = "layoutName_example";  // string |  (optional) 
+            var filename = "filename_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.AidaV1ScannerLayoutsImportValidateGet(layoutName, filename);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.AidaV1ScannerLayoutsImportValidateGet: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the AidaV1ScannerLayoutsImportValidateGetWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.AidaV1ScannerLayoutsImportValidateGetWithHttpInfo(layoutName, filename);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.AidaV1ScannerLayoutsImportValidateGetWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **layoutName** | **string** |  | [optional]  |
+| **filename** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="apiv1pcscgatewayreleasecontextpost"></a>
 # **ApiV1PcscGatewayReleaseContextPost**
@@ -2192,6 +2286,102 @@ catch (ApiException e)
 | **scannerId** | **string** |  | [optional]  |
 | **layoutName** | **string** |  | [optional]  |
 | **filename** | **string** |  | [optional]  |
+
+### Return type
+
+[**LayoutDto**](LayoutDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="renamelayout"></a>
+# **RenameLayout**
+> LayoutDto RenameLayout (int id, string name = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class RenameLayoutExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var id = 56;  // int | 
+            var name = "name_example";  // string |  (optional) 
+
+            try
+            {
+                LayoutDto result = apiInstance.RenameLayout(id, name);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.RenameLayout: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the RenameLayoutWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<LayoutDto> response = apiInstance.RenameLayoutWithHttpInfo(id, name);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.RenameLayoutWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **id** | **int** |  |  |
+| **name** | **string** |  | [optional]  |
 
 ### Return type
 
