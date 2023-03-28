@@ -70,7 +70,6 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                             case WorkflowSchedulerStartedMessage:
                                 _logger.LogInformation("Workflow Scheduler started");
                                 break;
-
                             // These are fire and forget for AIDA. 
                             case WorkflowCancelledMessage:
                                 _logger.LogWarning("Job {JobId} cancelled", message.JobId);
@@ -87,15 +86,14 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                             // The workflow was suspended because AIDA was not able to get the card 
                             // from the feeder or it was about to move a card in the engraving position but open interlocks where found.
                             case WorkflowSchedulerProcessSuspendedMessage suspended:
-
                                 switch (suspended.ErrorCode)
                                 {
                                     case JobErrorCodes.FeederEmpty:
                                         // Intentionally block until we receive user input 
-                                        Console.WriteLine("\n\nFeeder empty\nLoad the input feeder with cards and press the 'Resume' button");
+                                        _logger.LogWarning("\n\nFeeder empty\nLoad the input feeder with cards and press the 'Resume' button");
                                         break;
                                     case JobErrorCodes.OpenInterlock:
-                                        Console.WriteLine("\n\n Mark activity suspended.Open interlocks detected.Please verify all interlocks are properly locked, then click the 'Resume'");
+                                        _logger.LogWarning("\n\n Mark activity suspended.Open interlocks detected.Please verify all interlocks are properly locked, then click the 'Resume'");
                                         break;
                                 }
 
@@ -141,23 +139,27 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
         {
             _logger.LogInformation("Running chip personalization for job: {JobId}", message.JobId);
             await Task.Delay(15000).ConfigureAwait(false);
-
             _ = Task.Run(async () =>
             {
                 try
                 {
                     var responseMessage = new ExternalProcessCompletedMessage
                     {
+                        // We tell AIDA chip personalization completed without error
                         Outcome = ExternalProcessOutcome.Completed,
+                        // This is the WorkflowInstanceId we received in the webhook notification
                         WorkflowInstanceId = message.WorkflowInstanceId,
                     };
 
                     _logger.LogInformation("Chip personalization completed. Sending completion signal to AIDA {BasePath} {Message}",
                         _api.GetBasePath(), JsonSerializer.Serialize(responseMessage, _jsonSerializerOptions));
 
+                    // tell AIDA to dispatch the completion signal and resume 
                     await _api.SignalExternalProcessCompletedAsync(
-                        // tell AIDA to dispatch the completion signal and resume 
+                        // waitForCompletion = false tells aida to return immediately the HTTP response without waiting the workflow
+                        // to finish 
                         waitForCompletion: false,
+                        // The response message
                         externalProcessCompletedMessage: responseMessage).ConfigureAwait(false);
                 }
                 catch

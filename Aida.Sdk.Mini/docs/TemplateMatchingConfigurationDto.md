@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **Threshold** | **double** |  | [optional] 
 **WarpPerspective** | **bool** |  | [optional] 
 **ScannerId** | **string** |  | [optional] 
+**CameraId** | **string** |  | [optional] 
 **AcquisitionPresetName** | **string** |  | [optional] 
 **CreatedAt** | **DateTime?** |  | [optional] 
 **UpdatedAt** | **DateTime?** |  | [optional] 
@@ -19,7 +20,7 @@ Name | Type | Description | Notes
 **SearchPatternImage** | [**ApplicationImageDto**](ApplicationImageDto.md) |  | [optional] 
 **IsConfigured** | **bool** |  | [optional] [readonly] 
 **DebugUrl** | **string** |  | [optional] 
-**ScannerModule** | [**ScannerModuleDescriptor**](ScannerModuleDescriptor.md) |  | [optional] 
+**ScannerModule** | [**ScannerModuleDefinition**](ScannerModuleDefinition.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

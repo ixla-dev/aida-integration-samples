@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **LastLoadedItemId** | **int** |  | [optional] 
 **UpTimeSeconds** | **int** |  | [optional] 
 **CurrentJobTemplate** | [**JobTemplateDto**](JobTemplateDto.md) |  | [optional] 
+**WorkflowTypeName** | **string** |  | [optional] 
 **SessionId** | **string** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

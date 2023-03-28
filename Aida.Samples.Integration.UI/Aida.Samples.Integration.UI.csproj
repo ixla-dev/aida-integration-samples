@@ -2,27 +2,28 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0-windows</TargetFramework>
+        <TargetFramework>net5.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
         <UserSecretsId>9208301f-b8bf-497c-a61b-2622718c3cbe</UserSecretsId>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Remove="csharp-generator-config.json" />
+        <Content Remove="csharp-generator-config.json"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="generate_client.ps1" />
-        <None Remove="Resources\ixla_black_logo.png" />
+        <None Remove="generate_client.ps1"/>
+        <None Remove="Resources\ixla_black_logo.png"/>
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\ixla_black_logo.png" />
+        <EmbeddedResource Include="Resources\ixla_black_logo.png"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="Npgsql" Version="6.0.6" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="Npgsql" Version="6.0.6"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -31,7 +32,7 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
-        <Compile Update="Forms\SuspendedWorkflowsForm.cs" />
+        <Compile Update="Forms\SuspendedWorkflowsForm.cs"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -48,7 +49,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Aida.Sdk.Mini\src\Aida.Sdk.Mini\Aida.Sdk.Mini.csproj" />
+        <PackageReference Include="Serilog" Version="2.12.0"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0"/>
+        <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <ProjectReference Include="..\Aida.Sdk.Mini\src\Aida.Sdk.Mini\Aida.Sdk.Mini.csproj"/>
     </ItemGroup>
 
 </Project>

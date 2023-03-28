@@ -5,13 +5,12 @@ using Aida.Samples.Integration.UI.Forms;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Aida.Samples.Integration.UI
 {
     static class Program
     {
-        
-        
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -33,7 +32,14 @@ namespace Aida.Samples.Integration.UI
                 .CreateDefaultBuilder(args)
                 .UseConsoleLifetime()
                 .ConfigureWebHostDefaults(conf =>
-                    conf.UseStartup<Startup>());
+                    conf
+                        .UseStartup<Startup>()
+                        .UseSerilog((context, serilog) =>
+                        {
+                            serilog.ReadFrom.Configuration(context.Configuration)
+                                .Enrich.WithProperty("ApplicationId", "Aida.Samples.Integration.UI");
+                        })
+                );
         }
     }
 }

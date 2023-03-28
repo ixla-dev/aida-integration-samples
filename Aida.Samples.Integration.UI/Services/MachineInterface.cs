@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Aida.Samples.Integration.UI.Extensions;
 using Aida.Samples.Integration.UI.Model;
 using Aida.Sdk.Mini.Api;
@@ -38,13 +40,14 @@ namespace Aida.Samples.Integration.UI.Services
     /// </summary>
     public class MachineInterface
     {
-        private string                  _apiAddress;
-        private string                  _dbConnectionString;
+        private readonly SemaphoreSlim _dbInsertSemaphore = new(1,1);
+        private readonly string _apiAddress;
+        private readonly string _dbConnectionString;
         private CancellationTokenSource _pollCancellation;
 
-        public  WorkflowSchedulerStateDto       WorkflowSchedulerState;
-        private NpgsqlConnection                _dbConnection;
-        public  MachineInterfaceConnectionState _connectionState = MachineInterfaceConnectionState.Disconnected;
+        public WorkflowSchedulerStateDto WorkflowSchedulerState;
+        private NpgsqlConnection _dbConnection;
+        public MachineInterfaceConnectionState _connectionState = MachineInterfaceConnectionState.Disconnected;
 
         public MachineInterfaceConnectionState ConnectionState
         {
@@ -163,6 +166,17 @@ namespace Aida.Samples.Integration.UI.Services
         }
 
         /// <summary>
+        /// Get the list of support workflows by the machine
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<WorkflowBlueprintSummaryModel>> GetWorkflowsAsync()
+        {
+            using var api = GetClient();
+            return (await api.GetWorkflowRegistryAsync().ConfigureAwait(false)).Items;
+        }
+
+
+        /// <summary>
         /// Retrieves the list of entities for a given job template. 
         /// </summary>
         /// <param name="jobTemplateId">ID of the JobTemplate</param>
@@ -195,41 +209,51 @@ namespace Aida.Samples.Integration.UI.Services
         /// Helper method that inserts a record in the shared database table. This is used 
         /// to avoid having to populate records manually while testing.
         /// </summary>
-        /// <param name="jobTemplateId">
+        /// <param name="id">
         /// The target job template Id. This is used to retrieve the DataSourceConfiguration for the
         /// given job template, which contains the connection information for the shared database
         /// </param>
+        /// <param name="batchId"></param>
         /// <returns></returns>
-        public async Task InsertMockRecord(int jobTemplateId, string batchId)
+        public async Task InsertMockRecord(int id, string batchId)
         {
-            using var api = GetClient();
-
-            var record = new PersonalizationRecord();
-            var fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(jobTemplateId).ConfigureAwait(false);
-            var job    = await api.GetJobTemplateByIdAsync(jobTemplateId).ConfigureAwait(false);
-
-            foreach (var f in fields)
+            try
             {
-                if (f.ValueType is EntityFieldValueType.String)
+                await _dbInsertSemaphore.WaitAsync();
+                using var api = GetClient();
+
+                var record = new PersonalizationRecord();
+                var fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(id).ConfigureAwait(false);
+                var job = await api.GetJobTemplateByIdAsync(id).ConfigureAwait(false);
+
+                // skipping personalization fields will make AIDA server use placeholders found in SJF Files
+                foreach (var f in fields)
                 {
-                    record.Fields.Add(f.EntityName.StartsWith("FE_")
-                        ? new PersonalizationField(f.EntityName, "123123")
-                        : new PersonalizationField(f.EntityName, f.EntityName));
+                    if (f.ValueType == EntityFieldValueType.String)
+                        record.Fields.Add(new PersonalizationField(f.EntityName, DBNull.Value));
                 }
-            }
 
-            if ((job.MagStripeConfiguration?.Operations ?? MagneticStripeOperations.None) != MagneticStripeOperations.None)
+                if ((job.MagStripeConfiguration?.Operations ?? MagneticStripeOperations.None) != MagneticStripeOperations.None)
+                {
+                    record.Fields.Add(new PersonalizationField("magnetic_track_1_w", "TRACK 1"));
+                    record.Fields.Add(new PersonalizationField("magnetic_track_2_w", "123456789"));
+                    record.Fields.Add(new PersonalizationField("magnetic_track_3_w", "1234"));
+                }
+
+                record.Fields.Add(new PersonalizationField("batch_id", batchId));
+
+                var etlDefinition = await api.GetDataExchangeTableDefinitionAsync(id).ConfigureAwait(false);
+                var statement = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
+                await statement.ExecuteNonQueryAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
             {
-                record.Fields.Add(new PersonalizationField("magnetic_track_1_w", "TRACK 1"));
-                record.Fields.Add(new PersonalizationField("magnetic_track_2_w", "123456789"));
-                record.Fields.Add(new PersonalizationField("magnetic_track_3_w", "1234"));
+                MessageBox.Show(e.ToString(), "Failed to insert mock record");
             }
-
-            record.Fields.Add(new PersonalizationField("batch_id", batchId));
-
-            var etlDefinition = await api.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
-            var statement     = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
-            await statement.ExecuteNonQueryAsync().ConfigureAwait(false);
+            finally
+            {
+                _dbInsertSemaphore.Release();
+            }
         }
 
         public async Task<WorkflowSchedulerStateDto> ResumeSchedulerAsync()
@@ -243,26 +267,30 @@ namespace Aida.Samples.Integration.UI.Services
         /// Starts the workflow scheduler for the given JobTemplate
         /// </summary>
         /// <param name="jobTemplateName"></param>
-        public async Task StartWorkflowSchedulerAsync(string jobTemplateName, string batchId)
+        /// <param name="batchId"></param>
+        public async Task StartWorkflowSchedulerAsync(string jobTemplateName, string workflowTypeName, bool? dryRun, string? batchId)
         {
             using var api = GetClient();
             var startupParams = new WorkflowSchedulerStartupParamsDto
             {
                 JobTemplateName = jobTemplateName,
                 DisableRedPointer = false,
-                DryRun = true,
+                DryRun = dryRun ?? _configuration.GetValue<bool>("DryRun"),
                 NoReset = false,
                 SkipEntityUpdates = false,
                 StopAfter = -1,
                 TaskAllocationStrategy = null,
-                WorkflowTypeName = _configuration.GetValue<string>("WorkflowTypeName"),
+                WorkflowTypeName = workflowTypeName,
                 MetadataFields = new Dictionary<string, object>
                 {
                     ["Field"] = "Some data you might need in your process that we are not storing",
                     ["Another"] = "This fields will be sent back to you in webhooks"
                 },
-                FilterJobsBy = new List<FilterDto> { new("batch_id", new List<string> { batchId }) }
+                FilterJobsBy = new List<FilterDto>()
             };
+            if (!string.IsNullOrEmpty(batchId))
+                startupParams.FilterJobsBy.Add(new("batch_id", new List<string> { batchId }));
+
             var state = await GetWorkflowSchedulerStateAsync();
             if (state.Status == WorkflowSchedulerStatus.Running) return;
             try
@@ -282,7 +310,7 @@ namespace Aida.Samples.Integration.UI.Services
         public async Task StopPersonalizationCycleAsync()
         {
             using var scheduler = GetClient();
-            var       state     = await scheduler.StopWorkflowSchedulerAsync(true);
+            var state = await scheduler.StopWorkflowSchedulerAsync(true);
             UpdateState(state);
         }
 
@@ -344,6 +372,20 @@ namespace Aida.Samples.Integration.UI.Services
             );
         }
 
+
+        public async Task<DataExchangeTableDefinition> GetDataExchangeTableDefinition(int jobTemplateId)
+        {
+            var etl = GetClient();
+            var definition = await etl.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
+            return definition;
+        }
+
+        public async Task<IEnumerable<AidaJobViewModel>> FetchJobsAsync(int jobTemplateId, int offset = 0, int limit = 50)
+        {
+            var definition = await GetDataExchangeTableDefinition(jobTemplateId).ConfigureAwait(false);
+            return await FetchJobsAsync(definition, offset, limit).ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Get current jobs status from shared database
         /// </summary>
@@ -351,24 +393,21 @@ namespace Aida.Samples.Integration.UI.Services
         /// <param name="offset"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<AidaJobViewModel>> FetchJobsAsync(int jobTemplateId, int offset = 0, int limit = 50)
+        public async Task<List<AidaJobViewModel>> FetchJobsAsync(DataExchangeTableDefinition definition, int offset = 0, int limit = 50)
         {
             try
             {
-                var etl        = GetClient();
-                var definition = await etl.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
-
                 await using var cmd = _dbConnection.CreateCommand();
 
-                cmd.CommandText = $@"select * from ""{definition.TableName}"" order by job_id desc offset @offset limit @limit";
+                cmd.CommandText = $"select * from {definition.TableName} order by job_id desc offset @offset limit @limit";
                 cmd.Parameters.AddWithValue("@offset", offset);
                 cmd.Parameters.AddWithValue("@limit", limit);
 
-                await using var reader = cmd.ExecuteReader();
+                await using var reader = await cmd.ExecuteReaderAsync();
 
                 var list = new List<AidaJobViewModel>();
 
-                while (reader.Read())
+                while (await reader.ReadAsync())
                 {
                     var job = new AidaJobViewModel
                     {
@@ -396,9 +435,10 @@ namespace Aida.Samples.Integration.UI.Services
             }
             catch (Exception)
             {
-                return Array.Empty<AidaJobViewModel>();
+                return Array.Empty<AidaJobViewModel>().ToList();
             }
         }
+
 
         private IntegrationApi GetClient(TimeSpan? timeout = null)
         {

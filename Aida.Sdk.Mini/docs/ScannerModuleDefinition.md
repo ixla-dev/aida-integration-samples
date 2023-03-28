@@ -1,4 +1,4 @@
-# Aida.Sdk.Mini.Model.ScannerModuleDescriptor
+# Aida.Sdk.Mini.Model.ScannerModuleDefinition
 
 ## Properties
 

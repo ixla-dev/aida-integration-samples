@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **Id** | **int?** |  | [optional] 
 **Name** | **string** |  | [optional] 
 **DataSourceType** | [**DataSourceType**](DataSourceType.md) |  | [optional] 
+**CanBeDeleted** | **bool** |  | [optional] 
 **TableName** | **string** |  | [optional] 
 **QueryTemplate** | **string** |  | [optional] 
 **ConnectionString** | **string** |  | [optional] 

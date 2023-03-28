@@ -35,20 +35,22 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
             [FromBody] JsonElement receivedMessage)
         {
             var message = DeserializeMessage(receivedMessage);
+            
             // If the payload does not contain a known message type we short-circuit the request
             // and respond with 400 bad request to the client
             if (message == null) return BadRequest();
+            
             // log the received message from AIDA
             _logger.LogInformation("Received Message {@Message}", JsonSerializer.Serialize(receivedMessage, new JsonSerializerOptions
             {
                 WriteIndented = true,
                 Converters = { new JsonStringEnumConverter() }
             }));
+            
             // Add the message in an unbounded blocking collection for further processing 
             messageQueue.AddMessage(message);
             return Ok();
         }
-
 
         /// <summary>
         /// Deserialize messages. In the demo app i was using models defined in the project, now we are using the models from the SDK 
@@ -61,6 +63,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
                 return null;
             var jsonString = json.ToString();
             if (jsonString is null) return null;
+            
             return messageType switch
             {
                 MessageType.WorkflowSchedulerStarted   => JsonSerializer.Deserialize<WorkflowSchedulerStartedMessage>(jsonString, _jsonOptions),
@@ -72,6 +75,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
                 MessageType.WorkflowCompleted          => JsonSerializer.Deserialize<WorkflowCompletedMessage>(jsonString, _jsonOptions),
                 MessageType.WorkflowFaulted            => JsonSerializer.Deserialize<WorkflowFaultedMessage>(jsonString, _jsonOptions),
                 MessageType.FeederEmpty                => JsonSerializer.Deserialize<FeederEmptyMessage>(jsonString, _jsonOptions),
+                MessageType.HealthCheck                => JsonSerializer.Deserialize<WebhookReceiverHealthCheckMessage>(jsonString, _jsonOptions),
                 _                                      => null
             };
         }

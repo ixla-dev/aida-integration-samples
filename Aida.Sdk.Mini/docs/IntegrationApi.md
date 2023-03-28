@@ -9,7 +9,7 @@ All URIs are relative to *http://localhost*
 | [**CreateJobTemplate**](IntegrationApi.md#createjobtemplate) | **POST** /aida/v1/scanner/job-templates |  |
 | [**DeleteJobTemplate**](IntegrationApi.md#deletejobtemplate) | **DELETE** /aida/v1/scanner/job-templates/{id} |  |
 | [**DeleteLayout**](IntegrationApi.md#deletelayout) | **DELETE** /aida/v1/scanner/layouts/{id} |  |
-| [**EstablishContext**](IntegrationApi.md#establishcontext) | **POST** /api/v1/pcsc-gateway/establish-context | IWS invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext. |
+| [**EstablishContext**](IntegrationApi.md#establishcontext) | **POST** /api/v1/pcsc-gateway/establish-context | AIDA Server invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext. |
 | [**FindJobTemplates**](IntegrationApi.md#findjobtemplates) | **GET** /aida/v1/scanner/job-templates |  |
 | [**FindLayouts**](IntegrationApi.md#findlayouts) | **GET** /aida/v1/scanner/layouts |  |
 | [**GetAssignableLayoutsByJobTemplateId**](IntegrationApi.md#getassignablelayoutsbyjobtemplateid) | **GET** /aida/v1/scanner/job-templates/{id}/layouts/available |  |
@@ -502,7 +502,7 @@ void (empty response body)
 # **EstablishContext**
 > void EstablishContext (SCardEstablishContextParamsDto sCardEstablishContextParamsDto = null)
 
-IWS invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext.
+AIDA Server invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext.
 
 ### Example
 ```csharp
@@ -532,7 +532,7 @@ namespace Example
 
             try
             {
-                // IWS invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext.
+                // AIDA Server invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext.
                 apiInstance.EstablishContext(sCardEstablishContextParamsDto);
             }
             catch (ApiException  e)
@@ -552,7 +552,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    // IWS invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext.
+    // AIDA Server invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext.
     apiInstance.EstablishContextWithHttpInfo(sCardEstablishContextParamsDto);
 }
 catch (ApiException e)

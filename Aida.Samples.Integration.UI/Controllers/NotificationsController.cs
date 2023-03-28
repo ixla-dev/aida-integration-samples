@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -12,12 +13,15 @@ namespace Aida.Samples.Integration.UI.Controllers
     [ApiController]
     public class WebHooksController : ControllerBase
     {
+        private readonly JsonSerializerOptions       _jsonOptions;
         private readonly ILogger<WebHooksController> _logger;
         private readonly WebhooksHandler             _webhooksHandler;
         public WebHooksController(
+            JsonSerializerOptions jsonOptions,
             WebhooksHandler webhooksHandler,
             ILogger<WebHooksController> logger)
         {
+            _jsonOptions = jsonOptions;
             _webhooksHandler = webhooksHandler;
             _logger = logger;
         }
@@ -41,80 +45,79 @@ namespace Aida.Samples.Integration.UI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("/ixla/aida/v1/webhooks")]
-        public Task<ActionResult> OnWebhookReceived(
-            [FromBody] JsonElement jsonMessage)
+        public async Task<ActionResult> OnWebhookReceived([FromBody] JsonElement json)
         {
-            var jsonOptions = new JsonSerializerOptions();
-            // enable string -> Enum parsing in the json serializer
-            jsonOptions.Converters.Add(new JsonStringEnumConverter());
-
-            // Parse messages sent by AIDA: 
-            // Polymorphic deserialization can be achieved also using a custom json converter for system.text.json 
-            // but i didn't want to implement it, since it would be pretty much overkill for deserializing only 2 
-            // different message types
-
-            var             type    = Enum.Parse<MessageType>(jsonMessage.GetProperty("MessageType").GetString() ?? "");
-            WorkflowMessage message = null;
-
             try
             {
-                switch (type)
+                var jsonOptions = new JsonSerializerOptions();
+                // enable string -> Enum parsing in the json serializer
+                jsonOptions.Converters.Add(new JsonStringEnumConverter());
+
+                // Parse messages sent by AIDA: 
+                // Polymorphic deserialization can be achieved also using a custom json converter for system.text.json 
+                // but i didn't want to implement it, since it would be pretty much overkill for deserializing only 2 
+                // different message types
+
+                var message = DeserializeMessage(json);
+                switch (message)
                 {
-                    case MessageType.HealthCheck:
-                        var healthCheck = jsonMessage.Deserialize<WebhookReceiverHealthCheckMessage>(jsonOptions);
+                    case null:
+                        return BadRequest("Unsupported message type");
+                    case WorkflowCompletedMessage wfCompleted:
+                        _webhooksHandler.OnWorkflowCompleted(wfCompleted);
                         break;
-                    // Whe webhooks are enabled, the workflow scheduler will try to publish the WorkflowSchedulerStarted message
-                    // If the webhooks receiver does not send back a successful http response, the WorkflowScheduler will be stopped
-                    // with error code WebhooksReceiver unreachable 
-                    case MessageType.WorkflowSchedulerStarted:
-                        var started = jsonMessage.Deserialize<WorkflowSchedulerStartedMessage>(jsonOptions);
-                        break;
-                    // Sent by workflow instances when there are no more cards in the feeder
-                    // We know the feeder is empty only after trying to move the card because 
-                    // there are no sensors in the feeder 
-                    case MessageType.FeederEmpty:
-                        var feederEmpty = jsonMessage.Deserialize<FeederEmptyMessage>(jsonOptions);
-                        _webhooksHandler.OnFeederEmpty(feederEmpty);
-                        break;
-                    case MessageType.WorkflowCancelled:
-                        var cancelled = jsonMessage.Deserialize<WorkflowCancelledMessage>(jsonOptions);
-                        // no-op 
-                        // AIDA sends this when the workflow engine triggers the workflow cancelled event which 
-                        // indicates that a running/suspended workflow was cancelled programmatically 
-                        break;
-                    case MessageType.WorkflowCompleted:
-                        var complete = jsonMessage.Deserialize<WorkflowCompletedMessage>(jsonOptions);
-                        _webhooksHandler.OnWorkflowCompleted(complete);
-                        break;
-                    case MessageType.WorkflowFaulted:
-                        var fault = jsonMessage.Deserialize<WorkflowFaultedMessage>(jsonOptions);
-                        _webhooksHandler.OnWorkflowFaulted(fault);
-                        break;
-                    // message sent by AIDA containing OCR results 
-                    case MessageType.OcrExecuted:
-                        message = jsonMessage.Deserialize<OcrExecutedMessage>(jsonOptions);
-                        break;
-                    // message sent by AIDA when the card is in the encoder position 
-                    case MessageType.EncoderLoaded:
-                        message = jsonMessage.Deserialize<EncoderLoadedMessage>(jsonOptions);
+                    case WorkflowFaultedMessage wfFault:
+                        _webhooksHandler.OnWorkflowFaulted(wfFault);
                         break;
                 }
+
+                _webhooksHandler.Add(message);
+                return Ok();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                return BadRequest(e.Message);
             }
+        }
+        /// <summary>
+        /// Deserialize messages. In the demo app i was using models defined in the project, now we are using the models from the SDK 
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        private WorkflowMessage DeserializeMessage(JsonElement json)
+        {
+            try
+            {
+                if (!Enum.TryParse<MessageType>(json.GetProperty("MessageType").GetString(), out var messageType))
+                    return null;
+                var jsonString = json.ToString();
+                _logger.LogInformation("Parsing {@MessageType}", messageType);
+                _logger.LogInformation("Raw Content {@RawContent}", jsonString);
+                _logger.LogInformation("Message {@JsonMessage}", JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString));
 
+                if (jsonString is null)
+                    return null;
 
-            if (message is null)
-                return Task.FromResult<ActionResult>(Ok());
-
-            // webhooks handler is just a service that keeps track of received messages 
-            // and is used to notify AIDA interactively from the UI. Of course in real applications
-            // this can be replaced with whatever you need to handle encoding / ocr results validation
-            _webhooksHandler.Add(message);
-
-            return Task.FromResult<ActionResult>(Ok());
+                return messageType switch
+                {
+                    MessageType.WorkflowSchedulerStarted   => JsonSerializer.Deserialize<WorkflowSchedulerStartedMessage>(jsonString, _jsonOptions),
+                    MessageType.WorkflowSchedulerSuspended => JsonSerializer.Deserialize<WorkflowSchedulerProcessSuspendedMessage>(jsonString, _jsonOptions),
+                    MessageType.WorkflowSchedulerStopped   => JsonSerializer.Deserialize<WorkflowSchedulerStoppedMessage>(jsonString, _jsonOptions),
+                    MessageType.EncoderLoaded              => JsonSerializer.Deserialize<EncoderLoadedMessage>(jsonString, _jsonOptions),
+                    MessageType.OcrExecuted                => JsonSerializer.Deserialize<OcrExecutedMessage>(jsonString, _jsonOptions),
+                    MessageType.WorkflowCancelled          => JsonSerializer.Deserialize<WorkflowCancelledMessage>(jsonString, _jsonOptions),
+                    MessageType.WorkflowCompleted          => JsonSerializer.Deserialize<WorkflowCompletedMessage>(jsonString, _jsonOptions),
+                    MessageType.WorkflowFaulted            => JsonSerializer.Deserialize<WorkflowFaultedMessage>(jsonString, _jsonOptions),
+                    MessageType.FeederEmpty                => JsonSerializer.Deserialize<FeederEmptyMessage>(jsonString, _jsonOptions),
+                    MessageType.HealthCheck                => JsonSerializer.Deserialize<WebhookReceiverHealthCheckMessage>(jsonString, _jsonOptions),
+                    _                                      => null
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return null;
+            }
         }
     }
 }

@@ -19,6 +19,9 @@ Name | Type | Description | Notes
 **MatchPattern** | **string** |  | [optional] 
 **MeanConfidenceThreshold** | **double?** |  | [optional] 
 **ImageAcquisitionPreset** | **string** |  | [optional] 
+**ScannerId** | **string** |  | [optional] 
+**CameraId** | **string** |  | [optional] 
+**CanBeDeleted** | **bool** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

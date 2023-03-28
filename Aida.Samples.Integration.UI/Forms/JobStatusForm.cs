@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Aida.Samples.Integration.UI.Model;
 using Aida.Samples.Integration.UI.Services;
+using Aida.Sdk.Mini.Model;
 
 namespace Aida.Samples.Integration.UI.Forms
 {
@@ -16,9 +17,7 @@ namespace Aida.Samples.Integration.UI.Forms
         private CancellationTokenSource? _pollJobsCancellation;
         public BindingList<AidaJobViewModel> Jobs { get; } = new();
         public readonly MachineInterface _machineInterface;
-
         private readonly AppState _appState;
-
 
         public JobStatusForm(
             AppState appState,
@@ -28,11 +27,12 @@ namespace Aida.Samples.Integration.UI.Forms
             _machineInterface = machineInterface;
             InitializeComponent();
 
-            dataGridJobs.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            dataGridJobs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridJobs.DataSource = Jobs;
             dataGridJobs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridJobs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridJobs.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            dataGridJobs.DataSource = Jobs;
             dataGridJobs.MultiSelect = false;
+            dataGridJobs.CellFormatting += DataGridJobs_CellFormatting;
 
             foreach (DataGridViewColumn c in dataGridJobs.Columns)
             {
@@ -46,13 +46,42 @@ namespace Aida.Samples.Integration.UI.Forms
                     StopPollingJobs();
                 return Task.CompletedTask;
             };
+
+            appState.SelectedJobTemplateChanged += (_, job) => StartPollingJobs(job);
+        }
+
+        private void DataGridJobs_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var grid = (DataGridView)sender;
+            var row = grid.Rows[e.RowIndex];
+            var item = row.DataBoundItem as AidaJobViewModel;
+            var cell = row.Cells[e.ColumnIndex]; 
+            if (item is null) return;
+            cell.Style.ForeColor = item.JobStatus switch
+            {
+                JobStatus.None => Color.DarkGray,
+                JobStatus.Waiting => Color.Blue,
+                JobStatus.Starting => Color.Blue,
+                JobStatus.Resuming => Color.Blue,
+                JobStatus.Running => Color.Blue,
+                JobStatus.Completed => Color.DarkGreen,
+                JobStatus.Cancelled => Color.DarkGray,
+                JobStatus.Suspended => Color.Orange,
+                JobStatus.Rejected => Color.DarkRed,
+                JobStatus.Faulted => Color.DarkRed,
+                _ => Color.DarkRed,
+            };
+            
         }
 
         private void JobStatusForm_Load(object sender, EventArgs e)
         {
-            StartPollingJobs();
+            Task.Run(async () =>
+            {
+                await _machineInterface.ConnectToExchangeDatabase().ConfigureAwait(false);
+                StartPollingJobs(_appState.SelectedJobTemplate);
+            });
         }
-
 
         private void StopPollingJobs()
         {
@@ -67,18 +96,19 @@ namespace Aida.Samples.Integration.UI.Forms
             }
         }
 
-        private void StartPollingJobs()
+        private void StartPollingJobs(JobTemplateItem job)
         {
             StopPollingJobs();
             _pollJobsCancellation = new CancellationTokenSource();
             Task.Run(async () =>
             {
+                var tableDefinition = await _machineInterface.GetDataExchangeTableDefinition(job.Id).ConfigureAwait(false);
                 while (!_pollJobsCancellation.Token.IsCancellationRequested)
                 {
                     try
                     {
                         if (_appState.SelectedJobTemplate == null) continue;
-                        var result = (await _machineInterface.FetchJobsAsync(_appState.SelectedJobTemplate.Id).ConfigureAwait(false)).ToList();
+                        var result = await _machineInterface.FetchJobsAsync(tableDefinition).ConfigureAwait(false);
 
                         RunInUIThread(dataGridJobs, () =>
                         {
@@ -104,7 +134,6 @@ namespace Aida.Samples.Integration.UI.Forms
             });
         }
 
-
         private void RunInUIThread(Control ctrl, Action action, params object?[] args)
         {
             if (ctrl.InvokeRequired)
@@ -124,7 +153,7 @@ namespace Aida.Samples.Integration.UI.Forms
                     {
                         await _machineInterface.SignalExternalProcessOutcomeAsync(
                             data.WorkflowId,
-                            Sdk.Mini.Model.ExternalProcessOutcome.Faulted
+                            ExternalProcessOutcome.Faulted
                         ).ConfigureAwait(false);
                     }
                     catch
@@ -145,7 +174,7 @@ namespace Aida.Samples.Integration.UI.Forms
                     {
                         await _machineInterface.SignalExternalProcessOutcomeAsync(
                             data.WorkflowId,
-                            Sdk.Mini.Model.ExternalProcessOutcome.Completed
+                            ExternalProcessOutcome.Completed
                         ).ConfigureAwait(false);
                     }
                     catch
@@ -163,13 +192,18 @@ namespace Aida.Samples.Integration.UI.Forms
                 return;
             var row = grid.Rows[e.RowIndex];
             var job = row.DataBoundItem as AidaJobViewModel;
-            if (job?.WorkflowStatus is not Sdk.Mini.Model.WorkflowStatus.Suspended)
+            if (job?.WorkflowStatus is not WorkflowStatus.Suspended)
                 return;
             grid.ClearSelection();
             row.Selected = true;
             grid.Refresh();
             var cellRect = grid.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
             dataGridContextMenu.Show(grid, new Point(cellRect.Left + e.X, cellRect.Top + e.Y));
+        }
+
+        private void dataGridJobs_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

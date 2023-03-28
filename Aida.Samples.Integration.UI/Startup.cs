@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Aida.Samples.Integration.UI.Forms;
 using Aida.Samples.Integration.UI.Services;
 using Microsoft.AspNetCore.Builder;
@@ -17,11 +18,14 @@ namespace Aida.Samples.Integration.UI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(_ =>
+            {
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new JsonStringEnumConverter());
+                return options;
+            });
             services.AddOptions();
-            services.AddControllers()
-                .AddJsonOptions(options => options
-                    .JsonSerializerOptions
-                    .Converters.Add(new JsonStringEnumConverter()));
+            services.AddControllers();
             services.AddSingleton<WebhooksHandler>();
             services.AddSingleton<MainForm>();
             services.AddTransient<InsertDataForm>();

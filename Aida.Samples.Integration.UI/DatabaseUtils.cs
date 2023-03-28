@@ -18,14 +18,14 @@ namespace Aida.Samples.Integration.UI
         /// <returns></returns>
         public static NpgsqlCommand BuildInsertStatement(string tableName, NpgsqlConnection connection, List<PersonalizationField> fields)
         {
-            var fieldList = string.Join(", ", fields.Select(_ => $@"""{_.FieldName}"""));
+            var fieldList         = string.Join(", ", fields.Select(_ => $@"""{_.FieldName}"""));
             var valuePlaceHolders = string.Join(", ", fields.Select(_ => $"@{_.FieldName}"));
 
             fieldList += ", job_status";
             valuePlaceHolders += ", @job_status";
 
             var correlationId = "job:" + Guid.NewGuid();
-            var insert        = $@"INSERT INTO ""public"".""{tableName}"" (""correlation_id"", {fieldList}) VALUES ( @correlation_id, {valuePlaceHolders})";
+            var insert        = $@"INSERT INTO {tableName} (""correlation_id"", {fieldList}) VALUES ( @correlation_id, {valuePlaceHolders})";
             var cmd           = new NpgsqlCommand(insert, connection);
 
             foreach (var f in fields)

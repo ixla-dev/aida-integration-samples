@@ -86,7 +86,7 @@ docs/SCardState.md
 docs/ScannerEntityDto.md
 docs/ScannerEntityMarkFlagsDto.md
 docs/ScannerMarkGroupDto.md
-docs/ScannerModuleDescriptor.md
+docs/ScannerModuleDefinition.md
 docs/SearchJobLayoutsResultDto.md
 docs/SearchJobTemplatesResultDto.md
 docs/SearchLayoutsResultDto.md
@@ -201,7 +201,7 @@ src/Aida.Sdk.Mini.Test/Model/SCardStateTests.cs
 src/Aida.Sdk.Mini.Test/Model/ScannerEntityDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ScannerEntityMarkFlagsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ScannerMarkGroupDtoTests.cs
-src/Aida.Sdk.Mini.Test/Model/ScannerModuleDescriptorTests.cs
+src/Aida.Sdk.Mini.Test/Model/ScannerModuleDefinitionTests.cs
 src/Aida.Sdk.Mini.Test/Model/SearchJobLayoutsResultDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/SearchJobTemplatesResultDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/SearchLayoutsResultDtoTests.cs
@@ -333,7 +333,7 @@ src/Aida.Sdk.Mini/Model/SCardState.cs
 src/Aida.Sdk.Mini/Model/ScannerEntityDto.cs
 src/Aida.Sdk.Mini/Model/ScannerEntityMarkFlagsDto.cs
 src/Aida.Sdk.Mini/Model/ScannerMarkGroupDto.cs
-src/Aida.Sdk.Mini/Model/ScannerModuleDescriptor.cs
+src/Aida.Sdk.Mini/Model/ScannerModuleDefinition.cs
 src/Aida.Sdk.Mini/Model/SearchJobLayoutsResultDto.cs
 src/Aida.Sdk.Mini/Model/SearchJobTemplatesResultDto.cs
 src/Aida.Sdk.Mini/Model/SearchLayoutsResultDto.cs

@@ -14,10 +14,10 @@ namespace Aida.Samples.Integration.UI.Forms
 {
     public partial class MainForm : Form
     {
-        private          CancellationTokenSource _pollCancellation = new();
-        private readonly IConfiguration          _configuration;
-        private readonly ILogger<MainForm>       _logger;
-        private readonly IServiceProvider        _serviceProvider;
+        private CancellationTokenSource _pollCancellation = new();
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<MainForm> _logger;
+        private readonly IServiceProvider _serviceProvider;
         public AppState AppState { get; set; }
 
         private MachineInterface _machineInterface;
@@ -74,7 +74,9 @@ namespace Aida.Samples.Integration.UI.Forms
 
         private void OpenJobsStatusForm()
         {
-            var form = new JobStatusForm(AppState, _machineInterface);
+            var form = new JobStatusForm(AppState, new MachineInterface(
+                TxtIpAddress.Text, TxtConnectionString.Text, _configuration
+            ));
             form.Show();
         }
 
@@ -84,40 +86,38 @@ namespace Aida.Samples.Integration.UI.Forms
             {
                 var defaultTimeout = TimeSpan.FromSeconds(1);
                 //Create an instance of MachineInterface class, used to interact with the system
-                AppState.ApiBaseUrl = TxtIpAddress.Text;
+                AppState.ApiBaseUrl = TxtIpAddress.Text.TrimEnd('/');
                 AppState.DbConnectionString = TxtConnectionString.Text;
 
                 _machineInterface = new MachineInterface(TxtIpAddress.Text, TxtConnectionString.Text, _configuration);
                 _machineInterface.WorkflowSchedulerStateChanged += WorkflowScheduler_StateChanged;
                 _machineInterface.ConnectionStateChanged += MachineInterface_ConnectionStateChanged;
-                await _machineInterface.ConnectAsync(timeout: defaultTimeout).ConfigureAwait(false);
+                await _machineInterface.ConnectAsync(timeout: defaultTimeout);
                 _machineInterface.StartPollingState();
 
                 //retrieve the list of JobTemplates to allow the user to choose the JobTemplate he'll working with
-                var jobTemplates = await _machineInterface.GetAvailableJobTemplatesAsync().ConfigureAwait(false);
-
-                var items = jobTemplates.Select(_ => new JobTemplateItem
-                {
-                    Name = _.Name,
-                    Id = _.Id!.Value,
-                    Description = _.Description
-                }).ToArray();
-
+                var jobTemplates = await _machineInterface.GetAvailableJobTemplatesAsync();
+                var workflows = await _machineInterface.GetWorkflowsAsync();
+                var workflowItems = workflows.Select(_ => new WorkflowItem(_.Name, _.DisplayName)).ToArray();
+                var jobTemplateItems = jobTemplates.Select(_ => new JobTemplateItem(_.Id!.Value, _.Name, _.Description)).ToArray();
 
                 UiThreadExec(() =>
                 {
-                    cmbJobTemplates.Items.AddRange(items);
 
+                    cmbBoxWorkflows.Items.AddRange(workflowItems);
+                    cmbJobTemplates.Items.AddRange(jobTemplateItems);
                     if (_machineInterface.WorkflowSchedulerState.Status == WorkflowSchedulerStatus.Running)
                     {
-                        var selectedItem = items.First(item => item.Id == _machineInterface.WorkflowSchedulerState.CurrentJobTemplate.Id);
-                        cmbJobTemplates.SelectedItem = selectedItem;
+                        var selectedJobTemplate = jobTemplateItems.First(item => item.Id == _machineInterface.WorkflowSchedulerState.CurrentJobTemplate.Id);
+                        var selectedWorkflow = workflowItems.First(item => item.TypeName == _machineInterface.WorkflowSchedulerState.WorkflowTypeName);
+                        cmbJobTemplates.SelectedItem = selectedJobTemplate;
+                        cmbBoxWorkflows.SelectedItem = selectedWorkflow;
                         UpdateUi(_machineInterface.WorkflowSchedulerState.Status);
                     }
                     else
                     {
-                        if (cmbJobTemplates.Items.Count == 1)
-                            cmbJobTemplates.SelectedItem = cmbJobTemplates.Items[0];
+                        if (cmbBoxWorkflows.Items.Count == 1) cmbBoxWorkflows.SelectedItem = cmbBoxWorkflows.Items[0];
+                        if (cmbJobTemplates.Items.Count == 1) cmbJobTemplates.SelectedItem = cmbJobTemplates.Items[0];
                     }
 
                     grpBoxConnections.Enabled = false;
@@ -128,7 +128,7 @@ namespace Aida.Samples.Integration.UI.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Connection Failed");
+                MessageBox.Show(ex.Message, "Connection Failed");
             }
         }
 
@@ -200,8 +200,11 @@ namespace Aida.Samples.Integration.UI.Forms
         }
         private async void btnStart_Click(object sender, EventArgs e)
         {
-            var item = (JobTemplateItem)cmbJobTemplates.SelectedItem;
-            if (item is null)
+            var selectedWorkflow = (WorkflowItem)cmbBoxWorkflows.SelectedItem;
+            var selectedJobTemplate = (JobTemplateItem)cmbJobTemplates.SelectedItem;
+            var batchId = txtBatchId.Text.Trim();
+            var dryRun = checkBoxDryRun.Checked;
+            if (selectedJobTemplate is null)
             {
                 MessageBox.Show("Please select a job template from the drop down menu");
                 return;
@@ -212,10 +215,15 @@ namespace Aida.Samples.Integration.UI.Forms
                 try
                 {
                     var state = await _machineInterface.GetWorkflowSchedulerStateAsync().ConfigureAwait(false);
-                    if (state.Status == WorkflowSchedulerStatus.Running && state.CurrentJobTemplate.Name != item.Name)
+                    if (state.Status == WorkflowSchedulerStatus.Running && state.CurrentJobTemplate.Name != selectedJobTemplate.Name)
                         await _machineInterface.StopPersonalizationCycleAsync().ConfigureAwait(false);
                     //Starts the workflow scheduler for the given JobTemplate, the system will now start personalizing supports
-                    await _machineInterface.StartWorkflowSchedulerAsync(item.Name, txtBatchId.Text).ConfigureAwait(false);
+                    await _machineInterface.StartWorkflowSchedulerAsync(
+                        jobTemplateName: selectedJobTemplate.Name,
+                        batchId: batchId,
+                        workflowTypeName: selectedWorkflow.TypeName,
+                        dryRun: dryRun
+                    ).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
@@ -226,18 +234,20 @@ namespace Aida.Samples.Integration.UI.Forms
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            var dbUser     = _configuration.GetSection("MachineInterface:DbUser").Get<string>();
+            var dbUser = _configuration.GetSection("MachineInterface:DbUser").Get<string>();
             var dbPassword = _configuration.GetSection("MachineInterface:DbPassword").Get<string>();
-            var dbPort     = _configuration.GetSection("MachineInterface:DbPort").Get<int>();
-            var ipAddress  = _configuration.GetSection("MachineInterface:IpAddress").Get<string>();
-            var baseUrl    = $"http://{ipAddress}:5000";
+            var dbPort = _configuration.GetSection("MachineInterface:DbPort").Get<int>();
+            var ipAddress = _configuration.GetSection("MachineInterface:IpAddress").Get<string>();
+            var baseUrl = $"http://{ipAddress}:5000";
 
-            var builder = new NpgsqlConnectionStringBuilder();
-            builder.Host = ipAddress;
-            builder.Port = dbPort;
-            builder.Database = "ixla_iws";
-            builder.Password = dbPassword;
-            builder.Username = dbUser;
+            var builder = new NpgsqlConnectionStringBuilder
+            {
+                Host = ipAddress,
+                Port = dbPort,
+                Database = "ixla_iws",
+                Password = dbPassword,
+                Username = dbUser
+            };
 
             TxtConnectionString.Text = builder.ToString();
             TxtIpAddress.Text = baseUrl;
@@ -275,8 +285,8 @@ namespace Aida.Samples.Integration.UI.Forms
             UiThreadExec(() =>
             {
                 var errorCode = _machineInterface.WorkflowSchedulerState?.Errors?.Any() ?? false
-                              ? _machineInterface.WorkflowSchedulerState?.Errors?.First().ToString() ?? "Ok"
-                              : "Ok";
+                    ? _machineInterface.WorkflowSchedulerState?.Errors?.First().ToString() ?? "Ok"
+                    : "Ok";
                 if (status != null)
                     SetWindowTitle($"{_machineInterface.ConnectionState} (Scheduler: {_machineInterface.WorkflowSchedulerState.Status}, {errorCode}))");
                 else
@@ -385,6 +395,20 @@ namespace Aida.Samples.Integration.UI.Forms
         }
 
         private void txtBatchId_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void lblWorkflow_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBoxDryRun_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblBatchId_Click(object sender, EventArgs e)
         {
 
         }
