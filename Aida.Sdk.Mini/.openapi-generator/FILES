@@ -9,6 +9,7 @@ docs/BoxModuleDoorStatus.md
 docs/BoxModuleState.md
 docs/BoxModuleStateChangedEventNotification.md
 docs/BoxModuleTransportStatus.md
+docs/ChipEncodingConfigurationDto.md
 docs/CollectedWorkflow.md
 docs/CreateJobTemplateDto.md
 docs/DRectangleDto.md
@@ -62,11 +63,8 @@ docs/PCSCActionResultDto.md
 docs/PageSegmentationMode.md
 docs/PcScConnectResult.md
 docs/PcScErrorCode.md
-docs/PersonalizationTask.md
-docs/PersonalizationTaskErrorCodes.md
-docs/PersonalizationTaskStatus.md
-docs/PersonalizationTaskType.md
 docs/PhotoSensorsFlags.md
+docs/ReaderAccessType.md
 docs/ReaderInterfaceType.md
 docs/RectangleDto.md
 docs/RuntimeMetrics.md
@@ -125,6 +123,7 @@ src/Aida.Sdk.Mini.Test/Model/BoxModuleDoorStatusTests.cs
 src/Aida.Sdk.Mini.Test/Model/BoxModuleStateChangedEventNotificationTests.cs
 src/Aida.Sdk.Mini.Test/Model/BoxModuleStateTests.cs
 src/Aida.Sdk.Mini.Test/Model/BoxModuleTransportStatusTests.cs
+src/Aida.Sdk.Mini.Test/Model/ChipEncodingConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/CollectedWorkflowTests.cs
 src/Aida.Sdk.Mini.Test/Model/CreateJobTemplateDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/DRectangleDtoTests.cs
@@ -177,11 +176,8 @@ src/Aida.Sdk.Mini.Test/Model/PCSCActionResultDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/PageSegmentationModeTests.cs
 src/Aida.Sdk.Mini.Test/Model/PcScConnectResultTests.cs
 src/Aida.Sdk.Mini.Test/Model/PcScErrorCodeTests.cs
-src/Aida.Sdk.Mini.Test/Model/PersonalizationTaskErrorCodesTests.cs
-src/Aida.Sdk.Mini.Test/Model/PersonalizationTaskStatusTests.cs
-src/Aida.Sdk.Mini.Test/Model/PersonalizationTaskTests.cs
-src/Aida.Sdk.Mini.Test/Model/PersonalizationTaskTypeTests.cs
 src/Aida.Sdk.Mini.Test/Model/PhotoSensorsFlagsTests.cs
+src/Aida.Sdk.Mini.Test/Model/ReaderAccessTypeTests.cs
 src/Aida.Sdk.Mini.Test/Model/ReaderInterfaceTypeTests.cs
 src/Aida.Sdk.Mini.Test/Model/RectangleDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/RuntimeMetricsTests.cs
@@ -257,6 +253,7 @@ src/Aida.Sdk.Mini/Model/BoxModuleDoorStatus.cs
 src/Aida.Sdk.Mini/Model/BoxModuleState.cs
 src/Aida.Sdk.Mini/Model/BoxModuleStateChangedEventNotification.cs
 src/Aida.Sdk.Mini/Model/BoxModuleTransportStatus.cs
+src/Aida.Sdk.Mini/Model/ChipEncodingConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/CollectedWorkflow.cs
 src/Aida.Sdk.Mini/Model/CreateJobTemplateDto.cs
 src/Aida.Sdk.Mini/Model/DRectangleDto.cs
@@ -309,11 +306,8 @@ src/Aida.Sdk.Mini/Model/PCSCActionResultDto.cs
 src/Aida.Sdk.Mini/Model/PageSegmentationMode.cs
 src/Aida.Sdk.Mini/Model/PcScConnectResult.cs
 src/Aida.Sdk.Mini/Model/PcScErrorCode.cs
-src/Aida.Sdk.Mini/Model/PersonalizationTask.cs
-src/Aida.Sdk.Mini/Model/PersonalizationTaskErrorCodes.cs
-src/Aida.Sdk.Mini/Model/PersonalizationTaskStatus.cs
-src/Aida.Sdk.Mini/Model/PersonalizationTaskType.cs
 src/Aida.Sdk.Mini/Model/PhotoSensorsFlags.cs
+src/Aida.Sdk.Mini/Model/ReaderAccessType.cs
 src/Aida.Sdk.Mini/Model/ReaderInterfaceType.cs
 src/Aida.Sdk.Mini/Model/RectangleDto.cs
 src/Aida.Sdk.Mini/Model/RuntimeMetrics.cs

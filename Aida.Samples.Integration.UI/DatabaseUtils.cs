@@ -36,5 +36,12 @@ namespace Aida.Samples.Integration.UI
 
             return cmd;
         }
+
+        public static NpgsqlCommand ClearTable(string tableName, NpgsqlConnection connection) {
+            var delete = $@"DELETE FROM {tableName};";
+            var command = new NpgsqlCommand(delete, connection);
+            command.Prepare();
+            return command;
+        }
     }
 }

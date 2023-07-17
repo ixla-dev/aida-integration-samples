@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **int** |  | [optional] 
 **Operations** | **MagneticStripeOperations** |  | [optional] 
-**HighCoercitivity** | **bool** |  | [optional] 
+**HighCoercivity** | **bool** |  | [optional] 
 **Track1Enabled** | **bool** |  | [optional] 
 **Track2Enabled** | **bool** |  | [optional] 
 **Track3Enabled** | **bool** |  | [optional] 

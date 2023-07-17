@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **UpdatedAt** | **DateTime?** |  | [optional] 
 **ExpectedMarkDuration** | **string** |  | [optional] 
 **WorkingArea** | [**DRectangleDto**](DRectangleDto.md) |  | [optional] 
+**ChipEncodingConfiguration** | [**ChipEncodingConfigurationDto**](ChipEncodingConfigurationDto.md) |  | [optional] 
 **MagStripeConfiguration** | [**MagneticStripeConfigurationDto**](MagneticStripeConfigurationDto.md) |  | [optional] 
 **WebhooksTarget** | [**WebhooksTargetDto**](WebhooksTargetDto.md) |  | [optional] 
 **File** | [**FileDto**](FileDto.md) |  | [optional] 

@@ -23,10 +23,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
 
         [HttpGet]
         [Route("/")]
-        public ActionResult Home()
-        {
-            return Ok("Webhooks handler");
-        }
+        public ActionResult Home() => Ok("Webhooks handler");
 
         [HttpPost]
         [Route("ixla/aida/v1/webhooks")]
@@ -35,18 +32,18 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
             [FromBody] JsonElement receivedMessage)
         {
             var message = DeserializeMessage(receivedMessage);
-            
+
             // If the payload does not contain a known message type we short-circuit the request
             // and respond with 400 bad request to the client
             if (message == null) return BadRequest();
-            
+
             // log the received message from AIDA
-            _logger.LogInformation("Received Message {@Message}", JsonSerializer.Serialize(receivedMessage, new JsonSerializerOptions
+            _logger.LogDebug("Received Message {@Message}", JsonSerializer.Serialize(receivedMessage, new JsonSerializerOptions
             {
                 WriteIndented = true,
                 Converters = { new JsonStringEnumConverter() }
             }));
-            
+
             // Add the message in an unbounded blocking collection for further processing 
             messageQueue.AddMessage(message);
             return Ok();
@@ -63,7 +60,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
                 return null;
             var jsonString = json.ToString();
             if (jsonString is null) return null;
-            
+
             return messageType switch
             {
                 MessageType.WorkflowSchedulerStarted   => JsonSerializer.Deserialize<WorkflowSchedulerStartedMessage>(jsonString, _jsonOptions),

@@ -8,7 +8,7 @@ namespace Aida.Samples.Integration.UI.Forms
 {
     public partial class SuspendedWorkflowsForm : Form
     {
-        private WebhooksHandler _webhooksHandler;
+        private readonly WebhooksHandler _webhooksHandler;
 
         public SuspendedWorkflowsForm(
             WebhooksHandler webhooksHandler)
@@ -72,9 +72,6 @@ namespace Aida.Samples.Integration.UI.Forms
             }
         }
 
-        private async void SuspendedWorkflowsForm_Load(object sender, EventArgs e)
-        {
-            await _webhooksHandler.FetchSuspendedWorkflows();
-        }
+        private async void SuspendedWorkflowsForm_Load(object sender, EventArgs e) { await _webhooksHandler.FetchSuspendedWorkflows(); }
     }
 }

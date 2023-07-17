@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -55,15 +56,16 @@ namespace Aida.Samples.Integration.UI.Forms
             var grid = (DataGridView)sender;
             var row = grid.Rows[e.RowIndex];
             var item = row.DataBoundItem as AidaJobViewModel;
-            var cell = row.Cells[e.ColumnIndex]; 
+            var cell = row.Cells[e.ColumnIndex];
             if (item is null) return;
+
             cell.Style.ForeColor = item.JobStatus switch
             {
                 JobStatus.None => Color.DarkGray,
                 JobStatus.Waiting => Color.Blue,
                 JobStatus.Starting => Color.Blue,
-                JobStatus.Resuming => Color.Blue,
-                JobStatus.Running => Color.Blue,
+                JobStatus.Resuming => Color.Goldenrod,
+                JobStatus.Running => Color.Green,
                 JobStatus.Completed => Color.DarkGreen,
                 JobStatus.Cancelled => Color.DarkGray,
                 JobStatus.Suspended => Color.Orange,
@@ -71,7 +73,6 @@ namespace Aida.Samples.Integration.UI.Forms
                 JobStatus.Faulted => Color.DarkRed,
                 _ => Color.DarkRed,
             };
-            
         }
 
         private void JobStatusForm_Load(object sender, EventArgs e)
@@ -100,16 +101,17 @@ namespace Aida.Samples.Integration.UI.Forms
         {
             StopPollingJobs();
             _pollJobsCancellation = new CancellationTokenSource();
+
             Task.Run(async () =>
             {
+                var lastCompletedJob = 0;
                 var tableDefinition = await _machineInterface.GetDataExchangeTableDefinition(job.Id).ConfigureAwait(false);
                 while (!_pollJobsCancellation.Token.IsCancellationRequested)
                 {
                     try
                     {
                         if (_appState.SelectedJobTemplate == null) continue;
-                        var result = await _machineInterface.FetchJobsAsync(tableDefinition).ConfigureAwait(false);
-
+                        var result = await _machineInterface.FetchJobsAsync(tableDefinition, last_completed_job: lastCompletedJob).ConfigureAwait(false);
                         RunInUIThread(dataGridJobs, () =>
                         {
                             if (result.Count == 0)
@@ -117,22 +119,27 @@ namespace Aida.Samples.Integration.UI.Forms
                                 Jobs.Clear();
                                 return;
                             }
-
-                            for (var i = 1; i <= result.Count; i++)
+                            var resultMap = result.ToDictionary(model => model.JobId, model => model);
+                            var existingMap = Jobs.ToDictionary(model => model.JobId, model => model);
+                            foreach (var kv in resultMap)
                             {
-                                var index = i - 1;
-                                if (i > Jobs.Count) Jobs.Add(result.ElementAt(index));
-                                else Jobs[index].Update(result.ElementAt(index));
+                                if (existingMap.TryGetValue(kv.Key, out var value))
+                                    value.Update(kv.Value);
+                                else Jobs.Insert(0, kv.Value);
                             }
                         });
                     }
-                    catch
+                    catch (Exception e) {
+                    }
+                    finally
                     {
-                        await Task.Delay(500);
+                        await Task.Delay(50).ConfigureAwait(false);
                     }
                 }
             });
         }
+
+         
 
         private void RunInUIThread(Control ctrl, Action action, params object?[] args)
         {
@@ -151,10 +158,8 @@ namespace Aida.Samples.Integration.UI.Forms
                 {
                     try
                     {
-                        await _machineInterface.SignalExternalProcessOutcomeAsync(
-                            data.WorkflowId,
-                            ExternalProcessOutcome.Faulted
-                        ).ConfigureAwait(false);
+                        await _machineInterface.SignalExternalProcessOutcomeAsync(data.WorkflowId,
+                            ExternalProcessOutcome.Faulted).ConfigureAwait(false);
                     }
                     catch
                     {
@@ -172,10 +177,8 @@ namespace Aida.Samples.Integration.UI.Forms
                 {
                     try
                     {
-                        await _machineInterface.SignalExternalProcessOutcomeAsync(
-                            data.WorkflowId,
-                            ExternalProcessOutcome.Completed
-                        ).ConfigureAwait(false);
+                        await _machineInterface.SignalExternalProcessOutcomeAsync(data.WorkflowId,
+                            ExternalProcessOutcome.Completed).ConfigureAwait(false);
                     }
                     catch
                     {
@@ -201,9 +204,6 @@ namespace Aida.Samples.Integration.UI.Forms
             dataGridContextMenu.Show(grid, new Point(cellRect.Left + e.X, cellRect.Top + e.Y));
         }
 
-        private void dataGridJobs_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
+        private void dataGridJobs_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
     }
 }

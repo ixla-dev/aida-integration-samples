@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		generate_client.ps1 = generate_client.ps1
 		openapitools.json = openapitools.json
 		README.md = README.md
+		generate_full_client.ps1 = generate_full_client.ps1
+		csharp-generator-config-full.json = csharp-generator-config-full.json
 	EndProjectSection
 EndProject
 Global

@@ -14,7 +14,6 @@ Name | Type | Description | Notes
 **JobStatus** | [**JobStatus**](JobStatus.md) |  | [optional] 
 **ErrorCode** | [**JobErrorCodes**](JobErrorCodes.md) |  | [optional] 
 **AdditionalMetadata** | **Dictionary&lt;string, Object&gt;** |  | [optional] 
-**PersonalizationTasks** | [**List&lt;PersonalizationTask&gt;**](PersonalizationTask.md) |  | [optional] 
 **DocumentProduced** | **bool** |  | [optional] 
 **Hostname** | **string** |  | [optional] 
 **EncoderId** | **string** |  | [optional] 

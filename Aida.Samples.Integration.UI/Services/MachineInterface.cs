@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,14 +41,17 @@ namespace Aida.Samples.Integration.UI.Services
     /// </summary>
     public class MachineInterface
     {
-        private readonly SemaphoreSlim _dbInsertSemaphore = new(1,1);
-        private readonly string _apiAddress;
-        private readonly string _dbConnectionString;
-        private CancellationTokenSource _pollCancellation;
+        private readonly SemaphoreSlim           _dbInsertSemaphore = new(1, 1);
+        private readonly string                  _apiAddress;
+        private readonly string                  _dbConnectionString;
+        private          CancellationTokenSource _pollCancellation;
 
-        public WorkflowSchedulerStateDto WorkflowSchedulerState;
-        private NpgsqlConnection _dbConnection;
-        public MachineInterfaceConnectionState _connectionState = MachineInterfaceConnectionState.Disconnected;
+        public  WorkflowSchedulerStateDto       WorkflowSchedulerState;
+        private NpgsqlConnection                _dbConnection;
+        public  MachineInterfaceConnectionState _connectionState = MachineInterfaceConnectionState.Disconnected;
+
+        private readonly Dictionary<int, List<EntityDescriptor>> _entityDescriptorsCache = new();
+        private readonly Dictionary<int, DataExchangeTableDefinition> _dataExchangeTableDefinitionsCache = new();
 
         public MachineInterfaceConnectionState ConnectionState
         {
@@ -183,8 +187,13 @@ namespace Aida.Samples.Integration.UI.Services
         /// <returns>List of Entities</returns>
         public List<EntityDescriptor> GetEntitiesPerJobTemplate(int jobTemplateId)
         {
+            if (_entityDescriptorsCache.ContainsKey(jobTemplateId))
+                return _entityDescriptorsCache[jobTemplateId];
+
             using var api = GetClient();
-            return api.GetEntityDescriptorsByJobTemplateId(jobTemplateId);
+            var result = api.GetEntityDescriptorsByJobTemplateId(jobTemplateId);
+            _entityDescriptorsCache.Add(jobTemplateId, result);
+            return result;
         }
 
         /// <summary>
@@ -196,7 +205,6 @@ namespace Aida.Samples.Integration.UI.Services
         public void PushPersonalizationDataToExchangeDatabase(int jobTemplateId, List<PersonalizationRecord> records)
         {
             using var etl = GetClient();
-
             var etlDefinition = etl.GetDataExchangeTableDefinition(jobTemplateId);
             foreach (var r in records)
             {
@@ -219,16 +227,15 @@ namespace Aida.Samples.Integration.UI.Services
         {
             try
             {
-                await _dbInsertSemaphore.WaitAsync();
-                using var api = GetClient();
+                await _dbInsertSemaphore.WaitAsync().ConfigureAwait(false);
 
-                var record = new PersonalizationRecord();
-                var fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(id).ConfigureAwait(false);
-                var job = await api.GetJobTemplateByIdAsync(id).ConfigureAwait(false);
-
+                using var api    = GetClient();
+                var       record = new PersonalizationRecord();
+                var       fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(id).ConfigureAwait(false);
+                var       job    = await api.GetJobTemplateByIdAsync(id).ConfigureAwait(false);
                 // skipping personalization fields will make AIDA server use placeholders found in SJF Files
                 foreach (var f in fields)
-                {
+                { 
                     if (f.ValueType == EntityFieldValueType.String)
                         record.Fields.Add(new PersonalizationField(f.EntityName, DBNull.Value));
                 }
@@ -243,7 +250,7 @@ namespace Aida.Samples.Integration.UI.Services
                 record.Fields.Add(new PersonalizationField("batch_id", batchId));
 
                 var etlDefinition = await api.GetDataExchangeTableDefinitionAsync(id).ConfigureAwait(false);
-                var statement = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
+                var statement     = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
                 await statement.ExecuteNonQueryAsync().ConfigureAwait(false);
             }
             catch (Exception e)
@@ -256,6 +263,19 @@ namespace Aida.Samples.Integration.UI.Services
             }
         }
 
+
+        public async Task ClearJobsAsync(int jobId)
+        {
+            await _dbInsertSemaphore.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                var definition = await GetDataExchangeTableDefinition(jobId).ConfigureAwait(false);
+                var statement = DatabaseUtils.ClearTable(definition.TableName, _dbConnection);
+                await statement.ExecuteNonQueryAsync().ConfigureAwait(false);
+            }
+            catch (Exception) { }
+            finally { _dbInsertSemaphore.Release(); }
+        }
         public async Task<WorkflowSchedulerStateDto> ResumeSchedulerAsync()
         {
             using var api = GetClient();
@@ -289,7 +309,7 @@ namespace Aida.Samples.Integration.UI.Services
                 FilterJobsBy = new List<FilterDto>()
             };
             if (!string.IsNullOrEmpty(batchId))
-                startupParams.FilterJobsBy.Add(new("batch_id", new List<string> { batchId }));
+                startupParams.FilterJobsBy.Add(new FilterDto("batch_id", new List<string> { batchId }));
 
             var state = await GetWorkflowSchedulerStateAsync();
             if (state.Status == WorkflowSchedulerStatus.Running) return;
@@ -310,7 +330,7 @@ namespace Aida.Samples.Integration.UI.Services
         public async Task StopPersonalizationCycleAsync()
         {
             using var scheduler = GetClient();
-            var state = await scheduler.StopWorkflowSchedulerAsync(true);
+            var       state     = await scheduler.StopWorkflowSchedulerAsync(true);
             UpdateState(state);
         }
 
@@ -368,15 +388,19 @@ namespace Aida.Samples.Integration.UI.Services
                     WorkflowInstanceId = workflowInstanceId,
                     RequiredAction = requiredAction,
                     ErrorReason = errorReason
-                }
-            );
+                });
         }
 
 
         public async Task<DataExchangeTableDefinition> GetDataExchangeTableDefinition(int jobTemplateId)
         {
-            var etl = GetClient();
+            if (_dataExchangeTableDefinitionsCache.ContainsKey(jobTemplateId))
+                return _dataExchangeTableDefinitionsCache[jobTemplateId];
+
+            var etl        = GetClient();
             var definition = await etl.GetDataExchangeTableDefinitionAsync(jobTemplateId).ConfigureAwait(false);
+            _dataExchangeTableDefinitionsCache.Add(jobTemplateId, definition);
+
             return definition;
         }
 
@@ -393,15 +417,16 @@ namespace Aida.Samples.Integration.UI.Services
         /// <param name="offset"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public async Task<List<AidaJobViewModel>> FetchJobsAsync(DataExchangeTableDefinition definition, int offset = 0, int limit = 50)
+        public async Task<List<AidaJobViewModel>> FetchJobsAsync(DataExchangeTableDefinition definition, int offset = 0, int limit = 50, int last_completed_job = 0)
         {
             try
             {
                 await using var cmd = _dbConnection.CreateCommand();
 
-                cmd.CommandText = $"select * from {definition.TableName} order by job_id desc offset @offset limit @limit";
+                cmd.CommandText = $"select * from {definition.TableName} where job_id > @last_completed_job order by job_id desc offset @offset limit @limit";
                 cmd.Parameters.AddWithValue("@offset", offset);
                 cmd.Parameters.AddWithValue("@limit", limit);
+                cmd.Parameters.AddWithValue("@last_completed_job", last_completed_job);
 
                 await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -422,10 +447,7 @@ namespace Aida.Samples.Integration.UI.Services
                         UpdateTimestamp = reader.ReadNullableDateTime("update_timestamp"),
                         CompleteTimestamp = reader.ReadNullableDateTime("complete_timestamp"),
                         WorkflowId = reader.ReadNullableString("workflow_id"),
-                        WorkflowStatus =
-                            Enum.TryParse<WorkflowStatus>(reader.ReadNullableString("workflow_status") ?? "", out var workflowStatus)
-                                ? workflowStatus
-                                : null,
+                        WorkflowStatus = Enum.TryParse<WorkflowStatus>(reader.ReadNullableString("workflow_status") ?? "", out var workflowStatus) ? workflowStatus : null,
                         JobStatus = Enum.Parse<JobStatus>(reader.ReadString("job_status"))
                     };
                     list.Add(job);
@@ -438,8 +460,7 @@ namespace Aida.Samples.Integration.UI.Services
                 return Array.Empty<AidaJobViewModel>().ToList();
             }
         }
-
-
+        
         private IntegrationApi GetClient(TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(1);
@@ -479,15 +500,23 @@ namespace Aida.Samples.Integration.UI.Services
                     {
                         await GetWorkflowSchedulerStateAsync().ConfigureAwait(false);
                         ConnectionState = MachineInterfaceConnectionState.Connected;
-                        await Task.Delay(1000).ConfigureAwait(false);
                     }
                     catch
                     {
                         ConnectionState = MachineInterfaceConnectionState.Connecting;
+                    } 
+                    finally
+                    {
                         await Task.Delay(1000).ConfigureAwait(false);
                     }
                 }
             });
+        }
+
+        public void ClearCaches()
+        {
+            _dataExchangeTableDefinitionsCache.Clear();
+            _entityDescriptorsCache.Clear();
         }
     }
 }

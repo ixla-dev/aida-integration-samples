@@ -1,0 +1,14 @@
+{
+  "stringEnums": true,
+  "ensureUniqueParams": true,
+  "returnICollection": true,
+  "useSingleRequestParameter": true,
+  "sortParamsByRequiredFlag": true,
+  "netCoreProjectFile": true,
+  "packageName": "Aida.Sdk",
+  "sourceFolder": "src",
+  "nonPublicApi": false,
+  "targetFramework": "netstandard2.0",
+  "library": "httpclient",
+  "enumPropertyNaming": "PascalCase"
+}

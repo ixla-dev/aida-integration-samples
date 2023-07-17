@@ -24,11 +24,9 @@ namespace Aida.Samples.Integration.UI.Services
         public WorkflowMessage GetMessageByIndex(int index) => MessagesToProcess[index];
         public WorkflowMessage GetMessageByWorkflowInstanceId(string workflowInstanceId)
             => MessagesToProcess.FirstOrDefault(m => string.Equals(m.WorkflowInstanceId, workflowInstanceId));
-        public IConfiguration _configuration;
 
-        public WebhooksHandler(IConfiguration configuration)
+        public WebhooksHandler()
         {
-            _configuration = configuration;
         }
 
         public void Add(WorkflowMessage message, bool force = false)

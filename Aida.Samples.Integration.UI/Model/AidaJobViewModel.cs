@@ -7,7 +7,6 @@ namespace Aida.Samples.Integration.UI.Model
 {
     public class AidaJobViewModel : INotifyPropertyChanged
     {
-
         private string _batchId;
 
         public string BatchId
@@ -19,7 +18,6 @@ namespace Aida.Samples.Integration.UI.Model
                 _batchId = value;
                 OnPropertyChanged();
             }
-
         }
 
         private int _jobId;
@@ -34,6 +32,7 @@ namespace Aida.Samples.Integration.UI.Model
                 OnPropertyChanged();
             }
         }
+
 
         private string _workflowId;
 
@@ -188,9 +187,8 @@ namespace Aida.Samples.Integration.UI.Model
 
         public void Update(AidaJobViewModel jobViewModel)
         {
-            foreach (var p in GetType().GetProperties(
-                         System.Reflection.BindingFlags.Public |
-                         System.Reflection.BindingFlags.Instance))
+            foreach (var p in GetType().GetProperties(System.Reflection.BindingFlags.Public |
+                                                      System.Reflection.BindingFlags.Instance))
             {
                 p.SetValue(this, p.GetValue(jobViewModel));
             }
