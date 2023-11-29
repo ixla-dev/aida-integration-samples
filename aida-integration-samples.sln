@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		csharp-generator-config-full.json = csharp-generator-config-full.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aida.Samples.PersoDataProvider", "Aida.Samples.PersoDataProvider\Aida.Samples.PersoDataProvider.csproj", "{3B182AA4-A225-4242-902B-F7E2FEE44D24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{E4167B3E-5C08-4BDF-83BD-DE64C1ACFDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4167B3E-5C08-4BDF-83BD-DE64C1ACFDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4167B3E-5C08-4BDF-83BD-DE64C1ACFDBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B182AA4-A225-4242-902B-F7E2FEE44D24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B182AA4-A225-4242-902B-F7E2FEE44D24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B182AA4-A225-4242-902B-F7E2FEE44D24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B182AA4-A225-4242-902B-F7E2FEE44D24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

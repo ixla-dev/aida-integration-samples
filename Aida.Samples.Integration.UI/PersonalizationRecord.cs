@@ -9,9 +9,6 @@ namespace Aida.Samples.Integration.UI
     public class PersonalizationRecord
     {
         public List<PersonalizationField> Fields { get; set; } = new();
-        public override string ToString()
-        {
-            return string.Join(" | ", Fields.Where(_ => _.Data is string).Select(_ => $"{_.FieldName}'{_.Data}'"));
-        }
+        public override string ToString() => string.Join(" | ", Fields.Where(_ => _.Data is string).Select(f => $"{f.FieldName}'{f.Data}'"));
     }
 }

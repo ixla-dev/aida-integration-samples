@@ -4,101 +4,16 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
-| [**ApiV1PcscGatewayReleaseContextPost**](PCSCGatewayApi.md#apiv1pcscgatewayreleasecontextpost) | **POST** /api/v1/pcsc-gateway/release-context |  |
 | [**EstablishContext**](PCSCGatewayApi.md#establishcontext) | **POST** /api/v1/pcsc-gateway/establish-context | AIDA Server invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext. |
 | [**GetReader**](PCSCGatewayApi.md#getreader) | **GET** /api/v1/pcsc-gateway/readers/{readerIndex} | Return the list of available readers |
 | [**GetReaders**](PCSCGatewayApi.md#getreaders) | **GET** /api/v1/pcsc-gateway/readers | Return the list of available readers |
 | [**GetSmartCardAtr**](PCSCGatewayApi.md#getsmartcardatr) | **GET** /api/v1/pcsc-gateway/{readerIndex}/smart-card/atr | Invokes SCardConnect on the specified reader and tries to read the ATR  from the card currently present in the reader |
 | [**GetSmartCardStatus**](PCSCGatewayApi.md#getsmartcardstatus) | **GET** /api/v1/pcsc-gateway/{readerIndex}/smart-card/status | Invoke SCardStatus on the specified reader |
+| [**ReleaseContext**](PCSCGatewayApi.md#releasecontext) | **POST** /api/v1/pcsc-gateway/release-context |  |
 | [**SmartCardConnect**](PCSCGatewayApi.md#smartcardconnect) | **POST** /api/v1/pcsc-gateway/{readerIndex}/smart-card/connect | Invoke SCardConnect on the specified reader. The card handle (hCard) is held server side  until the next time Connect is invoked |
 | [**SmartCardDisconnect**](PCSCGatewayApi.md#smartcarddisconnect) | **POST** /api/v1/pcsc-gateway/{readerIndex}/smart-card/disconnect | Invoke SCardDisconnect on the specified reader |
 | [**SmartCardReconnect**](PCSCGatewayApi.md#smartcardreconnect) | **POST** /api/v1/pcsc-gateway/{readerIndex}/smart-card/reconnect | Invoke SCardReconnect on the specified reader |
 | [**Transmit**](PCSCGatewayApi.md#transmit) | **POST** /api/v1/pcsc-gateway/{readerIndex}/smart-card/transmit | Invoke SCardTransmit on the specified reader |
-
-<a name="apiv1pcscgatewayreleasecontextpost"></a>
-# **ApiV1PcscGatewayReleaseContextPost**
-> void ApiV1PcscGatewayReleaseContextPost ()
-
-
-
-### Example
-```csharp
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using Aida.Sdk.Api;
-using Aida.Sdk.Client;
-using Aida.Sdk.Model;
-
-namespace Example
-{
-    public class ApiV1PcscGatewayReleaseContextPostExample
-    {
-        public static void Main()
-        {
-            Configuration config = new Configuration();
-            config.BasePath = "http://localhost";
-            // Configure Bearer token for authorization: Bearer
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-
-            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
-            HttpClient httpClient = new HttpClient();
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            var apiInstance = new PCSCGatewayApi(httpClient, config, httpClientHandler);
-
-            try
-            {
-                apiInstance.ApiV1PcscGatewayReleaseContextPost();
-            }
-            catch (ApiException  e)
-            {
-                Debug.Print("Exception when calling PCSCGatewayApi.ApiV1PcscGatewayReleaseContextPost: " + e.Message);
-                Debug.Print("Status Code: " + e.ErrorCode);
-                Debug.Print(e.StackTrace);
-            }
-        }
-    }
-}
-```
-
-#### Using the ApiV1PcscGatewayReleaseContextPostWithHttpInfo variant
-This returns an ApiResponse object which contains the response data, status code and headers.
-
-```csharp
-try
-{
-    apiInstance.ApiV1PcscGatewayReleaseContextPostWithHttpInfo();
-}
-catch (ApiException e)
-{
-    Debug.Print("Exception when calling PCSCGatewayApi.ApiV1PcscGatewayReleaseContextPostWithHttpInfo: " + e.Message);
-    Debug.Print("Status Code: " + e.ErrorCode);
-    Debug.Print(e.StackTrace);
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="establishcontext"></a>
 # **EstablishContext**
@@ -562,6 +477,91 @@ catch (ApiException e)
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="releasecontext"></a>
+# **ReleaseContext**
+> void ReleaseContext ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class ReleaseContextExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new PCSCGatewayApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                apiInstance.ReleaseContext();
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling PCSCGatewayApi.ReleaseContext: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ReleaseContextWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.ReleaseContextWithHttpInfo();
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling PCSCGatewayApi.ReleaseContextWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details

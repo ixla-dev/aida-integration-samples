@@ -12,8 +12,7 @@ Name | Type | Description | Notes
 **OffsetX** | **double** |  | [optional] 
 **OffsetY** | **double** |  | [optional] 
 **Entities** | **List&lt;string&gt;** |  | [optional] 
-**OcrSettingsDto** | [**List&lt;OcrSettingsDto&gt;**](OcrSettingsDto.md) |  | [optional] 
-**AutoPosSettings** | [**List&lt;TemplateMatchingConfiguration&gt;**](TemplateMatchingConfiguration.md) |  | [optional] 
+**AutoPosSettings** | [**List&lt;AutoPosConfigSummaryModel&gt;**](AutoPosConfigSummaryModel.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -4,9 +4,100 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**DeletePersonalizationSession**](PersonalizationSessionApi.md#deletepersonalizationsession) | **POST** /aida/v1/personalizationsession/personalization-session |  |
 | [**GetPersonalizationSession**](PersonalizationSessionApi.md#getpersonalizationsession) | **GET** /aida/v1/personalizationsession/personalization-session |  |
 | [**GetPersonalizationSessionEvents**](PersonalizationSessionApi.md#getpersonalizationsessionevents) | **GET** /aida/v1/personalizationsession/personalization-session-events |  |
 | [**GetPersonalizationSessions**](PersonalizationSessionApi.md#getpersonalizationsessions) | **GET** /aida/v1/personalizationsession/personalization-sessions |  |
+
+<a name="deletepersonalizationsession"></a>
+# **DeletePersonalizationSession**
+> void DeletePersonalizationSession (string sessionId = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class DeletePersonalizationSessionExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new PersonalizationSessionApi(httpClient, config, httpClientHandler);
+            var sessionId = "sessionId_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.DeletePersonalizationSession(sessionId);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling PersonalizationSessionApi.DeletePersonalizationSession: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the DeletePersonalizationSessionWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.DeletePersonalizationSessionWithHttpInfo(sessionId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling PersonalizationSessionApi.DeletePersonalizationSessionWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **sessionId** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="getpersonalizationsession"></a>
 # **GetPersonalizationSession**

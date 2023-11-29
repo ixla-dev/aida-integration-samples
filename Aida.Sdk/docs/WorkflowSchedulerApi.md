@@ -4,31 +4,33 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
-| [**AidaV1WorkflowSchedulerJobsInfoPost**](WorkflowSchedulerApi.md#aidav1workflowschedulerjobsinfopost) | **POST** /aida/v1/workflow-scheduler/jobs/info |  |
+| [**CancelRunningWorkflowInstances**](WorkflowSchedulerApi.md#cancelrunningworkflowinstances) | **POST** /aida/v1/workflow-scheduler/workflow-instances/running/_cancel |  |
 | [**CancelSuspendedWorkflows**](WorkflowSchedulerApi.md#cancelsuspendedworkflows) | **POST** /aida/v1/workflow-scheduler/workflow-instances/suspended/cancel |  |
 | [**CancelWorkflowInstance**](WorkflowSchedulerApi.md#cancelworkflowinstance) | **POST** /aida/v1/workflow-scheduler/workflow-instances/{id}/_cancel |  |
+| [**ClearPrintQueue**](WorkflowSchedulerApi.md#clearprintqueue) | **DELETE** /aida/v1/workflow-scheduler/print-queue |  |
 | [**DeleteWorkflowInstances**](WorkflowSchedulerApi.md#deleteworkflowinstances) | **DELETE** /aida/v1/workflow-scheduler/workflow-instances |  |
+| [**GetJobStatus**](WorkflowSchedulerApi.md#getjobstatus) | **POST** /aida/v1/workflow-scheduler/jobs/info |  |
 | [**GetMetrics**](WorkflowSchedulerApi.md#getmetrics) | **GET** /aida/v1/workflow-scheduler/metrics |  |
+| [**GetNamedLock**](WorkflowSchedulerApi.md#getnamedlock) | **GET** /aida/v1/workflow-scheduler/named-locks/{resourceName} |  |
 | [**GetQueuedJobs**](WorkflowSchedulerApi.md#getqueuedjobs) | **GET** /aida/v1/workflow-scheduler/queued-jobs |  |
 | [**GetRunningWorkflowIds**](WorkflowSchedulerApi.md#getrunningworkflowids) | **GET** /aida/v1/workflow-scheduler/workflow-instances/running |  |
 | [**GetRunningWorkflows**](WorkflowSchedulerApi.md#getrunningworkflows) | **GET** /aida/v1/workflow-scheduler/workflows/running |  |
 | [**GetSuspendedWorkflows**](WorkflowSchedulerApi.md#getsuspendedworkflows) | **GET** /aida/v1/workflow-scheduler/workflow-instances/suspended |  |
+| [**GetWorkflowBlueprints**](WorkflowSchedulerApi.md#getworkflowblueprints) | **GET** /aida/v1/workflow-scheduler/workflow-blueprints |  |
 | [**GetWorkflowInstances**](WorkflowSchedulerApi.md#getworkflowinstances) | **GET** /aida/v1/workflow-scheduler/workflow-instances |  |
 | [**GetWorkflowRegistry**](WorkflowSchedulerApi.md#getworkflowregistry) | **GET** /aida/v1/workflow-scheduler/workflow-registry |  |
 | [**GetWorkflowSchedulerState**](WorkflowSchedulerApi.md#getworkflowschedulerstate) | **GET** /aida/v1/workflow-scheduler/state |  |
 | [**ListNamedLocks**](WorkflowSchedulerApi.md#listnamedlocks) | **GET** /aida/v1/workflow-scheduler/named-locks |  |
 | [**ResumeWorkflowScheduler**](WorkflowSchedulerApi.md#resumeworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/resume |  |
-| [**RunExperimentalWorkflow**](WorkflowSchedulerApi.md#runexperimentalworkflow) | **GET** /aida/v1/workflow-scheduler/run-experimental-workflow |  |
-| [**RunTestWorkflow**](WorkflowSchedulerApi.md#runtestworkflow) | **GET** /aida/v1/workflow-scheduler/run-test-workflow |  |
 | [**RunTransportTestWorkflow**](WorkflowSchedulerApi.md#runtransporttestworkflow) | **GET** /aida/v1/workflow-scheduler/run-transport-test-workflow |  |
-| [**RunWorkflow**](WorkflowSchedulerApi.md#runworkflow) | **GET** /aida/v1/workflow-scheduler/run-workflow |  |
 | [**SignalExternalProcessCompleted**](WorkflowSchedulerApi.md#signalexternalprocesscompleted) | **POST** /aida/v1/workflow-scheduler/workflows/signal/external-process-completed | Notifies a suspended workflow instance when that the external process has completed execution |
 | [**StartWorkflowScheduler**](WorkflowSchedulerApi.md#startworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/start |  |
 | [**StopWorkflowScheduler**](WorkflowSchedulerApi.md#stopworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/stop |  |
+| [**UpdateInvalidDatabaseEntries**](WorkflowSchedulerApi.md#updateinvaliddatabaseentries) | **GET** /aida/v1/workflow-scheduler/update-invalid-database-entries |  |
 
-<a name="aidav1workflowschedulerjobsinfopost"></a>
-# **AidaV1WorkflowSchedulerJobsInfoPost**
-> List&lt;Job&gt; AidaV1WorkflowSchedulerJobsInfoPost (List<int> requestBody = null)
+<a name="cancelrunningworkflowinstances"></a>
+# **CancelRunningWorkflowInstances**
+> void CancelRunningWorkflowInstances ()
 
 
 
@@ -43,7 +45,7 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class AidaV1WorkflowSchedulerJobsInfoPostExample
+    public class CancelRunningWorkflowInstancesExample
     {
         public static void Main()
         {
@@ -56,16 +58,14 @@ namespace Example
             HttpClient httpClient = new HttpClient();
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
-            var requestBody = new List<int>(); // List<int> |  (optional) 
 
             try
             {
-                List<Job> result = apiInstance.AidaV1WorkflowSchedulerJobsInfoPost(requestBody);
-                Debug.WriteLine(result);
+                apiInstance.CancelRunningWorkflowInstances();
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling WorkflowSchedulerApi.AidaV1WorkflowSchedulerJobsInfoPost: " + e.Message);
+                Debug.Print("Exception when calling WorkflowSchedulerApi.CancelRunningWorkflowInstances: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -74,34 +74,27 @@ namespace Example
 }
 ```
 
-#### Using the AidaV1WorkflowSchedulerJobsInfoPostWithHttpInfo variant
+#### Using the CancelRunningWorkflowInstancesWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    ApiResponse<List<Job>> response = apiInstance.AidaV1WorkflowSchedulerJobsInfoPostWithHttpInfo(requestBody);
-    Debug.Write("Status Code: " + response.StatusCode);
-    Debug.Write("Response Headers: " + response.Headers);
-    Debug.Write("Response Body: " + response.Data);
+    apiInstance.CancelRunningWorkflowInstancesWithHttpInfo();
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling WorkflowSchedulerApi.AidaV1WorkflowSchedulerJobsInfoPostWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling WorkflowSchedulerApi.CancelRunningWorkflowInstancesWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
 ```
 
 ### Parameters
-
-| Name | Type | Description | Notes |
-|------|------|-------------|-------|
-| **requestBody** | [**List&lt;int&gt;**](int.md) |  | [optional]  |
-
+This endpoint does not need any parameter.
 ### Return type
 
-[**List&lt;Job&gt;**](Job.md)
+void (empty response body)
 
 ### Authorization
 
@@ -109,8 +102,8 @@ catch (ApiException e)
 
 ### HTTP request headers
 
- - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
- - **Accept**: text/plain, application/json, text/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -303,6 +296,96 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="clearprintqueue"></a>
+# **ClearPrintQueue**
+> void ClearPrintQueue (string jobTemplateName = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class ClearPrintQueueExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
+            var jobTemplateName = "jobTemplateName_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.ClearPrintQueue(jobTemplateName);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling WorkflowSchedulerApi.ClearPrintQueue: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ClearPrintQueueWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.ClearPrintQueueWithHttpInfo(jobTemplateName);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling WorkflowSchedulerApi.ClearPrintQueueWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **jobTemplateName** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="deleteworkflowinstances"></a>
 # **DeleteWorkflowInstances**
 > List&lt;WorkflowInstanceSummaryModel&gt; DeleteWorkflowInstances ()
@@ -392,6 +475,100 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="getjobstatus"></a>
+# **GetJobStatus**
+> List&lt;Job&gt; GetJobStatus (List<int> requestBody = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class GetJobStatusExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
+            var requestBody = new List<int>(); // List<int> |  (optional) 
+
+            try
+            {
+                List<Job> result = apiInstance.GetJobStatus(requestBody);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling WorkflowSchedulerApi.GetJobStatus: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetJobStatusWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<List<Job>> response = apiInstance.GetJobStatusWithHttpInfo(requestBody);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling WorkflowSchedulerApi.GetJobStatusWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **requestBody** | [**List&lt;int&gt;**](int.md) |  | [optional]  |
+
+### Return type
+
+[**List&lt;Job&gt;**](Job.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="getmetrics"></a>
 # **GetMetrics**
 > RuntimeMetrics GetMetrics ()
@@ -463,6 +640,100 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**RuntimeMetrics**](RuntimeMetrics.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getnamedlock"></a>
+# **GetNamedLock**
+> List&lt;Object&gt; GetNamedLock (string resourceName)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class GetNamedLockExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
+            var resourceName = "resourceName_example";  // string | 
+
+            try
+            {
+                List<Object> result = apiInstance.GetNamedLock(resourceName);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling WorkflowSchedulerApi.GetNamedLock: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetNamedLockWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<List<Object>> response = apiInstance.GetNamedLockWithHttpInfo(resourceName);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling WorkflowSchedulerApi.GetNamedLockWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **resourceName** | **string** |  |  |
+
+### Return type
+
+**List<Object>**
 
 ### Authorization
 
@@ -819,6 +1090,95 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;WorkflowInstanceSummaryModel&gt;**](WorkflowInstanceSummaryModel.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getworkflowblueprints"></a>
+# **GetWorkflowBlueprints**
+> List&lt;WorkflowBlueprintSummaryModel&gt; GetWorkflowBlueprints ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class GetWorkflowBlueprintsExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                List<WorkflowBlueprintSummaryModel> result = apiInstance.GetWorkflowBlueprints();
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling WorkflowSchedulerApi.GetWorkflowBlueprints: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetWorkflowBlueprintsWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<List<WorkflowBlueprintSummaryModel>> response = apiInstance.GetWorkflowBlueprintsWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling WorkflowSchedulerApi.GetWorkflowBlueprintsWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+[**List&lt;WorkflowBlueprintSummaryModel&gt;**](WorkflowBlueprintSummaryModel.md)
 
 ### Authorization
 
@@ -1291,190 +1651,6 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="runexperimentalworkflow"></a>
-# **RunExperimentalWorkflow**
-> void RunExperimentalWorkflow (int? cards = null)
-
-
-
-### Example
-```csharp
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using Aida.Sdk.Api;
-using Aida.Sdk.Client;
-using Aida.Sdk.Model;
-
-namespace Example
-{
-    public class RunExperimentalWorkflowExample
-    {
-        public static void Main()
-        {
-            Configuration config = new Configuration();
-            config.BasePath = "http://localhost";
-            // Configure Bearer token for authorization: Bearer
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-
-            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
-            HttpClient httpClient = new HttpClient();
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
-            var cards = 1;  // int? |  (optional)  (default to 1)
-
-            try
-            {
-                apiInstance.RunExperimentalWorkflow(cards);
-            }
-            catch (ApiException  e)
-            {
-                Debug.Print("Exception when calling WorkflowSchedulerApi.RunExperimentalWorkflow: " + e.Message);
-                Debug.Print("Status Code: " + e.ErrorCode);
-                Debug.Print(e.StackTrace);
-            }
-        }
-    }
-}
-```
-
-#### Using the RunExperimentalWorkflowWithHttpInfo variant
-This returns an ApiResponse object which contains the response data, status code and headers.
-
-```csharp
-try
-{
-    apiInstance.RunExperimentalWorkflowWithHttpInfo(cards);
-}
-catch (ApiException e)
-{
-    Debug.Print("Exception when calling WorkflowSchedulerApi.RunExperimentalWorkflowWithHttpInfo: " + e.Message);
-    Debug.Print("Status Code: " + e.ErrorCode);
-    Debug.Print(e.StackTrace);
-}
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-|------|------|-------------|-------|
-| **cards** | **int?** |  | [optional] [default to 1] |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-<a name="runtestworkflow"></a>
-# **RunTestWorkflow**
-> WorkflowInstanceSummaryModel RunTestWorkflow (bool? shouldFail = null)
-
-
-
-### Example
-```csharp
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using Aida.Sdk.Api;
-using Aida.Sdk.Client;
-using Aida.Sdk.Model;
-
-namespace Example
-{
-    public class RunTestWorkflowExample
-    {
-        public static void Main()
-        {
-            Configuration config = new Configuration();
-            config.BasePath = "http://localhost";
-            // Configure Bearer token for authorization: Bearer
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-
-            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
-            HttpClient httpClient = new HttpClient();
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
-            var shouldFail = true;  // bool? |  (optional) 
-
-            try
-            {
-                WorkflowInstanceSummaryModel result = apiInstance.RunTestWorkflow(shouldFail);
-                Debug.WriteLine(result);
-            }
-            catch (ApiException  e)
-            {
-                Debug.Print("Exception when calling WorkflowSchedulerApi.RunTestWorkflow: " + e.Message);
-                Debug.Print("Status Code: " + e.ErrorCode);
-                Debug.Print(e.StackTrace);
-            }
-        }
-    }
-}
-```
-
-#### Using the RunTestWorkflowWithHttpInfo variant
-This returns an ApiResponse object which contains the response data, status code and headers.
-
-```csharp
-try
-{
-    ApiResponse<WorkflowInstanceSummaryModel> response = apiInstance.RunTestWorkflowWithHttpInfo(shouldFail);
-    Debug.Write("Status Code: " + response.StatusCode);
-    Debug.Write("Response Headers: " + response.Headers);
-    Debug.Write("Response Body: " + response.Data);
-}
-catch (ApiException e)
-{
-    Debug.Print("Exception when calling WorkflowSchedulerApi.RunTestWorkflowWithHttpInfo: " + e.Message);
-    Debug.Print("Status Code: " + e.ErrorCode);
-    Debug.Print(e.StackTrace);
-}
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-|------|------|-------------|-------|
-| **shouldFail** | **bool?** |  | [optional]  |
-
-### Return type
-
-[**WorkflowInstanceSummaryModel**](WorkflowInstanceSummaryModel.md)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: text/plain, application/json, text/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 <a name="runtransporttestworkflow"></a>
 # **RunTransportTestWorkflow**
 > void RunTransportTestWorkflow ()
@@ -1539,102 +1715,6 @@ catch (ApiException e)
 
 ### Parameters
 This endpoint does not need any parameter.
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-<a name="runworkflow"></a>
-# **RunWorkflow**
-> void RunWorkflow (string workflowName = null, string supportId = null, string encoderSelectionStrategy = null, string feederSelectionStrategy = null)
-
-
-
-### Example
-```csharp
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using Aida.Sdk.Api;
-using Aida.Sdk.Client;
-using Aida.Sdk.Model;
-
-namespace Example
-{
-    public class RunWorkflowExample
-    {
-        public static void Main()
-        {
-            Configuration config = new Configuration();
-            config.BasePath = "http://localhost";
-            // Configure Bearer token for authorization: Bearer
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-
-            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
-            HttpClient httpClient = new HttpClient();
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
-            var workflowName = "workflowName_example";  // string |  (optional) 
-            var supportId = "supportId_example";  // string |  (optional) 
-            var encoderSelectionStrategy = "encoderSelectionStrategy_example";  // string |  (optional) 
-            var feederSelectionStrategy = "feederSelectionStrategy_example";  // string |  (optional) 
-
-            try
-            {
-                apiInstance.RunWorkflow(workflowName, supportId, encoderSelectionStrategy, feederSelectionStrategy);
-            }
-            catch (ApiException  e)
-            {
-                Debug.Print("Exception when calling WorkflowSchedulerApi.RunWorkflow: " + e.Message);
-                Debug.Print("Status Code: " + e.ErrorCode);
-                Debug.Print(e.StackTrace);
-            }
-        }
-    }
-}
-```
-
-#### Using the RunWorkflowWithHttpInfo variant
-This returns an ApiResponse object which contains the response data, status code and headers.
-
-```csharp
-try
-{
-    apiInstance.RunWorkflowWithHttpInfo(workflowName, supportId, encoderSelectionStrategy, feederSelectionStrategy);
-}
-catch (ApiException e)
-{
-    Debug.Print("Exception when calling WorkflowSchedulerApi.RunWorkflowWithHttpInfo: " + e.Message);
-    Debug.Print("Status Code: " + e.ErrorCode);
-    Debug.Print(e.StackTrace);
-}
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-|------|------|-------------|-------|
-| **workflowName** | **string** |  | [optional]  |
-| **supportId** | **string** |  | [optional]  |
-| **encoderSelectionStrategy** | **string** |  | [optional]  |
-| **feederSelectionStrategy** | **string** |  | [optional]  |
-
 ### Return type
 
 void (empty response body)
@@ -1935,6 +2015,91 @@ catch (ApiException e)
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="updateinvaliddatabaseentries"></a>
+# **UpdateInvalidDatabaseEntries**
+> void UpdateInvalidDatabaseEntries ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class UpdateInvalidDatabaseEntriesExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                apiInstance.UpdateInvalidDatabaseEntries();
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling WorkflowSchedulerApi.UpdateInvalidDatabaseEntries: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the UpdateInvalidDatabaseEntriesWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.UpdateInvalidDatabaseEntriesWithHttpInfo();
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling WorkflowSchedulerApi.UpdateInvalidDatabaseEntriesWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details

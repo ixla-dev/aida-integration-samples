@@ -27,7 +27,6 @@ namespace Aida.Samples.Integration.UI
         }
 
         private WorkflowSchedulerStatus _workflowSchedulerStatus;
-
         public WorkflowSchedulerStatus WorkflowSchedulerStatus
         {
             get => _workflowSchedulerStatus;

@@ -125,7 +125,7 @@ namespace Aida.Samples.Integration.UI.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Connection Failed");
+                MessageBox.Show(ex.ToString(), "Connection Failed");
             }
             finally
             {

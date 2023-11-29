@@ -9,13 +9,12 @@ using Aida.Sdk.Mini.Api;
 
 namespace Aida.Samples.WebhooksReceiverConsole
 {
+    public delegate IntegrationApi ApiClientFactory(string id);
+
     public class Startup
     {
         protected IConfiguration Configuration { get; set; }
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) { Configuration = configuration; }
 
         /// <summary>
         /// </summary>
@@ -27,25 +26,20 @@ namespace Aida.Samples.WebhooksReceiverConsole
             {
                 var options = new JsonSerializerOptions();
                 options.Converters.Add(new JsonStringEnumConverter());
+                options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 return options;
             });
-
-            // register the IntegrationApi as a transient service
-            services.AddTransient(serviceProvider =>
+            services.AddTransient<ApiClientFactory>(_ => machineAddress =>
             {
-                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                return new IntegrationApi(configuration.GetValue<string>("IwsApiBaseUrl"));
+                var url = $"http://{machineAddress}:5000";
+                return new IntegrationApi(url);
             });
-
             // enable options pattern
             services.AddOptions();
-
             // register controllers in the service collection
             services.AddControllers()
-
                 // json serializer options for asp netcore
-                .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
-
+                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             // this services handles messages that are stored stored in a blocking collection
             services.AddHostedService<MessagesBackgroundWorker>();
         }
@@ -60,7 +54,7 @@ namespace Aida.Samples.WebhooksReceiverConsole
             // enable routing
             app.UseRouting();
             // map controllers to routes
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

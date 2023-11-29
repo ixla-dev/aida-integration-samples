@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **IsMachineExit** | **bool** |  | [optional] 
 **IsMachineInput** | **bool** |  | [optional] 
 **IsTransient** | **bool** |  | [optional] 
+**IsReject** | **bool** |  | [optional] 
+**IsFeeder** | **bool** |  | [optional] 
 **IsAlias** | **bool** |  | [optional] 
 **Label** | **string** |  | [optional] 
 **Name** | **string** |  | [optional] 

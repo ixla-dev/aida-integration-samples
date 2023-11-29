@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | [optional] 
 **Name** | **string** |  | [optional] 
+**Model** | **string** |  | [optional] 
 **DisplayName** | **string** |  | [optional] 
 **PositionId** | **string** |  | [optional] 
 **Description** | **string** |  | [optional] 

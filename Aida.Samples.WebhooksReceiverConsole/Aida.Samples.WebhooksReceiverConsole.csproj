@@ -36,7 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="serilog"/>
+        <PackageReference Include="Serilog"/>
     </ItemGroup>
 
     <ItemGroup>

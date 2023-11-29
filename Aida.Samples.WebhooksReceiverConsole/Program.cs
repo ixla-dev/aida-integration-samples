@@ -28,18 +28,18 @@ namespace Aida.Samples.WebhooksReceiverConsole
                 .UseConsoleLifetime()
                 // configure the web stack
                 .ConfigureWebHostDefaults(builder =>
+                {
+                    builder.UseUrls("http://0.0.0.0:7654");
+                    // configure services and middleware pipeline
+                    builder.UseStartup<Startup>();
+                    // configure serilog for nicer console logging
+                    builder.UseSerilog((c, loggerConfig) =>
                     {
-                        // configure services and middleware pipeline
-                        builder.UseStartup<Startup>();
-                        // configure serilog for nicer console logging
-                        builder.UseSerilog((_, loggerConfig) =>
-                        {
-                            loggerConfig
-                                .ReadFrom.Configuration(_.Configuration)
-                                .Enrich.FromLogContext();
-                        });
-                    }
-                );
+                        loggerConfig
+                            .ReadFrom.Configuration(c.Configuration)
+                            .Enrich.FromLogContext();
+                    });
+                });
         }
     }
 }

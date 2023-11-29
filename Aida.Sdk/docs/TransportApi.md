@@ -4,8 +4,9 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
-| [**AidaV1TransportCpuResetGet**](TransportApi.md#aidav1transportcpuresetget) | **GET** /aida/v1/transport/cpu-reset |  |
+| [**BoxTransportCpuReset**](TransportApi.md#boxtransportcpureset) | **GET** /aida/v1/transport/cpu-reset |  |
 | [**CanPerformMovement**](TransportApi.md#canperformmovement) | **GET** /aida/v1/transport/can-perform-movement |  |
+| [**ComputeShortestPathMovePlan**](TransportApi.md#computeshortestpathmoveplan) | **GET** /aida/v1/transport/path/shortest/plan |  |
 | [**ConnectTransport**](TransportApi.md#connecttransport) | **POST** /aida/v1/transport/connect | Connects the transport module |
 | [**Disconnect**](TransportApi.md#disconnect) | **POST** /aida/v1/transport/disconnect | Disconnects the transport module |
 | [**EjectAllCards**](TransportApi.md#ejectallcards) | **POST** /aida/v1/transport/eject-all-cards |  |
@@ -29,9 +30,9 @@ All URIs are relative to *http://localhost*
 | [**SetSerialNumber**](TransportApi.md#setserialnumber) | **POST** /aida/v1/transport/module/{id}/set-serial |  |
 | [**Shift**](TransportApi.md#shift) | **POST** /aida/v1/transport/shift |  |
 
-<a name="aidav1transportcpuresetget"></a>
-# **AidaV1TransportCpuResetGet**
-> void AidaV1TransportCpuResetGet ()
+<a name="boxtransportcpureset"></a>
+# **BoxTransportCpuReset**
+> void BoxTransportCpuReset ()
 
 
 
@@ -46,7 +47,7 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class AidaV1TransportCpuResetGetExample
+    public class BoxTransportCpuResetExample
     {
         public static void Main()
         {
@@ -62,11 +63,11 @@ namespace Example
 
             try
             {
-                apiInstance.AidaV1TransportCpuResetGet();
+                apiInstance.BoxTransportCpuReset();
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling TransportApi.AidaV1TransportCpuResetGet: " + e.Message);
+                Debug.Print("Exception when calling TransportApi.BoxTransportCpuReset: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -75,17 +76,17 @@ namespace Example
 }
 ```
 
-#### Using the AidaV1TransportCpuResetGetWithHttpInfo variant
+#### Using the BoxTransportCpuResetWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    apiInstance.AidaV1TransportCpuResetGetWithHttpInfo();
+    apiInstance.BoxTransportCpuResetWithHttpInfo();
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling TransportApi.AidaV1TransportCpuResetGetWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling TransportApi.BoxTransportCpuResetWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
@@ -184,6 +185,98 @@ catch (ApiException e)
 |------|------|-------------|-------|
 | **source** | **string** |  | [optional]  |
 | **destination** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="computeshortestpathmoveplan"></a>
+# **ComputeShortestPathMovePlan**
+> void ComputeShortestPathMovePlan (string source = null, string target = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class ComputeShortestPathMovePlanExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new TransportApi(httpClient, config, httpClientHandler);
+            var source = "source_example";  // string |  (optional) 
+            var target = "target_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.ComputeShortestPathMovePlan(source, target);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling TransportApi.ComputeShortestPathMovePlan: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ComputeShortestPathMovePlanWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.ComputeShortestPathMovePlanWithHttpInfo(source, target);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling TransportApi.ComputeShortestPathMovePlanWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **source** | **string** |  | [optional]  |
+| **target** | **string** |  | [optional]  |
 
 ### Return type
 

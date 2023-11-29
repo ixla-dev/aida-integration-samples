@@ -81,6 +81,7 @@ docs/SCardReconnectParamsDto.md
 docs/SCardScope.md
 docs/SCardShare.md
 docs/SCardState.md
+docs/ScannerEntityBitmapModeFlags.md
 docs/ScannerEntityDto.md
 docs/ScannerEntityMarkFlagsDto.md
 docs/ScannerMarkGroupDto.md
@@ -112,6 +113,7 @@ docs/WorkflowSchedulerStartedMessage.md
 docs/WorkflowSchedulerStartupParamsDto.md
 docs/WorkflowSchedulerStateDto.md
 docs/WorkflowSchedulerStatus.md
+docs/WorkflowSchedulerStopReason.md
 docs/WorkflowSchedulerStoppedMessage.md
 docs/WorkflowStatus.md
 git_push.sh
@@ -194,6 +196,7 @@ src/Aida.Sdk.Mini.Test/Model/SCardReconnectParamsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/SCardScopeTests.cs
 src/Aida.Sdk.Mini.Test/Model/SCardShareTests.cs
 src/Aida.Sdk.Mini.Test/Model/SCardStateTests.cs
+src/Aida.Sdk.Mini.Test/Model/ScannerEntityBitmapModeFlagsTests.cs
 src/Aida.Sdk.Mini.Test/Model/ScannerEntityDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ScannerEntityMarkFlagsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ScannerMarkGroupDtoTests.cs
@@ -225,6 +228,7 @@ src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStartedMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStartupParamsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStateDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStatusTests.cs
+src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStopReasonTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStoppedMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowStatusTests.cs
 src/Aida.Sdk.Mini/Aida.Sdk.Mini.csproj
@@ -324,6 +328,7 @@ src/Aida.Sdk.Mini/Model/SCardReconnectParamsDto.cs
 src/Aida.Sdk.Mini/Model/SCardScope.cs
 src/Aida.Sdk.Mini/Model/SCardShare.cs
 src/Aida.Sdk.Mini/Model/SCardState.cs
+src/Aida.Sdk.Mini/Model/ScannerEntityBitmapModeFlags.cs
 src/Aida.Sdk.Mini/Model/ScannerEntityDto.cs
 src/Aida.Sdk.Mini/Model/ScannerEntityMarkFlagsDto.cs
 src/Aida.Sdk.Mini/Model/ScannerMarkGroupDto.cs
@@ -355,5 +360,6 @@ src/Aida.Sdk.Mini/Model/WorkflowSchedulerStartedMessage.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStartupParamsDto.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStateDto.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStatus.cs
+src/Aida.Sdk.Mini/Model/WorkflowSchedulerStopReason.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStoppedMessage.cs
 src/Aida.Sdk.Mini/Model/WorkflowStatus.cs

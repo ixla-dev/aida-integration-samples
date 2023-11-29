@@ -3,7 +3,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Aida.Samples.WebhooksReceiverConsole.Services.Messaging;
 using Aida.Sdk.Mini.Model;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Aida.Samples.WebhooksReceiverConsole.Controllers
@@ -13,6 +15,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
     {
         private readonly JsonSerializerOptions       _jsonOptions;
         private readonly ILogger<WebhooksController> _logger;
+
         public WebhooksController(
             JsonSerializerOptions jsonOptions,
             ILogger<WebhooksController> logger)
@@ -28,9 +31,11 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
         [HttpPost]
         [Route("ixla/aida/v1/webhooks")]
         public ActionResult OnWebhookMessage(
+            [FromServices] IConfiguration configuration,
             [FromServices] MessageCollection messageQueue,
             [FromBody] JsonElement receivedMessage)
         {
+            var address = HttpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress?.ToString();
             var message = DeserializeMessage(receivedMessage);
 
             // If the payload does not contain a known message type we short-circuit the request
@@ -38,14 +43,15 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
             if (message == null) return BadRequest();
 
             // log the received message from AIDA
-            _logger.LogDebug("Received Message {@Message}", JsonSerializer.Serialize(receivedMessage, new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Converters = { new JsonStringEnumConverter() }
-            }));
+            if (configuration.GetValue<bool>("LogMessagePayload"))
+                _logger.LogInformation("[{IPAddress}] Received Message {@WebhookMessage}", address, JsonSerializer.Serialize(receivedMessage, new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Converters = { new JsonStringEnumConverter() },
+                }));
 
             // Add the message in an unbounded blocking collection for further processing 
-            messageQueue.AddMessage(message);
+            messageQueue.AddMessage(new MachineMessage(address,message));
             return Ok();
         }
 
@@ -56,10 +62,12 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
         /// <returns></returns>
         private WorkflowMessage DeserializeMessage(JsonElement json)
         {
-            if (!Enum.TryParse<MessageType>(json.GetProperty("MessageType").GetString(), out var messageType))
+            if (!Enum.TryParse<MessageType>(json.GetProperty("messageType").GetString(), out var messageType))
                 return null;
+
             var jsonString = json.ToString();
-            if (jsonString is null) return null;
+            if (jsonString is null)
+                return null;
 
             return messageType switch
             {

@@ -5,17 +5,21 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Discriminator** | **string** |  | 
+**MachineName** | **string** |  | [optional] 
+**MachineSerial** | **string** |  | [optional] 
+**HostName** | **string** |  | [optional] 
 **JobId** | **string** |  | [optional] 
 **BatchId** | **string** |  | [optional] 
 **CorrelationId** | **string** |  | [optional] 
 **MessageId** | **string** |  | [optional] 
 **WorkflowInstanceId** | **string** |  | [optional] 
+**WorkflowInstanceName** | **string** |  | [optional] 
 **MessageType** | [**MessageType**](MessageType.md) |  | [optional] 
 **JobStatus** | [**JobStatus**](JobStatus.md) |  | [optional] 
 **ErrorCode** | [**JobErrorCodes**](JobErrorCodes.md) |  | [optional] 
 **AdditionalMetadata** | **Dictionary&lt;string, Object&gt;** |  | [optional] 
 **DocumentProduced** | **bool** |  | [optional] 
-**Hostname** | **string** |  | [optional] 
+**DestructiveOperationExecuted** | **bool** |  | [optional] 
 **EncoderId** | **string** |  | [optional] 
 **EncoderIndex** | **int** |  | [optional] 
 **CallbackUrl** | **string** |  | [optional] 

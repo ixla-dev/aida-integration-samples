@@ -28,6 +28,10 @@ Name | Type | Description | Notes
 **TextLenghtLimit** | **double?** |  | [optional] 
 **TextRadius** | **double?** |  | [optional] 
 **TextStartAngle** | **double?** |  | [optional] 
+**BitmapModeFlags** | [**ScannerEntityBitmapModeFlags**](ScannerEntityBitmapModeFlags.md) |  | [optional] 
+**ImageIntensity** | **double?** |  | [optional] 
+**ImageBrightness** | **double?** |  | [optional] 
+**ImageDitherStep** | **double?** |  | [optional] 
 **HatchPairs** | [**List&lt;HatchPairDto&gt;**](HatchPairDto.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

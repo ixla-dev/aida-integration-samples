@@ -5,7 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Status** | **WorkflowSchedulerStatus** |  | [optional] 
+**StopReason** | **WorkflowSchedulerStopReason** |  | [optional] 
 **Errors** | [**List&lt;WorkflowSchedulerErrorCodes&gt;**](WorkflowSchedulerErrorCodes.md) |  | [optional] 
+**StopSourceJobId** | **string** |  | [optional] 
 **QueueSize** | **int** |  | [optional] 
 **QueuedOrderIds** | **List&lt;int&gt;** |  | [optional] 
 **ErrorDetails** | **string** |  | [optional] 

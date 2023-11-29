@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
-| [**AidaV1SystemInfoGet**](SystemInfoApi.md#aidav1systeminfoget) | **GET** /aida/v1/system-info |  |
+| [**GetSystemInfo**](SystemInfoApi.md#getsysteminfo) | **GET** /aida/v1/system-info |  |
 
-<a name="aidav1systeminfoget"></a>
-# **AidaV1SystemInfoGet**
-> void AidaV1SystemInfoGet ()
+<a name="getsysteminfo"></a>
+# **GetSystemInfo**
+> void GetSystemInfo ()
 
 
 
@@ -23,7 +23,7 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class AidaV1SystemInfoGetExample
+    public class GetSystemInfoExample
     {
         public static void Main()
         {
@@ -39,11 +39,11 @@ namespace Example
 
             try
             {
-                apiInstance.AidaV1SystemInfoGet();
+                apiInstance.GetSystemInfo();
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling SystemInfoApi.AidaV1SystemInfoGet: " + e.Message);
+                Debug.Print("Exception when calling SystemInfoApi.GetSystemInfo: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -52,17 +52,17 @@ namespace Example
 }
 ```
 
-#### Using the AidaV1SystemInfoGetWithHttpInfo variant
+#### Using the GetSystemInfoWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    apiInstance.AidaV1SystemInfoGetWithHttpInfo();
+    apiInstance.GetSystemInfoWithHttpInfo();
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling SystemInfoApi.AidaV1SystemInfoGetWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling SystemInfoApi.GetSystemInfoWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }

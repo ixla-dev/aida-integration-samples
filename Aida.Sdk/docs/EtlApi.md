@@ -4,7 +4,6 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
-| [**AidaV1EtlJobIdGetDataExchangeTableDdlGet**](EtlApi.md#aidav1etljobidgetdataexchangetableddlget) | **GET** /aida/v1/etl/{jobId}/get-data-exchange-table-ddl |  |
 | [**CreateDataExchangeTable**](EtlApi.md#createdataexchangetable) | **POST** /aida/v1/etl/{jobId}/create-data-exchange-table |  |
 | [**DataSourceConfigurationIsValid**](EtlApi.md#datasourceconfigurationisvalid) | **GET** /aida/v1/etl/{jobId}/data-source/is-valid |  |
 | [**GenerateDataSource**](EtlApi.md#generatedatasource) | **POST** /aida/v1/etl/{jobId}/generate-datasource |  |
@@ -12,100 +11,7 @@ All URIs are relative to *http://localhost*
 | [**GetDataBindings**](EtlApi.md#getdatabindings) | **GET** /aida/v1/etl/{jobId}/data-bindings |  |
 | [**GetDataExchangeTableDefinition**](EtlApi.md#getdataexchangetabledefinition) | **GET** /aida/v1/etl/{jobId}/exchange-table-ddl |  |
 | [**GetEntityDescriptorsByJobTemplateId**](EtlApi.md#getentitydescriptorsbyjobtemplateid) | **GET** /aida/v1/etl/{jobId}/entities |  |
-
-<a name="aidav1etljobidgetdataexchangetableddlget"></a>
-# **AidaV1EtlJobIdGetDataExchangeTableDdlGet**
-> string AidaV1EtlJobIdGetDataExchangeTableDdlGet (int jobId)
-
-
-
-### Example
-```csharp
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using Aida.Sdk.Api;
-using Aida.Sdk.Client;
-using Aida.Sdk.Model;
-
-namespace Example
-{
-    public class AidaV1EtlJobIdGetDataExchangeTableDdlGetExample
-    {
-        public static void Main()
-        {
-            Configuration config = new Configuration();
-            config.BasePath = "http://localhost";
-            // Configure Bearer token for authorization: Bearer
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-
-            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
-            HttpClient httpClient = new HttpClient();
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            var apiInstance = new EtlApi(httpClient, config, httpClientHandler);
-            var jobId = 56;  // int | 
-
-            try
-            {
-                string result = apiInstance.AidaV1EtlJobIdGetDataExchangeTableDdlGet(jobId);
-                Debug.WriteLine(result);
-            }
-            catch (ApiException  e)
-            {
-                Debug.Print("Exception when calling EtlApi.AidaV1EtlJobIdGetDataExchangeTableDdlGet: " + e.Message);
-                Debug.Print("Status Code: " + e.ErrorCode);
-                Debug.Print(e.StackTrace);
-            }
-        }
-    }
-}
-```
-
-#### Using the AidaV1EtlJobIdGetDataExchangeTableDdlGetWithHttpInfo variant
-This returns an ApiResponse object which contains the response data, status code and headers.
-
-```csharp
-try
-{
-    ApiResponse<string> response = apiInstance.AidaV1EtlJobIdGetDataExchangeTableDdlGetWithHttpInfo(jobId);
-    Debug.Write("Status Code: " + response.StatusCode);
-    Debug.Write("Response Headers: " + response.Headers);
-    Debug.Write("Response Body: " + response.Data);
-}
-catch (ApiException e)
-{
-    Debug.Print("Exception when calling EtlApi.AidaV1EtlJobIdGetDataExchangeTableDdlGetWithHttpInfo: " + e.Message);
-    Debug.Print("Status Code: " + e.ErrorCode);
-    Debug.Print(e.StackTrace);
-}
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-|------|------|-------------|-------|
-| **jobId** | **int** |  |  |
-
-### Return type
-
-**string**
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: text/plain, application/json, text/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+| [**GetTableDdl**](EtlApi.md#gettableddl) | **GET** /aida/v1/etl/{jobId}/get-data-exchange-table-ddl |  |
 
 <a name="createdataexchangetable"></a>
 # **CreateDataExchangeTable**
@@ -745,6 +651,100 @@ catch (ApiException e)
 ### Return type
 
 [**List&lt;EntityDescriptor&gt;**](EntityDescriptor.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="gettableddl"></a>
+# **GetTableDdl**
+> string GetTableDdl (int jobId)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class GetTableDdlExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new EtlApi(httpClient, config, httpClientHandler);
+            var jobId = 56;  // int | 
+
+            try
+            {
+                string result = apiInstance.GetTableDdl(jobId);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling EtlApi.GetTableDdl: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetTableDdlWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<string> response = apiInstance.GetTableDdlWithHttpInfo(jobId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling EtlApi.GetTableDdlWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **jobId** | **int** |  |  |
+
+### Return type
+
+**string**
 
 ### Authorization
 

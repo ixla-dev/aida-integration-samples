@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Aida.Samples.Integration.UI.Model;
 using Aida.Samples.Integration.UI.Services;
 using Aida.Sdk.Mini.Model;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Aida.Samples.Integration.UI.Forms
 {
@@ -17,8 +18,8 @@ namespace Aida.Samples.Integration.UI.Forms
     {
         private CancellationTokenSource? _pollJobsCancellation;
         public BindingList<AidaJobViewModel> Jobs { get; } = new();
-        public readonly MachineInterface _machineInterface;
-        private readonly AppState _appState;
+        public readonly  MachineInterface _machineInterface;
+        private readonly AppState         _appState;
 
         public JobStatusForm(
             AppState appState,
@@ -54,24 +55,24 @@ namespace Aida.Samples.Integration.UI.Forms
         private void DataGridJobs_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var grid = (DataGridView)sender;
-            var row = grid.Rows[e.RowIndex];
+            var row  = grid.Rows[e.RowIndex];
             var item = row.DataBoundItem as AidaJobViewModel;
             var cell = row.Cells[e.ColumnIndex];
             if (item is null) return;
 
             cell.Style.ForeColor = item.JobStatus switch
             {
-                JobStatus.None => Color.DarkGray,
-                JobStatus.Waiting => Color.Blue,
-                JobStatus.Starting => Color.Blue,
-                JobStatus.Resuming => Color.Goldenrod,
-                JobStatus.Running => Color.Green,
+                JobStatus.None      => Color.DarkGray,
+                JobStatus.Waiting   => Color.Blue,
+                JobStatus.Starting  => Color.Blue,
+                JobStatus.Resuming  => Color.Goldenrod,
+                JobStatus.Running   => Color.Green,
                 JobStatus.Completed => Color.DarkGreen,
                 JobStatus.Cancelled => Color.DarkGray,
                 JobStatus.Suspended => Color.Orange,
-                JobStatus.Rejected => Color.DarkRed,
-                JobStatus.Faulted => Color.DarkRed,
-                _ => Color.DarkRed,
+                JobStatus.Rejected  => Color.DarkRed,
+                JobStatus.Faulted   => Color.DarkRed,
+                _                   => Color.DarkRed
             };
         }
 
@@ -104,14 +105,14 @@ namespace Aida.Samples.Integration.UI.Forms
 
             Task.Run(async () =>
             {
-                var lastCompletedJob = 0;
-                var tableDefinition = await _machineInterface.GetDataExchangeTableDefinition(job.Id).ConfigureAwait(false);
+                const int lastCompletedJob = 0;
+                var       tableDefinition  = await _machineInterface.GetDataExchangeTableDefinition(job.Id).ConfigureAwait(false);
                 while (!_pollJobsCancellation.Token.IsCancellationRequested)
                 {
                     try
                     {
                         if (_appState.SelectedJobTemplate == null) continue;
-                        var result = await _machineInterface.FetchJobsAsync(tableDefinition, last_completed_job: lastCompletedJob).ConfigureAwait(false);
+                        var result = await _machineInterface.FetchJobsAsync(tableDefinition, last_completed_job: lastCompletedJob, limit: 50).ConfigureAwait(false);
                         RunInUIThread(dataGridJobs, () =>
                         {
                             if (result.Count == 0)
@@ -119,27 +120,35 @@ namespace Aida.Samples.Integration.UI.Forms
                                 Jobs.Clear();
                                 return;
                             }
-                            var resultMap = result.ToDictionary(model => model.JobId, model => model);
+
+                            result = result.OrderBy(m => m.JobId).ToList();
+                            var resultMap   = result.ToDictionary(model => model.JobId, model => model);
                             var existingMap = Jobs.ToDictionary(model => model.JobId, model => model);
+
                             foreach (var kv in resultMap)
                             {
                                 if (existingMap.TryGetValue(kv.Key, out var value))
                                     value.Update(kv.Value);
-                                else Jobs.Insert(0, kv.Value);
+                                else
+                                    Jobs.Insert(0, kv.Value);
                             }
+
+                            var lastJobs = Jobs.TakeLast(50);
+                            var toRemove = Jobs.Except(lastJobs);
+                            foreach (var j in toRemove)
+                                Jobs.Remove(j);
                         });
                     }
-                    catch (Exception e) {
+                    catch (Exception)
+                    {
                     }
                     finally
                     {
-                        await Task.Delay(50).ConfigureAwait(false);
+                        await Task.Delay(250).ConfigureAwait(false);
                     }
                 }
             });
         }
-
-         
 
         private void RunInUIThread(Control ctrl, Action action, params object?[] args)
         {
@@ -158,8 +167,7 @@ namespace Aida.Samples.Integration.UI.Forms
                 {
                     try
                     {
-                        await _machineInterface.SignalExternalProcessOutcomeAsync(data.WorkflowId,
-                            ExternalProcessOutcome.Faulted).ConfigureAwait(false);
+                        await _machineInterface.SignalExternalProcessOutcomeAsync(data.WorkflowId, ExternalProcessOutcome.Faulted).ConfigureAwait(false);
                     }
                     catch
                     {
@@ -177,8 +185,7 @@ namespace Aida.Samples.Integration.UI.Forms
                 {
                     try
                     {
-                        await _machineInterface.SignalExternalProcessOutcomeAsync(data.WorkflowId,
-                            ExternalProcessOutcome.Completed).ConfigureAwait(false);
+                        await _machineInterface.SignalExternalProcessOutcomeAsync(data.WorkflowId, ExternalProcessOutcome.Completed).ConfigureAwait(false);
                     }
                     catch
                     {

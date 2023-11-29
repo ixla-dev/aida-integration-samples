@@ -22,6 +22,7 @@ Name | Type | Description | Notes
 **EncoderEnabled** | **bool** |  | [optional] 
 **WorkflowsEnabled** | **bool** |  | [optional] 
 **ElsaWorkflowsEnabled** | **bool** |  | [optional] [readonly] 
+**ScannerAppType** | **ScannerAppType** |  | [optional] 
 **ScannerHeadEnabled** | **bool** |  | [optional] 
 **LocalScannerEnabled** | **bool** |  | [optional] 
 **CameraEnabled** | **bool** |  | [optional] 

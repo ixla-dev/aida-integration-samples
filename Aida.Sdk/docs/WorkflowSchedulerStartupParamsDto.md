@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**RejectedCardsThreshold** | **float** |  | [optional] 
 **WorkflowTypeName** | **string** |  | [optional] 
 **JobTemplateName** | **string** |  | [optional] 
 **StopAfter** | **int?** |  | [optional] 

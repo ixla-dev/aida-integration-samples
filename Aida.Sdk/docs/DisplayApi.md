@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
-| [**AidaV1DisplayDataSendDataPost**](DisplayApi.md#aidav1displaydatasenddatapost) | **POST** /aida/v1/display-data/send-data |  |
-| [**AidaV1DisplayDataShowErrorWindowPost**](DisplayApi.md#aidav1displaydatashowerrorwindowpost) | **POST** /aida/v1/display-data/show-error-window |  |
-| [**AidaV1DisplayDataShowMainWindowPost**](DisplayApi.md#aidav1displaydatashowmainwindowpost) | **POST** /aida/v1/display-data/show-main-window |  |
-| [**AidaV1DisplayDataShowResetButtonPost**](DisplayApi.md#aidav1displaydatashowresetbuttonpost) | **POST** /aida/v1/display-data/show-reset-button |  |
+| [**SendData**](DisplayApi.md#senddata) | **POST** /aida/v1/display-data/send-data |  |
+| [**ShowErrorWindow**](DisplayApi.md#showerrorwindow) | **POST** /aida/v1/display-data/show-error-window |  |
+| [**ShowMainWindow**](DisplayApi.md#showmainwindow) | **POST** /aida/v1/display-data/show-main-window |  |
+| [**ShowResetWindow**](DisplayApi.md#showresetwindow) | **POST** /aida/v1/display-data/show-reset-button |  |
 
-<a name="aidav1displaydatasenddatapost"></a>
-# **AidaV1DisplayDataSendDataPost**
-> DisplayActionResult AidaV1DisplayDataSendDataPost (byte[] body = null)
+<a name="senddata"></a>
+# **SendData**
+> DisplayActionResult SendData (byte[] body = null)
 
 
 
@@ -26,7 +26,7 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class AidaV1DisplayDataSendDataPostExample
+    public class SendDataExample
     {
         public static void Main()
         {
@@ -43,12 +43,12 @@ namespace Example
 
             try
             {
-                DisplayActionResult result = apiInstance.AidaV1DisplayDataSendDataPost(body);
+                DisplayActionResult result = apiInstance.SendData(body);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DisplayApi.AidaV1DisplayDataSendDataPost: " + e.Message);
+                Debug.Print("Exception when calling DisplayApi.SendData: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -57,20 +57,20 @@ namespace Example
 }
 ```
 
-#### Using the AidaV1DisplayDataSendDataPostWithHttpInfo variant
+#### Using the SendDataWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    ApiResponse<DisplayActionResult> response = apiInstance.AidaV1DisplayDataSendDataPostWithHttpInfo(body);
+    ApiResponse<DisplayActionResult> response = apiInstance.SendDataWithHttpInfo(body);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling DisplayApi.AidaV1DisplayDataSendDataPostWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling DisplayApi.SendDataWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
@@ -103,9 +103,9 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="aidav1displaydatashowerrorwindowpost"></a>
-# **AidaV1DisplayDataShowErrorWindowPost**
-> DisplayActionResult AidaV1DisplayDataShowErrorWindowPost (ShowErrorWindowParamsDto showErrorWindowParamsDto = null)
+<a name="showerrorwindow"></a>
+# **ShowErrorWindow**
+> DisplayActionResult ShowErrorWindow (ShowErrorWindowParamsDto showErrorWindowParamsDto = null)
 
 
 
@@ -120,7 +120,7 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class AidaV1DisplayDataShowErrorWindowPostExample
+    public class ShowErrorWindowExample
     {
         public static void Main()
         {
@@ -137,12 +137,12 @@ namespace Example
 
             try
             {
-                DisplayActionResult result = apiInstance.AidaV1DisplayDataShowErrorWindowPost(showErrorWindowParamsDto);
+                DisplayActionResult result = apiInstance.ShowErrorWindow(showErrorWindowParamsDto);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DisplayApi.AidaV1DisplayDataShowErrorWindowPost: " + e.Message);
+                Debug.Print("Exception when calling DisplayApi.ShowErrorWindow: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -151,20 +151,20 @@ namespace Example
 }
 ```
 
-#### Using the AidaV1DisplayDataShowErrorWindowPostWithHttpInfo variant
+#### Using the ShowErrorWindowWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    ApiResponse<DisplayActionResult> response = apiInstance.AidaV1DisplayDataShowErrorWindowPostWithHttpInfo(showErrorWindowParamsDto);
+    ApiResponse<DisplayActionResult> response = apiInstance.ShowErrorWindowWithHttpInfo(showErrorWindowParamsDto);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling DisplayApi.AidaV1DisplayDataShowErrorWindowPostWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling DisplayApi.ShowErrorWindowWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
@@ -197,9 +197,9 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="aidav1displaydatashowmainwindowpost"></a>
-# **AidaV1DisplayDataShowMainWindowPost**
-> DisplayActionResult AidaV1DisplayDataShowMainWindowPost (ShowMainWindowParamsDto showMainWindowParamsDto = null)
+<a name="showmainwindow"></a>
+# **ShowMainWindow**
+> DisplayActionResult ShowMainWindow (ShowMainWindowParamsDto showMainWindowParamsDto = null)
 
 
 
@@ -214,7 +214,7 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class AidaV1DisplayDataShowMainWindowPostExample
+    public class ShowMainWindowExample
     {
         public static void Main()
         {
@@ -231,12 +231,12 @@ namespace Example
 
             try
             {
-                DisplayActionResult result = apiInstance.AidaV1DisplayDataShowMainWindowPost(showMainWindowParamsDto);
+                DisplayActionResult result = apiInstance.ShowMainWindow(showMainWindowParamsDto);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DisplayApi.AidaV1DisplayDataShowMainWindowPost: " + e.Message);
+                Debug.Print("Exception when calling DisplayApi.ShowMainWindow: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -245,20 +245,20 @@ namespace Example
 }
 ```
 
-#### Using the AidaV1DisplayDataShowMainWindowPostWithHttpInfo variant
+#### Using the ShowMainWindowWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    ApiResponse<DisplayActionResult> response = apiInstance.AidaV1DisplayDataShowMainWindowPostWithHttpInfo(showMainWindowParamsDto);
+    ApiResponse<DisplayActionResult> response = apiInstance.ShowMainWindowWithHttpInfo(showMainWindowParamsDto);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling DisplayApi.AidaV1DisplayDataShowMainWindowPostWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling DisplayApi.ShowMainWindowWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
@@ -291,9 +291,9 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="aidav1displaydatashowresetbuttonpost"></a>
-# **AidaV1DisplayDataShowResetButtonPost**
-> DisplayActionResult AidaV1DisplayDataShowResetButtonPost (ShowResetButtonParamsDto showResetButtonParamsDto = null)
+<a name="showresetwindow"></a>
+# **ShowResetWindow**
+> DisplayActionResult ShowResetWindow (ShowResetButtonParamsDto showResetButtonParamsDto = null)
 
 
 
@@ -308,7 +308,7 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class AidaV1DisplayDataShowResetButtonPostExample
+    public class ShowResetWindowExample
     {
         public static void Main()
         {
@@ -325,12 +325,12 @@ namespace Example
 
             try
             {
-                DisplayActionResult result = apiInstance.AidaV1DisplayDataShowResetButtonPost(showResetButtonParamsDto);
+                DisplayActionResult result = apiInstance.ShowResetWindow(showResetButtonParamsDto);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DisplayApi.AidaV1DisplayDataShowResetButtonPost: " + e.Message);
+                Debug.Print("Exception when calling DisplayApi.ShowResetWindow: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -339,20 +339,20 @@ namespace Example
 }
 ```
 
-#### Using the AidaV1DisplayDataShowResetButtonPostWithHttpInfo variant
+#### Using the ShowResetWindowWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    ApiResponse<DisplayActionResult> response = apiInstance.AidaV1DisplayDataShowResetButtonPostWithHttpInfo(showResetButtonParamsDto);
+    ApiResponse<DisplayActionResult> response = apiInstance.ShowResetWindowWithHttpInfo(showResetButtonParamsDto);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling DisplayApi.AidaV1DisplayDataShowResetButtonPostWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling DisplayApi.ShowResetWindowWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }

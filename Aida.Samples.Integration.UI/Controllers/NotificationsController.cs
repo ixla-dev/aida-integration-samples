@@ -55,8 +55,6 @@ namespace Aida.Samples.Integration.UI.Controllers
 
                 var message = DeserializeMessage(json);
 
-                _logger.LogInformation("Received {@Message}", message);
-
                 switch (message)
                 {
                     case null:

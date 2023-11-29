@@ -4,9 +4,9 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**AddJobTemplateChipEncodingConfiguration**](ScannerApi.md#addjobtemplatechipencodingconfiguration) | **POST** /aida/v1/scanner/job-templates/{id}/chip-encoding/settings |  |
 | [**AddJobTemplateLayoutAutoPosSettings**](ScannerApi.md#addjobtemplatelayoutautopossettings) | **POST** /aida/v1/scanner/job-templates/{jobTemplateId}/layouts/{layoutId}/autopos-settings |  |
 | [**AddMarkGroup**](ScannerApi.md#addmarkgroup) | **POST** /aida/v1/scanner/job-template/{id}/mark-groups |  |
-| [**AidaV1ScannerLayoutsImportValidateGet**](ScannerApi.md#aidav1scannerlayoutsimportvalidateget) | **GET** /aida/v1/scanner/layouts/import/_validate |  |
 | [**AlignEntities**](ScannerApi.md#alignentities) | **POST** /aida/v1/scanner/transform/align-entities |  |
 | [**AssignLayoutToJobTemplate**](ScannerApi.md#assignlayouttojobtemplate) | **POST** /aida/v1/scanner/job-template/{jobTemplateId}/{supportSide}/{layoutId} |  |
 | [**AssignLayoutsToJobTemplate**](ScannerApi.md#assignlayoutstojobtemplate) | **POST** /aida/v1/scanner/job-template/{id}/layouts |  |
@@ -36,6 +36,7 @@ All URIs are relative to *http://localhost*
 | [**EnableIllumination**](ScannerApi.md#enableillumination) | **POST** /aida/v1/scanner/illumination/enable |  |
 | [**EnableLaserPen**](ScannerApi.md#enablelaserpen) | **POST** /aida/v1/scanner/laser/enable |  |
 | [**EnableRedPointer**](ScannerApi.md#enableredpointer) | **POST** /aida/v1/scanner/red-pointer/enable |  |
+| [**ExportLayout**](ScannerApi.md#exportlayout) | **GET** /aida/v1/scanner/export-layout |  |
 | [**ExportPenSet**](ScannerApi.md#exportpenset) | **GET** /aida/v1/scanner/pens/export |  |
 | [**ExportScannerConfig**](ScannerApi.md#exportscannerconfig) | **GET** /aida/v1/scanner/configuration/export |  |
 | [**FindJobTemplateLayoutAutoPosSettings**](ScannerApi.md#findjobtemplatelayoutautopossettings) | **GET** /aida/v1/scanner/autopos-settings |  |
@@ -66,6 +67,7 @@ All URIs are relative to *http://localhost*
 | [**GetSystemPixelMap**](ScannerApi.md#getsystempixelmap) | **GET** /aida/v1/scanner/system-pixel-map |  |
 | [**GetUndistortedImage**](ScannerApi.md#getundistortedimage) | **GET** /aida/v1/scanner/vision/get-undistorted-image |  |
 | [**ImportLayoutFile**](ScannerApi.md#importlayoutfile) | **POST** /aida/v1/scanner/layouts/import |  |
+| [**ImportLayoutFileValidation**](ScannerApi.md#importlayoutfilevalidation) | **GET** /aida/v1/scanner/layouts/import/_validate |  |
 | [**ImportPenSet**](ScannerApi.md#importpenset) | **POST** /aida/v1/scanner/pens/import |  |
 | [**InitializeAutoPos**](ScannerApi.md#initializeautopos) | **POST** /aida/v1/scanner/job-templates/{id}/auto-pos/init |  |
 | [**IsConnected**](ScannerApi.md#isconnected) | **GET** /aida/v1/scanner/is-connected |  |
@@ -121,6 +123,102 @@ All URIs are relative to *http://localhost*
 | [**UploadSettingsFile**](ScannerApi.md#uploadsettingsfile) | **POST** /aida/v1/scanner/settings-file |  |
 | [**ValidateJobTemplateName**](ScannerApi.md#validatejobtemplatename) | **POST** /aida/v1/scanner/job-templates/validate-name |  |
 | [**ValidateLayoutName**](ScannerApi.md#validatelayoutname) | **POST** /aida/v1/scanner/layouts/validate-name |  |
+
+<a name="addjobtemplatechipencodingconfiguration"></a>
+# **AddJobTemplateChipEncodingConfiguration**
+> ChipEncodingConfigurationDto AddJobTemplateChipEncodingConfiguration (int id, ChipEncodingConfigurationDto chipEncodingConfigurationDto = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class AddJobTemplateChipEncodingConfigurationExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new ScannerApi(httpClient, config, httpClientHandler);
+            var id = 56;  // int | 
+            var chipEncodingConfigurationDto = new ChipEncodingConfigurationDto(); // ChipEncodingConfigurationDto |  (optional) 
+
+            try
+            {
+                ChipEncodingConfigurationDto result = apiInstance.AddJobTemplateChipEncodingConfiguration(id, chipEncodingConfigurationDto);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling ScannerApi.AddJobTemplateChipEncodingConfiguration: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the AddJobTemplateChipEncodingConfigurationWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<ChipEncodingConfigurationDto> response = apiInstance.AddJobTemplateChipEncodingConfigurationWithHttpInfo(id, chipEncodingConfigurationDto);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling ScannerApi.AddJobTemplateChipEncodingConfigurationWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **id** | **int** |  |  |
+| **chipEncodingConfigurationDto** | [**ChipEncodingConfigurationDto**](ChipEncodingConfigurationDto.md) |  | [optional]  |
+
+### Return type
+
+[**ChipEncodingConfigurationDto**](ChipEncodingConfigurationDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="addjobtemplatelayoutautopossettings"></a>
 # **AddJobTemplateLayoutAutoPosSettings**
@@ -311,98 +409,6 @@ catch (ApiException e)
 
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-<a name="aidav1scannerlayoutsimportvalidateget"></a>
-# **AidaV1ScannerLayoutsImportValidateGet**
-> void AidaV1ScannerLayoutsImportValidateGet (string layoutName = null, string filename = null)
-
-
-
-### Example
-```csharp
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using Aida.Sdk.Api;
-using Aida.Sdk.Client;
-using Aida.Sdk.Model;
-
-namespace Example
-{
-    public class AidaV1ScannerLayoutsImportValidateGetExample
-    {
-        public static void Main()
-        {
-            Configuration config = new Configuration();
-            config.BasePath = "http://localhost";
-            // Configure Bearer token for authorization: Bearer
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-
-            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
-            HttpClient httpClient = new HttpClient();
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            var apiInstance = new ScannerApi(httpClient, config, httpClientHandler);
-            var layoutName = "layoutName_example";  // string |  (optional) 
-            var filename = "filename_example";  // string |  (optional) 
-
-            try
-            {
-                apiInstance.AidaV1ScannerLayoutsImportValidateGet(layoutName, filename);
-            }
-            catch (ApiException  e)
-            {
-                Debug.Print("Exception when calling ScannerApi.AidaV1ScannerLayoutsImportValidateGet: " + e.Message);
-                Debug.Print("Status Code: " + e.ErrorCode);
-                Debug.Print(e.StackTrace);
-            }
-        }
-    }
-}
-```
-
-#### Using the AidaV1ScannerLayoutsImportValidateGetWithHttpInfo variant
-This returns an ApiResponse object which contains the response data, status code and headers.
-
-```csharp
-try
-{
-    apiInstance.AidaV1ScannerLayoutsImportValidateGetWithHttpInfo(layoutName, filename);
-}
-catch (ApiException e)
-{
-    Debug.Print("Exception when calling ScannerApi.AidaV1ScannerLayoutsImportValidateGetWithHttpInfo: " + e.Message);
-    Debug.Print("Status Code: " + e.ErrorCode);
-    Debug.Print(e.StackTrace);
-}
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-|------|------|-------------|-------|
-| **layoutName** | **string** |  | [optional]  |
-| **filename** | **string** |  | [optional]  |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -3120,6 +3126,98 @@ catch (ApiException e)
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="exportlayout"></a>
+# **ExportLayout**
+> void ExportLayout (string layoutName = null, string scannerId = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class ExportLayoutExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new ScannerApi(httpClient, config, httpClientHandler);
+            var layoutName = "layoutName_example";  // string |  (optional) 
+            var scannerId = "scannerId_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.ExportLayout(layoutName, scannerId);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling ScannerApi.ExportLayout: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ExportLayoutWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.ExportLayoutWithHttpInfo(layoutName, scannerId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling ScannerApi.ExportLayoutWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **layoutName** | **string** |  | [optional]  |
+| **scannerId** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -6054,6 +6152,98 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="importlayoutfilevalidation"></a>
+# **ImportLayoutFileValidation**
+> void ImportLayoutFileValidation (string layoutName = null, string filename = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class ImportLayoutFileValidationExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new ScannerApi(httpClient, config, httpClientHandler);
+            var layoutName = "layoutName_example";  // string |  (optional) 
+            var filename = "filename_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.ImportLayoutFileValidation(layoutName, filename);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling ScannerApi.ImportLayoutFileValidation: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ImportLayoutFileValidationWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.ImportLayoutFileValidationWithHttpInfo(layoutName, filename);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling ScannerApi.ImportLayoutFileValidationWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **layoutName** | **string** |  | [optional]  |
+| **filename** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="importpenset"></a>
 # **ImportPenSet**
 > ScannerAppStateDto ImportPenSet (string scannerId = null, List<FileParameter> files = null)
@@ -6717,7 +6907,7 @@ catch (ApiException e)
 
 <a name="loadjobinstance"></a>
 # **LoadJobInstance**
-> ScannerAppStateDto LoadJobInstance (int? jobId = null, int? instanceId = null, string scannerId = null, bool? force = null)
+> ScannerAppStateDto LoadJobInstance (int? jobId = null, int? instanceId = null, string scannerId = null, bool? force = null, bool? skipUpdate = null)
 
 Loads a job template, fetches the personalization data from the configured data source  and updates entities
 
@@ -6749,11 +6939,12 @@ namespace Example
             var instanceId = 56;  // int? |  (optional) 
             var scannerId = "scannerId_example";  // string |  (optional) 
             var force = false;  // bool? |  (optional)  (default to false)
+            var skipUpdate = false;  // bool? |  (optional)  (default to false)
 
             try
             {
                 // Loads a job template, fetches the personalization data from the configured data source  and updates entities
-                ScannerAppStateDto result = apiInstance.LoadJobInstance(jobId, instanceId, scannerId, force);
+                ScannerAppStateDto result = apiInstance.LoadJobInstance(jobId, instanceId, scannerId, force, skipUpdate);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -6774,7 +6965,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Loads a job template, fetches the personalization data from the configured data source  and updates entities
-    ApiResponse<ScannerAppStateDto> response = apiInstance.LoadJobInstanceWithHttpInfo(jobId, instanceId, scannerId, force);
+    ApiResponse<ScannerAppStateDto> response = apiInstance.LoadJobInstanceWithHttpInfo(jobId, instanceId, scannerId, force, skipUpdate);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -6795,6 +6986,7 @@ catch (ApiException e)
 | **instanceId** | **int?** |  | [optional]  |
 | **scannerId** | **string** |  | [optional]  |
 | **force** | **bool?** |  | [optional] [default to false] |
+| **skipUpdate** | **bool?** |  | [optional] [default to false] |
 
 ### Return type
 
