@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -18,6 +18,8 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
     /// </summary>
     public class MessagesBackgroundWorker : IHostedService
     {
+        private readonly Dictionary<string, CancellationTokenSource> _cancellationTokenSources = new();
+
         private readonly ILogger<MessagesBackgroundWorker> _logger;
         private readonly MessageCollection                 _messages;
         private readonly ApiClientFactory                  _clientFactory;
@@ -28,7 +30,8 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
             IConfiguration configuration,
             MessageCollection messages,
             ApiClientFactory clientFactory,
-            ILogger<MessagesBackgroundWorker> logger)
+            ILogger<MessagesBackgroundWorker> logger
+        )
         {
             _jsonSerializerOptions = new JsonSerializerOptions
             {
@@ -50,17 +53,24 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
         {
             _ = Task.Run(() =>
             {
+                
                 var cts               = new CancellationTokenSource();
                 var cancellationToken = cts.Token;
+                
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     try
                     {
-                        var aidaMessage  = _messages.TakeMessage(cancellationToken);
-                        var eventMessage = aidaMessage.Message;
+                        var aidaMessage = _messages.TakeMessage(cancellationToken);
+                        _logger.LogInformation("Dequeued message {@DequeuedMessage}", aidaMessage);
+                        if (aidaMessage is null)
+                        {
+                            Thread.Sleep(1000);
+                            continue;
+                        }
 
-                        if (_configuration.GetValue("LogWebhooksPayload", false))
-                            _logger.LogInformation("Message {MessageType}", eventMessage.MessageType);
+                        var eventMessage = aidaMessage.Message;
+                        _logger.LogInformation("Message {MessageType}", eventMessage.MessageType);
 
                         if (eventMessage.JobId is not null)
                             _logger.LogInformation(
@@ -80,7 +90,6 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                         switch (eventMessage)
                         {
                             case WorkflowSchedulerStoppedMessage stopped:
-                                cts.Cancel();
                                 _logger.LogWarning("Workflow Scheduler stopped. Error code = {ErrorCode}, stop reason = {StopReason}, source job id = {SourceJobId}",
                                     stopped.ErrorCode,
                                     stopped.StopReason,
@@ -208,19 +217,21 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
         /// <param name="cancellationToken"></param>
         private async Task MockChipEncodingPersonalization(WorkflowMessage message, IntegrationApi api, CancellationToken cancellationToken)
         {
-            // _logger.LogInformation("Running chip personalization for job: {JobId}", message.JobId);
-            if (cancellationToken.IsCancellationRequested) return;
-
-            var errorRate = _configuration.GetValue("EncodingErrorRate", 0);
-            var rnd       = new Random();
-            var value     = rnd.Next(0, 100);
-            var outcome   = value < errorRate ? ExternalProcessOutcome.Faulted : ExternalProcessOutcome.Completed;
-
             try
             {
+                // _logger.LogInformation("Running chip personalization for job: {JobId}", message.JobId);
+                if (cancellationToken.IsCancellationRequested) 
+                    return;
+
+                var errorRate = _configuration.GetValue("EncodingErrorRate", 0);
+                var rnd       = new Random();
+                var value     = rnd.Next(0, 100);
+                var outcome   = value < errorRate ? ExternalProcessOutcome.Faulted : ExternalProcessOutcome.Completed;
+
                 var duration = TimeSpan.Parse(_configuration.GetValue<string>("MockEncodingDuration"));
                 _logger.LogInformation("Mocking chip encoding, jobId = {JobId}, duration = {Duration}", message.JobId, duration);
                 await Task.Delay(duration, cancellationToken).ConfigureAwait(false);
+                
                 var responseMessage = new ExternalProcessCompletedMessage
                 {
                     // We tell AIDA chip personalization completed without error
@@ -233,12 +244,12 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
 
                 // tell AIDA to dispatch the completion signal and resume 
                 await api.SignalExternalProcessCompletedAsync(
-                        // waitForCompletion = false tells aida to return immediately the HTTP response without waiting the workflow to finish 
-                        waitForCompletion: false,
-                        // The response message
-                        externalProcessCompletedMessage: responseMessage,
-                        cancellationToken)
-                    .ConfigureAwait(false);
+                    // waitForCompletion = false tells aida to return immediately the HTTP response without waiting the workflow to finish 
+                    waitForCompletion: false,
+                    // The response message
+                    externalProcessCompletedMessage: responseMessage,
+                    cancellationToken
+                ).ConfigureAwait(false);
             }
             catch (Exception e)
             {

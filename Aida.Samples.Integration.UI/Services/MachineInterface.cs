@@ -275,7 +275,6 @@ namespace Aida.Samples.Integration.UI.Services
                 await _dbInsertSemaphore.WaitAsync().ConfigureAwait(false);
 
                 using var api = GetClient();
-
                 var fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(id).ConfigureAwait(false);
                 var job    = await api.GetJobTemplateByIdAsync(id).ConfigureAwait(false);
 

@@ -17,8 +17,8 @@ namespace Aida.Samples.WebhooksReceiverConsole.Services.Messaging
 
     public class MessageCollection
     {
-        private readonly BlockingCollection<MachineMessage> _incomingMessages = new();
-        public void AddMessage(MachineMessage message) => _incomingMessages.Add(message);
-        public MachineMessage TakeMessage(CancellationToken cancellationToken) => _incomingMessages.Take(cancellationToken);
+        private readonly ConcurrentQueue<MachineMessage> _incomingMessages = new();
+        public void AddMessage(MachineMessage message) => _incomingMessages.Enqueue(message);
+        public MachineMessage TakeMessage(CancellationToken cancellationToken) => _incomingMessages.TryDequeue(out var message) ? message : null;
     }
 }
