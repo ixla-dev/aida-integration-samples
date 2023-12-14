@@ -57,12 +57,11 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                 var cts               = new CancellationTokenSource();
                 var cancellationToken = cts.Token;
                 
-                while (!cancellationToken.IsCancellationRequested)
+                while (true)
                 {
                     try
                     {
-                        var aidaMessage = _messages.TakeMessage(cancellationToken);
-                        _logger.LogInformation("Dequeued message {@DequeuedMessage}", aidaMessage);
+                        var aidaMessage = _messages.TakeMessage(CancellationToken.None);
                         if (aidaMessage is null)
                         {
                             Thread.Sleep(1000);
@@ -139,7 +138,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                                     try
                                     {
                                         _logger.LogInformation("Mocking chip encoding for job {JobId}", encoderLoaded.JobId);
-                                        await MockChipEncodingPersonalization(encoderLoaded, client, cancellationToken);
+                                        await MockChipEncodingPersonalization(encoderLoaded, client, CancellationToken.None);
                                     }
                                     catch (Exception e)
                                     {
@@ -152,7 +151,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                             // obtained from the OCR reading, it now expects the receiving application to validate the 
                             // results and signal the outcome of the validation 
                             case OcrExecutedMessage ocrMessage:
-                                _ = MockOcrValidation(ocrMessage, client, cancellationToken);
+                                _ = MockOcrValidation(ocrMessage, client, CancellationToken.None);
                                 break;
                         }
                     }
@@ -241,7 +240,6 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                 };
 
                 _logger.LogInformation("CorrelationId: {CorrelationId}, job id: {JobId}, Chip Perso: {OperationOutcome}", message.CorrelationId, message.JobId, outcome);
-
                 // tell AIDA to dispatch the completion signal and resume 
                 await api.SignalExternalProcessCompletedAsync(
                     // waitForCompletion = false tells aida to return immediately the HTTP response without waiting the workflow to finish 

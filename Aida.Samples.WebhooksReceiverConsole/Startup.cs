@@ -1,20 +1,18 @@
-﻿using Aida.Samples.WebhooksReceiverConsole.HostedServices;
+﻿using System.Text.Json;
+using Aida.Sdk.Mini.Api;
 using Microsoft.AspNetCore.Builder;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Aida.Samples.WebhooksReceiverConsole.HostedServices;
 using Aida.Samples.WebhooksReceiverConsole.Services.Messaging;
-using Aida.Sdk.Mini.Api;
 
 namespace Aida.Samples.WebhooksReceiverConsole
 {
     public delegate IntegrationApi ApiClientFactory(string id);
-
     public class Startup
     {
-        protected IConfiguration Configuration { get; set; }
-        public Startup(IConfiguration configuration) { Configuration = configuration; }
+        public Startup(IConfiguration configuration) { }
 
         /// <summary>
         /// </summary>
@@ -22,6 +20,7 @@ namespace Aida.Samples.WebhooksReceiverConsole
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(_ => new MessageCollection());
+            
             services.AddScoped(_ =>
             {
                 var options = new JsonSerializerOptions();
@@ -29,6 +28,7 @@ namespace Aida.Samples.WebhooksReceiverConsole
                 options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 return options;
             });
+            
             services.AddTransient<ApiClientFactory>(_ => machineAddress =>
             {
                 var url = $"http://{machineAddress}:5000";

@@ -5,11 +5,17 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
 | [**CreateJobTemplate**](IntegrationApi.md#createjobtemplate) | **POST** /aida/v1/scanner/job-templates |  |
+| [**CreateWebhooksTarget**](IntegrationApi.md#createwebhookstarget) | **POST** /aida/v1/webhooks-targets |  |
+| [**DeleteInkjetLayout**](IntegrationApi.md#deleteinkjetlayout) | **DELETE** /aida/v1/inkjet/layouts/{id} |  |
 | [**DeleteJobTemplate**](IntegrationApi.md#deletejobtemplate) | **DELETE** /aida/v1/scanner/job-templates/{id} |  |
 | [**DeleteLayout**](IntegrationApi.md#deletelayout) | **DELETE** /aida/v1/scanner/layouts/{id} |  |
+| [**DeleteWebhooksTarget**](IntegrationApi.md#deletewebhookstarget) | **DELETE** /aida/v1/webhooks-targets/{id} |  |
 | [**EstablishContext**](IntegrationApi.md#establishcontext) | **POST** /api/v1/pcsc-gateway/establish-context | AIDA Server invokes ScEstablishContext on startup. If for any reason the current context becomes invalid (usb cable  disconnected for example) you can use this endpoint to re-establish a new PcScContext. |
+| [**FindInkjetLayouts**](IntegrationApi.md#findinkjetlayouts) | **GET** /aida/v1/inkjet/layouts/find |  |
 | [**FindJobTemplates**](IntegrationApi.md#findjobtemplates) | **GET** /aida/v1/scanner/job-templates |  |
 | [**FindLayouts**](IntegrationApi.md#findlayouts) | **GET** /aida/v1/scanner/layouts |  |
+| [**FindWebhooksTargets**](IntegrationApi.md#findwebhookstargets) | **GET** /aida/v1/webhooks-targets |  |
+| [**GetAssignableInkjetLayoutsByJobTemplateId**](IntegrationApi.md#getassignableinkjetlayoutsbyjobtemplateid) | **GET** /aida/v1/inkjet/job-templates/{id}/layouts/available |  |
 | [**GetAssignableLayoutsByJobTemplateId**](IntegrationApi.md#getassignablelayoutsbyjobtemplateid) | **GET** /aida/v1/scanner/job-templates/{id}/layouts/available |  |
 | [**GetAssignedLayoutsByJobTemplateId**](IntegrationApi.md#getassignedlayoutsbyjobtemplateid) | **GET** /aida/v1/scanner/job-templates/{id}/layouts/assigned |  |
 | [**GetDataExchangeTableDefinition**](IntegrationApi.md#getdataexchangetabledefinition) | **GET** /aida/v1/etl/{jobId}/exchange-table-ddl |  |
@@ -23,11 +29,13 @@ All URIs are relative to *http://localhost*
 | [**GetRunningWorkflows**](IntegrationApi.md#getrunningworkflows) | **GET** /aida/v1/workflow-scheduler/workflows/running |  |
 | [**GetSmartCardAtr**](IntegrationApi.md#getsmartcardatr) | **GET** /api/v1/pcsc-gateway/{readerIndex}/smart-card/atr | Invokes SCardConnect on the specified reader and tries to read the ATR  from the card currently present in the reader |
 | [**GetSmartCardStatus**](IntegrationApi.md#getsmartcardstatus) | **GET** /api/v1/pcsc-gateway/{readerIndex}/smart-card/status | Invoke SCardStatus on the specified reader |
+| [**GetWebhooksTargetById**](IntegrationApi.md#getwebhookstargetbyid) | **GET** /aida/v1/webhooks-targets/{id} |  |
 | [**GetWorkflowRegistry**](IntegrationApi.md#getworkflowregistry) | **GET** /aida/v1/workflow-scheduler/workflow-registry |  |
 | [**GetWorkflowSchedulerState**](IntegrationApi.md#getworkflowschedulerstate) | **GET** /aida/v1/workflow-scheduler/state |  |
 | [**ImportLayoutFile**](IntegrationApi.md#importlayoutfile) | **POST** /aida/v1/scanner/layouts/import |  |
 | [**ImportLayoutFileValidation**](IntegrationApi.md#importlayoutfilevalidation) | **GET** /aida/v1/scanner/layouts/import/_validate |  |
 | [**ReleaseContext**](IntegrationApi.md#releasecontext) | **POST** /api/v1/pcsc-gateway/release-context |  |
+| [**RenameInkjetLayout**](IntegrationApi.md#renameinkjetlayout) | **PUT** /aida/v1/inkjet/layouts/{id} |  |
 | [**RenameLayout**](IntegrationApi.md#renamelayout) | **PUT** /aida/v1/scanner/layouts/{id} |  |
 | [**ResumeWorkflowScheduler**](IntegrationApi.md#resumeworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/resume |  |
 | [**SignalExternalProcessCompleted**](IntegrationApi.md#signalexternalprocesscompleted) | **POST** /aida/v1/workflow-scheduler/workflows/signal/external-process-completed | Notifies a suspended workflow instance when that the external process has completed execution |
@@ -36,8 +44,11 @@ All URIs are relative to *http://localhost*
 | [**SmartCardReconnect**](IntegrationApi.md#smartcardreconnect) | **POST** /api/v1/pcsc-gateway/{readerIndex}/smart-card/reconnect | Invoke SCardReconnect on the specified reader |
 | [**StartWorkflowScheduler**](IntegrationApi.md#startworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/start |  |
 | [**StopWorkflowScheduler**](IntegrationApi.md#stopworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/stop |  |
+| [**TestWebhookTarget**](IntegrationApi.md#testwebhooktarget) | **POST** /aida/v1/webhooks-targets/{id} |  |
 | [**Transmit**](IntegrationApi.md#transmit) | **POST** /api/v1/pcsc-gateway/{readerIndex}/smart-card/transmit | Invoke SCardTransmit on the specified reader |
+| [**UpdateWebhooksTarget**](IntegrationApi.md#updatewebhookstarget) | **PUT** /aida/v1/webhooks-targets |  |
 | [**UploadLayoutFile**](IntegrationApi.md#uploadlayoutfile) | **POST** /aida/v1/scanner/layouts/upload |  |
+| [**ValidateInkjetLayoutName**](IntegrationApi.md#validateinkjetlayoutname) | **POST** /aida/v1/inkjet/layouts/validate-name |  |
 | [**ValidateJobTemplateName**](IntegrationApi.md#validatejobtemplatename) | **POST** /aida/v1/scanner/job-templates/validate-name |  |
 | [**ValidateLayoutName**](IntegrationApi.md#validatelayoutname) | **POST** /aida/v1/scanner/layouts/validate-name |  |
 
@@ -128,6 +139,190 @@ catch (ApiException e)
 
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="createwebhookstarget"></a>
+# **CreateWebhooksTarget**
+> WebhooksTargetDto CreateWebhooksTarget (WebhooksTargetDto webhooksTargetDto = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class CreateWebhooksTargetExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var webhooksTargetDto = new WebhooksTargetDto(); // WebhooksTargetDto |  (optional) 
+
+            try
+            {
+                WebhooksTargetDto result = apiInstance.CreateWebhooksTarget(webhooksTargetDto);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.CreateWebhooksTarget: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the CreateWebhooksTargetWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<WebhooksTargetDto> response = apiInstance.CreateWebhooksTargetWithHttpInfo(webhooksTargetDto);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.CreateWebhooksTargetWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **webhooksTargetDto** | [**WebhooksTargetDto**](WebhooksTargetDto.md) |  | [optional]  |
+
+### Return type
+
+[**WebhooksTargetDto**](WebhooksTargetDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="deleteinkjetlayout"></a>
+# **DeleteInkjetLayout**
+> void DeleteInkjetLayout (int id)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class DeleteInkjetLayoutExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var id = 56;  // int | 
+
+            try
+            {
+                apiInstance.DeleteInkjetLayout(id);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.DeleteInkjetLayout: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the DeleteInkjetLayoutWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.DeleteInkjetLayoutWithHttpInfo(id);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.DeleteInkjetLayoutWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **id** | **int** |  |  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -321,6 +516,100 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="deletewebhookstarget"></a>
+# **DeleteWebhooksTarget**
+> WebhooksTargetDto DeleteWebhooksTarget (int id)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class DeleteWebhooksTargetExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var id = 56;  // int | 
+
+            try
+            {
+                WebhooksTargetDto result = apiInstance.DeleteWebhooksTarget(id);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.DeleteWebhooksTarget: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the DeleteWebhooksTargetWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<WebhooksTargetDto> response = apiInstance.DeleteWebhooksTargetWithHttpInfo(id);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.DeleteWebhooksTargetWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **id** | **int** |  |  |
+
+### Return type
+
+[**WebhooksTargetDto**](WebhooksTargetDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="establishcontext"></a>
 # **EstablishContext**
 > void EstablishContext (SCardEstablishContextParamsDto sCardEstablishContextParamsDto = null)
@@ -404,6 +693,112 @@ void (empty response body)
 
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="findinkjetlayouts"></a>
+# **FindInkjetLayouts**
+> SearchInkjetLayoutsResultDto FindInkjetLayouts (bool? includeFile = null, bool? includeEntities = null, int? page = null, int? pageSize = null, string query = null, string sortCriteriaPropertyName = null, SortDirection? sortCriteriaDirection = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class FindInkjetLayoutsExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var includeFile = true;  // bool? |  (optional) 
+            var includeEntities = true;  // bool? |  (optional) 
+            var page = 56;  // int? |  (optional) 
+            var pageSize = 56;  // int? |  (optional) 
+            var query = "query_example";  // string |  (optional) 
+            var sortCriteriaPropertyName = "sortCriteriaPropertyName_example";  // string |  (optional) 
+            var sortCriteriaDirection = (SortDirection) "Ascending";  // SortDirection? |  (optional) 
+
+            try
+            {
+                SearchInkjetLayoutsResultDto result = apiInstance.FindInkjetLayouts(includeFile, includeEntities, page, pageSize, query, sortCriteriaPropertyName, sortCriteriaDirection);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.FindInkjetLayouts: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the FindInkjetLayoutsWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<SearchInkjetLayoutsResultDto> response = apiInstance.FindInkjetLayoutsWithHttpInfo(includeFile, includeEntities, page, pageSize, query, sortCriteriaPropertyName, sortCriteriaDirection);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.FindInkjetLayoutsWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **includeFile** | **bool?** |  | [optional]  |
+| **includeEntities** | **bool?** |  | [optional]  |
+| **page** | **int?** |  | [optional]  |
+| **pageSize** | **int?** |  | [optional]  |
+| **query** | **string** |  | [optional]  |
+| **sortCriteriaPropertyName** | **string** |  | [optional]  |
+| **sortCriteriaDirection** | **SortDirection?** |  | [optional]  |
+
+### Return type
+
+[**SearchInkjetLayoutsResultDto**](SearchInkjetLayoutsResultDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
 
 
 ### HTTP response details
@@ -613,6 +1008,208 @@ catch (ApiException e)
 ### Return type
 
 [**SearchLayoutsResultDto**](SearchLayoutsResultDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="findwebhookstargets"></a>
+# **FindWebhooksTargets**
+> SearchWebhooksTargetsResultDto FindWebhooksTargets (int? page = null, int? pageSize = null, string query = null, string sortCriteriaPropertyName = null, SortDirection? sortCriteriaDirection = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class FindWebhooksTargetsExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var page = 56;  // int? |  (optional) 
+            var pageSize = 56;  // int? |  (optional) 
+            var query = "query_example";  // string |  (optional) 
+            var sortCriteriaPropertyName = "sortCriteriaPropertyName_example";  // string |  (optional) 
+            var sortCriteriaDirection = (SortDirection) "Ascending";  // SortDirection? |  (optional) 
+
+            try
+            {
+                SearchWebhooksTargetsResultDto result = apiInstance.FindWebhooksTargets(page, pageSize, query, sortCriteriaPropertyName, sortCriteriaDirection);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.FindWebhooksTargets: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the FindWebhooksTargetsWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<SearchWebhooksTargetsResultDto> response = apiInstance.FindWebhooksTargetsWithHttpInfo(page, pageSize, query, sortCriteriaPropertyName, sortCriteriaDirection);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.FindWebhooksTargetsWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **page** | **int?** |  | [optional]  |
+| **pageSize** | **int?** |  | [optional]  |
+| **query** | **string** |  | [optional]  |
+| **sortCriteriaPropertyName** | **string** |  | [optional]  |
+| **sortCriteriaDirection** | **SortDirection?** |  | [optional]  |
+
+### Return type
+
+[**SearchWebhooksTargetsResultDto**](SearchWebhooksTargetsResultDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getassignableinkjetlayoutsbyjobtemplateid"></a>
+# **GetAssignableInkjetLayoutsByJobTemplateId**
+> SearchInkjetLayoutsResultDto GetAssignableInkjetLayoutsByJobTemplateId (int id, int? page = null, int? pageSize = null, string supportSide = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class GetAssignableInkjetLayoutsByJobTemplateIdExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var id = 56;  // int | 
+            var page = 1;  // int? |  (optional)  (default to 1)
+            var pageSize = 15;  // int? |  (optional)  (default to 15)
+            var supportSide = "supportSide_example";  // string |  (optional) 
+
+            try
+            {
+                SearchInkjetLayoutsResultDto result = apiInstance.GetAssignableInkjetLayoutsByJobTemplateId(id, page, pageSize, supportSide);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.GetAssignableInkjetLayoutsByJobTemplateId: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetAssignableInkjetLayoutsByJobTemplateIdWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<SearchInkjetLayoutsResultDto> response = apiInstance.GetAssignableInkjetLayoutsByJobTemplateIdWithHttpInfo(id, page, pageSize, supportSide);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.GetAssignableInkjetLayoutsByJobTemplateIdWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **id** | **int** |  |  |
+| **page** | **int?** |  | [optional] [default to 1] |
+| **pageSize** | **int?** |  | [optional] [default to 15] |
+| **supportSide** | **string** |  | [optional]  |
+
+### Return type
+
+[**SearchInkjetLayoutsResultDto**](SearchInkjetLayoutsResultDto.md)
 
 ### Authorization
 
@@ -1855,6 +2452,100 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="getwebhookstargetbyid"></a>
+# **GetWebhooksTargetById**
+> WebhooksTargetDto GetWebhooksTargetById (int id)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class GetWebhooksTargetByIdExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var id = 56;  // int | 
+
+            try
+            {
+                WebhooksTargetDto result = apiInstance.GetWebhooksTargetById(id);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.GetWebhooksTargetById: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetWebhooksTargetByIdWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<WebhooksTargetDto> response = apiInstance.GetWebhooksTargetByIdWithHttpInfo(id);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.GetWebhooksTargetByIdWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **id** | **int** |  |  |
+
+### Return type
+
+[**WebhooksTargetDto**](WebhooksTargetDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="getworkflowregistry"></a>
 # **GetWorkflowRegistry**
 > WorkflowBlueprintSummaryModelPagedList GetWorkflowRegistry ()
@@ -2308,6 +2999,102 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="renameinkjetlayout"></a>
+# **RenameInkjetLayout**
+> InkjetLayoutDto RenameInkjetLayout (int id, string name = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class RenameInkjetLayoutExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var id = 56;  // int | 
+            var name = "name_example";  // string |  (optional) 
+
+            try
+            {
+                InkjetLayoutDto result = apiInstance.RenameInkjetLayout(id, name);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.RenameInkjetLayout: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the RenameInkjetLayoutWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<InkjetLayoutDto> response = apiInstance.RenameInkjetLayoutWithHttpInfo(id, name);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.RenameInkjetLayoutWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **id** | **int** |  |  |
+| **name** | **string** |  | [optional]  |
+
+### Return type
+
+[**InkjetLayoutDto**](InkjetLayoutDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="renamelayout"></a>
 # **RenameLayout**
 > LayoutDto RenameLayout (int id, string name = null)
@@ -2406,7 +3193,7 @@ catch (ApiException e)
 
 <a name="resumeworkflowscheduler"></a>
 # **ResumeWorkflowScheduler**
-> List&lt;CollectedWorkflow&gt; ResumeWorkflowScheduler ()
+> List&lt;JobInstance&gt; ResumeWorkflowScheduler ()
 
 
 
@@ -2437,7 +3224,7 @@ namespace Example
 
             try
             {
-                List<CollectedWorkflow> result = apiInstance.ResumeWorkflowScheduler();
+                List<JobInstance> result = apiInstance.ResumeWorkflowScheduler();
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -2457,7 +3244,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    ApiResponse<List<CollectedWorkflow>> response = apiInstance.ResumeWorkflowSchedulerWithHttpInfo();
+    ApiResponse<List<JobInstance>> response = apiInstance.ResumeWorkflowSchedulerWithHttpInfo();
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -2474,7 +3261,7 @@ catch (ApiException e)
 This endpoint does not need any parameter.
 ### Return type
 
-[**List&lt;CollectedWorkflow&gt;**](CollectedWorkflow.md)
+[**List&lt;JobInstance&gt;**](JobInstance.md)
 
 ### Authorization
 
@@ -2495,7 +3282,7 @@ This endpoint does not need any parameter.
 
 <a name="signalexternalprocesscompleted"></a>
 # **SignalExternalProcessCompleted**
-> List&lt;CollectedWorkflow&gt; SignalExternalProcessCompleted (bool? waitForCompletion = null, ExternalProcessCompletedMessage externalProcessCompletedMessage = null)
+> List&lt;JobInstance&gt; SignalExternalProcessCompleted (bool? waitForCompletion = null, ExternalProcessCompletedMessage externalProcessCompletedMessage = null)
 
 Notifies a suspended workflow instance when that the external process has completed execution
 
@@ -2529,7 +3316,7 @@ namespace Example
             try
             {
                 // Notifies a suspended workflow instance when that the external process has completed execution
-                List<CollectedWorkflow> result = apiInstance.SignalExternalProcessCompleted(waitForCompletion, externalProcessCompletedMessage);
+                List<JobInstance> result = apiInstance.SignalExternalProcessCompleted(waitForCompletion, externalProcessCompletedMessage);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -2550,7 +3337,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Notifies a suspended workflow instance when that the external process has completed execution
-    ApiResponse<List<CollectedWorkflow>> response = apiInstance.SignalExternalProcessCompletedWithHttpInfo(waitForCompletion, externalProcessCompletedMessage);
+    ApiResponse<List<JobInstance>> response = apiInstance.SignalExternalProcessCompletedWithHttpInfo(waitForCompletion, externalProcessCompletedMessage);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -2572,7 +3359,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**List&lt;CollectedWorkflow&gt;**](CollectedWorkflow.md)
+[**List&lt;JobInstance&gt;**](JobInstance.md)
 
 ### Authorization
 
@@ -3071,6 +3858,100 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="testwebhooktarget"></a>
+# **TestWebhookTarget**
+> WebhookTargetTestResultDto TestWebhookTarget (int id)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class TestWebhookTargetExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var id = 56;  // int | 
+
+            try
+            {
+                WebhookTargetTestResultDto result = apiInstance.TestWebhookTarget(id);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.TestWebhookTarget: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the TestWebhookTargetWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<WebhookTargetTestResultDto> response = apiInstance.TestWebhookTargetWithHttpInfo(id);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.TestWebhookTargetWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **id** | **int** |  |  |
+
+### Return type
+
+[**WebhookTargetTestResultDto**](WebhookTargetTestResultDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="transmit"></a>
 # **Transmit**
 > byte[] Transmit (int readerIndex, byte[] body = null)
@@ -3151,6 +4032,100 @@ catch (ApiException e)
 ### Return type
 
 **byte[]**
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="updatewebhookstarget"></a>
+# **UpdateWebhooksTarget**
+> WebhooksTargetDto UpdateWebhooksTarget (WebhooksTargetDto webhooksTargetDto = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class UpdateWebhooksTargetExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var webhooksTargetDto = new WebhooksTargetDto(); // WebhooksTargetDto |  (optional) 
+
+            try
+            {
+                WebhooksTargetDto result = apiInstance.UpdateWebhooksTarget(webhooksTargetDto);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.UpdateWebhooksTarget: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the UpdateWebhooksTargetWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<WebhooksTargetDto> response = apiInstance.UpdateWebhooksTargetWithHttpInfo(webhooksTargetDto);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.UpdateWebhooksTargetWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **webhooksTargetDto** | [**WebhooksTargetDto**](WebhooksTargetDto.md) |  | [optional]  |
+
+### Return type
+
+[**WebhooksTargetDto**](WebhooksTargetDto.md)
 
 ### Authorization
 
@@ -3259,6 +4234,102 @@ catch (ApiException e)
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="validateinkjetlayoutname"></a>
+# **ValidateInkjetLayoutName**
+> NameValidationResultDto ValidateInkjetLayoutName (string scannerId = null, string body = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class ValidateInkjetLayoutNameExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var scannerId = "scannerId_example";  // string |  (optional) 
+            var body = "body_example";  // string |  (optional) 
+
+            try
+            {
+                NameValidationResultDto result = apiInstance.ValidateInkjetLayoutName(scannerId, body);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.ValidateInkjetLayoutName: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ValidateInkjetLayoutNameWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<NameValidationResultDto> response = apiInstance.ValidateInkjetLayoutNameWithHttpInfo(scannerId, body);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.ValidateInkjetLayoutNameWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **scannerId** | **string** |  | [optional]  |
+| **body** | **string** |  | [optional]  |
+
+### Return type
+
+[**NameValidationResultDto**](NameValidationResultDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
 

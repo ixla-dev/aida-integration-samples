@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **File** | [**FileDto**](FileDto.md) |  | [optional] 
 **DataSourceConfiguration** | [**JobTemplateDtoDataSourceConfiguration**](JobTemplateDtoDataSourceConfiguration.md) |  | [optional] 
 **Layouts** | [**List&lt;JobTemplateLayoutDto&gt;**](JobTemplateLayoutDto.md) |  | [optional] 
+**InkjetLayouts** | [**List&lt;JobTemplateInkjetLayoutDto&gt;**](JobTemplateInkjetLayoutDto.md) |  | [optional] 
 **MarkGroups** | [**List&lt;ScannerMarkGroupDto&gt;**](ScannerMarkGroupDto.md) |  | [optional] 
 **OcrSettings** | [**List&lt;JobTemplateOcrSettingsDto&gt;**](JobTemplateOcrSettingsDto.md) |  | [optional] 
 **AutoPosEnabled** | **bool** |  | [optional] 

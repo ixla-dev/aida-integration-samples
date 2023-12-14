@@ -51,7 +51,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
                 }));
 
             // Add the message in an unbounded blocking collection for further processing 
-            messageQueue.AddMessage(new MachineMessage(address,message));
+            messageQueue.AddMessage(new MachineMessage(address, message));
             return Ok();
         }
 
@@ -64,11 +64,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
         {
             if (!Enum.TryParse<MessageType>(json.GetProperty("messageType").GetString(), out var messageType))
                 return null;
-
             var jsonString = json.ToString();
-            if (jsonString is null)
-                return null;
-
             return messageType switch
             {
                 MessageType.WorkflowSchedulerStarted   => JsonSerializer.Deserialize<WorkflowSchedulerStartedMessage>(jsonString, _jsonOptions),
@@ -76,6 +72,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
                 MessageType.WorkflowSchedulerStopped   => JsonSerializer.Deserialize<WorkflowSchedulerStoppedMessage>(jsonString, _jsonOptions),
                 MessageType.EncoderLoaded              => JsonSerializer.Deserialize<EncoderLoadedMessage>(jsonString, _jsonOptions),
                 MessageType.OcrExecuted                => JsonSerializer.Deserialize<OcrExecutedMessage>(jsonString, _jsonOptions),
+                MessageType.WorkflowStarted            => JsonSerializer.Deserialize<WorkflowStartedMessage>(jsonString, _jsonOptions),
                 MessageType.WorkflowCancelled          => JsonSerializer.Deserialize<WorkflowCancelledMessage>(jsonString, _jsonOptions),
                 MessageType.WorkflowCompleted          => JsonSerializer.Deserialize<WorkflowCompletedMessage>(jsonString, _jsonOptions),
                 MessageType.WorkflowFaulted            => JsonSerializer.Deserialize<WorkflowFaultedMessage>(jsonString, _jsonOptions),
