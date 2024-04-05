@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -16,157 +16,141 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
     /// <summary>
     /// Hosted service that processes messages from AIDAMessageCollection 
     /// </summary>
-    public class MessagesBackgroundWorker : IHostedService
+    public class MessagesBackgroundWorker(
+        IConfiguration configuration,
+        MessageCollection messages,
+        ApiClientFactory clientFactory,
+        ILogger<MessagesBackgroundWorker> logger)
+        : IHostedService
     {
-        private readonly Dictionary<string, CancellationTokenSource> _cancellationTokenSources = new();
-
-        private readonly ILogger<MessagesBackgroundWorker> _logger;
-        private readonly MessageCollection                 _messages;
-        private readonly ApiClientFactory                  _clientFactory;
-        private readonly IConfiguration                    _configuration;
-        private readonly JsonSerializerOptions             _jsonSerializerOptions;
-
-        public MessagesBackgroundWorker(
-            IConfiguration configuration,
-            MessageCollection messages,
-            ApiClientFactory clientFactory,
-            ILogger<MessagesBackgroundWorker> logger
-        )
+        private readonly JsonSerializerOptions _jsonSerializerOptions = new()
         {
-            _jsonSerializerOptions = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Converters = { new JsonStringEnumConverter() }
-            };
-            _logger = logger;
-            _messages = messages;
-            _configuration = configuration;
-            _clientFactory = clientFactory;
-        }
+            WriteIndented = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
 
         /// <summary>
         /// Starts an async task 
         /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <param name="stoppingToken"></param>
         /// <returns></returns>
-        public Task StartAsync(CancellationToken stoppingToken)
+        public async Task StartAsync(CancellationToken stoppingToken)
         {
-            _ = Task.Run(() =>
+            _ = ProcessMessages(stoppingToken).ConfigureAwait(false);
+            logger.LogInformation("Message processor started");
+        }
+        public async Task ProcessMessages(CancellationToken cancellationToken)
+        {
+            logger.LogInformation("Server started. Waiting messages...");
+            while (!cancellationToken.IsCancellationRequested)
             {
-                
-                var cts               = new CancellationTokenSource();
-                var cancellationToken = cts.Token;
-                
-                while (true)
+                try
                 {
-                    try
+                    var aidaMessage = messages.TakeMessage();
+                    if (aidaMessage is null)
                     {
-                        var aidaMessage = _messages.TakeMessage(CancellationToken.None);
-                        if (aidaMessage is null)
-                        {
-                            Thread.Sleep(1000);
-                            continue;
-                        }
-
-                        var eventMessage = aidaMessage.Message;
-                        _logger.LogInformation("Message {MessageType}", eventMessage.MessageType);
-
-                        if (eventMessage.JobId is not null)
-                            _logger.LogInformation(
-                                "CorrelationId: {CorrelationId} job id: {JobId}, event: {WorkflowEvent} status: {Status}, error code: {ErrorCode}, document produced: {DocumentProduced}",
-                                eventMessage.CorrelationId,
-                                eventMessage.JobId,
-                                eventMessage.MessageType,
-                                eventMessage.JobStatus,
-                                eventMessage.ErrorCode,
-                                eventMessage.DocumentProduced);
-
-                        var ipAddress = aidaMessage.IpAddress;
-                        var client    = _clientFactory(ipAddress);
-
-                        _logger.LogInformation("Processing message {AidaMessageType}", eventMessage.GetType().Name);
-
-                        switch (eventMessage)
-                        {
-                            case WorkflowSchedulerStoppedMessage stopped:
-                                _logger.LogWarning("Workflow Scheduler stopped. Error code = {ErrorCode}, stop reason = {StopReason}, source job id = {SourceJobId}",
-                                    stopped.ErrorCode,
-                                    stopped.StopReason,
-                                    stopped.SourceJobInstanceId);
-                                break;
-
-                            case WorkflowSchedulerStartedMessage started:
-                                _logger.LogInformation("Workflow Scheduler started");
-                                break;
-                            // These are notifications that indicate that the workflow was suspended
-                            // The workflow was suspended because AIDA was not able to get the card 
-                            // from the feeder or it was about to move a card in the engraving position but open interlocks where found.
-                            case WorkflowSchedulerProcessSuspendedMessage suspended:
-                                switch (suspended.ErrorCode)
-                                {
-                                    case JobErrorCodes.FeederEmpty:
-                                        // Intentionally block until we receive user input 
-                                        _logger.LogWarning("\n\nFeeder empty\nLoad the input feeder with cards and press the 'Resume' button");
-                                        break;
-
-                                    case JobErrorCodes.OpenInterlock:
-                                        _logger.LogWarning("\n\n Open interlocks detected. Please verify all interlocks are properly locked, then click the 'Resume'");
-                                        break;
-                                }
-
-                                break;
-                            // These are fire and forget for AIDA. 
-                            case WorkflowCancelledMessage:
-                                // _logger.LogWarning("Job {JobId} cancelled", eventMessage.JobId);
-                                break;
-
-                            case WorkflowCompletedMessage:
-                                // _logger.LogInformation("Job {JobId} completed", eventMessage.JobId);
-                                break;
-
-                            case WorkflowFaultedMessage fault:
-                                // _logger.LogWarning("Job {JobId} faulted. JobStatus: {JobStatus}, ErrorCode: {ErrorCode}", fault.JobId, fault.JobStatus, fault.ErrorCode);
-                                break;
-
-                            // These events require the receiving application to invoke SignalExternalProcessCompleted.
-                            // The card is positioned in the SmartCard reader. AIDA is waiting the external application
-                            // to signal the completion (and outcome) of the operation.
-                            case EncoderLoadedMessage encoderLoaded:
-                                // Mock the chip personalization process. 
-                                _ = Task.Run(async () =>
-                                {
-                                    try
-                                    {
-                                        _logger.LogInformation("Mocking chip encoding for job {JobId}", encoderLoaded.JobId);
-                                        await MockChipEncodingPersonalization(encoderLoaded, client, CancellationToken.None);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        _logger.LogError(e, e.Message);
-                                    }
-                                });
-                                break;
-
-                            // AIDA executed an OCR operation successfully. The notification contains the list of results
-                            // obtained from the OCR reading, it now expects the receiving application to validate the 
-                            // results and signal the outcome of the validation 
-                            case OcrExecutedMessage ocrMessage:
-                                _ = MockOcrValidation(ocrMessage, client, CancellationToken.None);
-                                break;
-                        }
+                        await Task.Delay(250, default);
+                        continue;
                     }
-                    catch (Exception e)
+
+                    var eventMessage = aidaMessage.Message;
+                    if (eventMessage.JobId is null)
+                        logger.LogInformation("Message {MessageType}", eventMessage.MessageType);
+                    if (eventMessage.JobId is not null)
+                        logger.LogInformation(
+                            "CorrelationId: {CorrelationId} job id: {JobId}, event: {WorkflowEvent} status: {Status}, error code: {ErrorCode}, document produced: {DocumentProduced}",
+                            eventMessage.CorrelationId,
+                            eventMessage.JobId,
+                            eventMessage.MessageType,
+                            eventMessage.JobStatus,
+                            eventMessage.ErrorCode,
+                            eventMessage.DocumentProduced);
+
+                    var ipAddress = aidaMessage.IpAddress;
+                    var client    = clientFactory(ipAddress);
+
+                    // logger.LogInformation("Processing message {AidaMessageType}", eventMessage.GetType().Name);
+
+                    switch (eventMessage)
                     {
-                        _logger.LogError(e, "Failed to process AIDA notification");
+                        case WorkflowSchedulerStoppedMessage stopped:
+                            logger.LogWarning("Workflow Scheduler stopped. Error code = {ErrorCode}, stop reason = {StopReason}, source job id = {SourceJobId}",
+                                stopped.ErrorCode,
+                                stopped.StopReason,
+                                stopped.SourceJobInstanceId);
+                            break;
+
+                        case WorkflowSchedulerStartedMessage started:
+                            logger.LogInformation("Workflow Scheduler started");
+                            break;
+                        // These are notifications that indicate that the workflow was suspended
+                        // The workflow was suspended because AIDA was not able to get the card 
+                        // from the feeder or it was about to move a card in the engraving position but open interlocks where found.
+                        case WorkflowSchedulerProcessSuspendedMessage suspended:
+                            switch (suspended.ErrorCode)
+                            {
+                                case JobErrorCodes.CardJam: break;
+
+                                case JobErrorCodes.FeederEmpty:
+                                    // Intentionally block until we receive user input 
+                                    logger.LogWarning("\n\nFeeder empty\nLoad the input feeder with cards and press the 'Resume' button");
+                                    break;
+                                case JobErrorCodes.OpenInterlock:
+                                    logger.LogWarning("\n\n Open interlocks detected. Please verify all interlocks are properly locked, then click the 'Resume'");
+                                    break;
+                            }
+
+                            break;
+                        // These are fire and forget for AIDA. 
+                        case WorkflowCancelledMessage: break;
+                        case WorkflowCompletedMessage: break;
+                        case WorkflowFaultedMessage:   break;
+
+                        case MagneticStripeReadBackMessage readBack:
+                            logger.LogInformation("MAGNETIC READ_BACK RECEIVED");
+                            _ = MockReadBackValidation(readBack, client);
+                            break;
+
+                        // These events require the receiving application to invoke SignalExternalProcessCompleted.
+                        // The card is positioned in the SmartCard reader. AIDA is waiting the external application
+                        // to signal the completion (and outcome) of the operation.
+                        case EncoderLoadedMessage encoderLoaded:
+                            // Mock the chip personalization process.
+                            _ = MockChipEncodingPersonalization(encoderLoaded, client, CancellationToken.None).ConfigureAwait(false);
+                            break;
+
+                        // AIDA executed an OCR operation successfully. The notification contains the list of results
+                        // obtained from the OCR reading, it now expects the receiving application to validate the 
+                        // results and signal the outcome of the validation 
+                        case OcrExecutedMessage ocrMessage:
+                            _ = MockOcrValidation(ocrMessage, client, CancellationToken.None).ConfigureAwait(false);
+                            break;
                     }
                 }
-
-                return Task.FromResult(Task.CompletedTask);
-            }, cancellationToken: stoppingToken);
-            return Task.CompletedTask;
+                catch (Exception e)
+                {
+                    logger.LogError(e, "Failed to process AIDA notification");
+                }
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+        public async Task MockReadBackValidation(MagneticStripeReadBackMessage readBack, IntegrationApi api)
+        {
+            try
+            {
+                var response = new ExternalProcessCompletedMessage()
+                {
+                    Outcome = ExternalProcessOutcome.Completed,
+                    WorkflowInstanceId = readBack.WorkflowInstanceId
+                };
+                await api.SignalExternalProcessCompletedAsync(false, response).ConfigureAwait(false);
+            }
+            catch
+            {
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -186,7 +170,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                     WorkflowInstanceId = message.WorkflowInstanceId,
                 };
 
-                _logger.LogInformation("Ocr Validation completed {Validation}", JsonSerializer.Serialize(message, _jsonSerializerOptions));
+                logger.LogInformation("Ocr Validation completed {Validation}", JsonSerializer.Serialize(message, _jsonSerializerOptions));
                 // tell AIDA to dispatch the completion signal and resume 
                 await api.SignalExternalProcessCompletedAsync(
                         // waitForCompletion = false tells aida to return immediately the
@@ -197,14 +181,14 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                         cancellationToken)
                     .ConfigureAwait(false);
 
-                _logger.LogInformation("Message published. Outcome = {Outcome}, WorkflowId = {WorkflowId}, {Message}",
+                logger.LogInformation("Message published. Outcome = {Outcome}, WorkflowId = {WorkflowId}, {Message}",
                     responseMessage.Outcome,
                     responseMessage.WorkflowInstanceId,
                     JsonSerializer.Serialize(message, _jsonSerializerOptions));
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "OCR Validation Resume Failed");
+                logger.LogError(e, "OCR Validation Resume Failed");
             }
         }
 
@@ -218,19 +202,18 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
         {
             try
             {
-                // _logger.LogInformation("Running chip personalization for job: {JobId}", message.JobId);
-                if (cancellationToken.IsCancellationRequested) 
+                if (cancellationToken.IsCancellationRequested)
                     return;
 
-                var errorRate = _configuration.GetValue("EncodingErrorRate", 0);
+                var errorRate = configuration.GetValue("EncodingErrorRate", 0);
                 var rnd       = new Random();
                 var value     = rnd.Next(0, 100);
                 var outcome   = value < errorRate ? ExternalProcessOutcome.Faulted : ExternalProcessOutcome.Completed;
 
-                var duration = TimeSpan.Parse(_configuration.GetValue<string>("MockEncodingDuration"));
-                _logger.LogInformation("Mocking chip encoding, jobId = {JobId}, duration = {Duration}", message.JobId, duration);
+                var duration = TimeSpan.Parse(configuration.GetValue<string>("MockEncodingDuration"));
+                logger.LogInformation("Mocking chip encoding, jobId = {JobId}, duration = {Duration}", message.JobId, duration);
                 await Task.Delay(duration, cancellationToken).ConfigureAwait(false);
-                
+
                 var responseMessage = new ExternalProcessCompletedMessage
                 {
                     // We tell AIDA chip personalization completed without error
@@ -239,19 +222,18 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                     WorkflowInstanceId = message.WorkflowInstanceId
                 };
 
-                _logger.LogInformation("CorrelationId: {CorrelationId}, job id: {JobId}, Chip Perso: {OperationOutcome}", message.CorrelationId, message.JobId, outcome);
+                logger.LogInformation("CorrelationId: {CorrelationId}, job id: {JobId}, Chip Perso: {OperationOutcome}", message.CorrelationId, message.JobId, outcome);
                 // tell AIDA to dispatch the completion signal and resume 
                 await api.SignalExternalProcessCompletedAsync(
                     // waitForCompletion = false tells aida to return immediately the HTTP response without waiting the workflow to finish 
                     waitForCompletion: false,
                     // The response message
                     externalProcessCompletedMessage: responseMessage,
-                    cancellationToken
-                ).ConfigureAwait(false);
+                    cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                logger.LogError(e, e.Message);
             }
         }
     }

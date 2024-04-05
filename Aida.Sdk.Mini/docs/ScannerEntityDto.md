@@ -25,7 +25,7 @@ Name | Type | Description | Notes
 **CharSpacing** | **double?** |  | [optional] 
 **TextBaseline** | **double?** |  | [optional] 
 **TextHeightLimit** | **double?** |  | [optional] 
-**TextLenghtLimit** | **double?** |  | [optional] 
+**TextLengthLimit** | **double?** |  | [optional] 
 **TextRadius** | **double?** |  | [optional] 
 **TextStartAngle** | **double?** |  | [optional] 
 **BitmapModeFlags** | [**ScannerEntityBitmapModeFlags**](ScannerEntityBitmapModeFlags.md) |  | [optional] 

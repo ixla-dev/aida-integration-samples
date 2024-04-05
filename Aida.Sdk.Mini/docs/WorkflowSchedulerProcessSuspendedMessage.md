@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Discriminator** | **string** |  | 
+**SourceJobInstanceId** | **string** |  | [optional] 
 **MachineName** | **string** |  | [optional] 
 **MachineSerial** | **string** |  | [optional] 
 **HostName** | **string** |  | [optional] 

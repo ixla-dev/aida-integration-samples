@@ -1,4 +1,6 @@
 ﻿
+using System.Windows.Forms;
+
 namespace Aida.Samples.Integration.UI.Forms
 {
     partial class MainForm
@@ -323,6 +325,8 @@ namespace Aida.Samples.Integration.UI.Forms
             btnStart.Text = "Start";
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += btnStart_Click;
+            // btnStart.Click += (sender, args) => MessageBox.Show("handler 1");
+            // btnStart.Click += (sender, args) => MessageBox.Show("handler 2");
             // 
             // btnStop
             // 

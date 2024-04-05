@@ -20,6 +20,7 @@ namespace Aida.Samples.Integration.UI
             var       host   = CreateHostBuilder(args).Build();
             using var sScope = host.Services.CreateScope();
             _ = Task.Run(async () => await host.RunAsync());
+            
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -30,16 +31,13 @@ namespace Aida.Samples.Integration.UI
         {
             return Host
                 .CreateDefaultBuilder(args)
+                .UseSerilog((context, serilog) =>
+                {
+                    serilog.ReadFrom.Configuration(context.Configuration)
+                        .Enrich.WithProperty("ApplicationId", "Aida.Samples.Integration.UI");
+                })
                 .UseConsoleLifetime()
-                .ConfigureWebHostDefaults(conf =>
-                    conf
-                        .UseStartup<Startup>()
-                        .UseSerilog((context, serilog) =>
-                        {
-                            serilog.ReadFrom.Configuration(context.Configuration)
-                                .Enrich.WithProperty("ApplicationId", "Aida.Samples.Integration.UI");
-                        })
-                );
+                .ConfigureWebHostDefaults(conf => conf.UseStartup<Startup>());
         }
     }
 }

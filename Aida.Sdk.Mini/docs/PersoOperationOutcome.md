@@ -1,4 +1,4 @@
-# Aida.Sdk.Mini.Model.WorkflowMessages
+# Aida.Sdk.Mini.Model.PersoOperationOutcome
 
 ## Properties
 

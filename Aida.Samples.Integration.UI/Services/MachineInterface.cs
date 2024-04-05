@@ -227,56 +227,16 @@ namespace Aida.Samples.Integration.UI.Services
         /// </param>
         /// <param name="batchId"></param>
         /// <returns></returns>
-        public async Task InsertMockRecord(int id, string batchId)
-        {
-            await InsertBatch(id, batchId, 10);
-            // try
-            // {
-            //     await _dbInsertSemaphore.WaitAsync().ConfigureAwait(false);
-            //
-            //     using var api    = GetClient();
-            //     var       record = new PersonalizationRecord();
-            //     var       fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(id).ConfigureAwait(false);
-            //     var       job    = await api.GetJobTemplateByIdAsync(id).ConfigureAwait(false);
-            //     // skipping personalization fields will make AIDA server use placeholders found in SJF Files
-            //     foreach (var f in fields)
-            //     {
-            //         if (f.ValueType == EntityFieldValueType.String)
-            //             record.Fields.Add(new PersonalizationField(f.EntityName, DBNull.Value));
-            //     }
-            //
-            //     if ((job.MagStripeConfiguration?.Operations ?? MagneticStripeOperations.None) != MagneticStripeOperations.None)
-            //     {
-            //         record.Fields.Add(new PersonalizationField("magnetic_track_1_w", "TRACK 1"));
-            //         record.Fields.Add(new PersonalizationField("magnetic_track_2_w", "123456789"));
-            //         record.Fields.Add(new PersonalizationField("magnetic_track_3_w", "1234"));
-            //     }
-            //
-            //     record.Fields.Add(new PersonalizationField("batch_id", batchId));
-            //
-            //     var etlDefinition = await api.GetDataExchangeTableDefinitionAsync(id).ConfigureAwait(false);
-            //     var statement     = DatabaseUtils.BuildInsertStatement(etlDefinition.TableName, _dbConnection, record.Fields);
-            //     await statement.ExecuteNonQueryAsync().ConfigureAwait(false);
-            // }
-            // catch (Exception e)
-            // {
-            //     MessageBox.Show(e.ToString(), "Failed to insert mock record");
-            // }
-            // finally
-            // {
-            //     _dbInsertSemaphore.Release();
-            // }
-        }
+        public async Task InsertMockRecord(int id, string batchId) => await InsertBatch(id, batchId, 1);
 
         public async Task InsertBatch(int id, string batchId, int size = 100)
         {
             try
             {
                 await _dbInsertSemaphore.WaitAsync().ConfigureAwait(false);
-
-                using var api = GetClient();
-                var fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(id).ConfigureAwait(false);
-                var job    = await api.GetJobTemplateByIdAsync(id).ConfigureAwait(false);
+                using var api    = GetClient();
+                var       fields = await api.GetEntityDescriptorsByJobTemplateIdAsync(id).ConfigureAwait(false);
+                var       job    = await api.GetJobTemplateByIdAsync(id).ConfigureAwait(false);
 
                 for (var i = 0; i < size; i++)
                 {
@@ -489,7 +449,7 @@ namespace Aida.Samples.Integration.UI.Services
                                   $"order by job_id desc offset @offset limit @limit";
                 cmd.Parameters.AddWithValue("@offset", offset);
                 cmd.Parameters.AddWithValue("@limit", limit);
-                
+
                 // cmd.Parameters.AddWithValue("@session_id", WorkflowSchedulerState!.SessionId);
                 // cmd.Parameters.AddWithValue("@batch_id", batch_id);
                 // cmd.Parameters.AddWithValue("@last_completed_job", last_completed_job);

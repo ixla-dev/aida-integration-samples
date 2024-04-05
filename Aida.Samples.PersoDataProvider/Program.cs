@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
-using System.IO.Enumeration;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Aida.Sdk.Mini.Api;
 using Aida.Sdk.Mini.Client;
 using Aida.Sdk.Mini.Model;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Npgsql;
 using Sharprompt;
 
@@ -52,7 +48,9 @@ public class Program
         var job      = Prompt.Select("Select a job template", jobs, 5, null, j => j.Name);
         var jobId    = job.Id!.Value;
 
-        var dbConfig = job.DataSourceConfiguration.GetNpgSqlDataSourceConfigurationDto();
+        var dbConfig = job.DataSourceConfiguration as NpgSqlDataSourceConfigurationDto;
+        if (dbConfig is null)
+            throw new Exception("Invalid type for dbConfig");
         var tableDef = await client.GetDataExchangeTableDefinitionAsync(jobId);
         var fieldDes = await client.GetEntityDescriptorsByJobTemplateIdAsync(jobId);
 
@@ -78,6 +76,12 @@ public class Program
             var record = new PersoRecord();
             foreach (var e in entities)
             {
+                await using var fs = File.OpenRead(@"d:\tmp\layouts\mirroring\picture.bmp");
+                await using var ms = new MemoryStream();
+                await fs.CopyToAsync(ms);
+                if (e.ValueType == EntityFieldValueType.Image) 
+                    record.Fields.Add(new PersoRecordField(e.EntityName, ms.ToArray()));
+                
                 if (e.ValueType == EntityFieldValueType.String)
                     record.Fields.Add(new PersoRecordField(e.EntityName, DBNull.Value));
             }
@@ -95,11 +99,8 @@ public class Program
 
     public static NpgsqlCommand BuildInsertStatement(IEnumerable<PersoRecord> records, NpgsqlCommand command, DataExchangeTableDefinition tableDef)
     {
+        records = records.ToArray();
         var fields = records.First().Fields;
-
-        var names = fields.Select(f => f.Name).ToList();
-        names.Add("job_status");
-        names.Add("correlation_id");
 
         var fieldList = string.Join(", ", fields.Select(f => $@"""{f.Name}"""));
 
@@ -140,8 +141,9 @@ public class Program
                 Description = "Test Job Template for Peru IDs",
                 Type = "Laser"
             });
-            var index = 0;
             foreach (var l in frontLayouts) await UploadLayoutFile(l.FilePath, l.DisplayName, "front");
+            if (rearLayouts is null)
+                return;
             foreach (var l in rearLayouts) await UploadLayoutFile(l.FilePath, l.DisplayName, "rear");
         }
         public async Task<int> UploadLayoutFile(string filename, string layoutName, string cardSide)
@@ -152,8 +154,8 @@ public class Program
             });
             return response.Id!.Value;
         }
-        public async Task AssignLayoutToJobTemplate() { }
-        public async Task CreateWebhookTarget() { }
-        public async Task AssignWebhookTargetToJobTemplate() { }
+        public Task CreateWebhookTarget() => Task.CompletedTask;
+        public Task AssignLayoutToJobTemplate() => Task.CompletedTask;
+        public Task AssignWebhookTargetToJobTemplate() => Task.CompletedTask;
     }
 }

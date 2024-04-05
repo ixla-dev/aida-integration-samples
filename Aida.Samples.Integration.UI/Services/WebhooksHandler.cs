@@ -49,11 +49,6 @@ namespace Aida.Samples.Integration.UI.Services
             if (m != null) Remove(m);
         }
 
-        public void OnFeederEmpty(FeederEmptyMessage feederEmpty)
-        {
-            Add(feederEmpty);
-        }
-
         public void OnWorkflowCompleted(WorkflowCompletedMessage message)
         {
             var m = GetMessageByWorkflowInstanceId(message.WorkflowInstanceId);
@@ -99,7 +94,7 @@ namespace Aida.Samples.Integration.UI.Services
                 }).ConfigureAwait(false);
         }
 
-        public async Task FetchSuspendedWorkflows()
+        public static async Task FetchSuspendedWorkflows()
         {
         }
     }

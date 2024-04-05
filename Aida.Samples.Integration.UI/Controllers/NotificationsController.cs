@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Aida.Samples.Integration.UI.Services;
+using Aida.Samples.Integration.Webhooks;
 using Aida.Sdk.Mini.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -52,13 +53,11 @@ namespace Aida.Samples.Integration.UI.Controllers
                 // Polymorphic deserialization can be achieved also using a custom json converter for system.text.json 
                 // but i didn't want to implement it, since it would be pretty much overkill for deserializing only 2 
                 // different message types
-
-                var message = DeserializeMessage(json);
+                if (!(json.TryParseWorkflowMessage(_jsonOptions, _logger, out var message)))
+                    return Task.FromResult<ActionResult>(BadRequest("Unsupported message type"));
 
                 switch (message)
                 {
-                    case null:
-                        return Task.FromResult<ActionResult>(BadRequest("Unsupported message type"));
                     case WorkflowCompletedMessage wfCompleted:
                         _webhooksHandler.OnWorkflowCompleted(wfCompleted);
                         break;
@@ -66,48 +65,12 @@ namespace Aida.Samples.Integration.UI.Controllers
                         _webhooksHandler.OnWorkflowFaulted(wfFault);
                         break;
                 }
-
                 _webhooksHandler.Add(message);
                 return Task.FromResult<ActionResult>(Ok());
             }
             catch (Exception e)
             {
                 return Task.FromResult<ActionResult>(BadRequest(e.Message));
-            }
-        }
-
-        /// <summary>
-        /// Deserialize messages. In the demo app i was using models defined in the project, now we are using the models from the SDK 
-        /// </summary>
-        /// <param name="json"></param>
-        /// <returns></returns>
-        private WorkflowMessage DeserializeMessage(JsonElement json)
-        {
-            try
-            {
-                if (!Enum.TryParse<MessageType>(json.GetProperty("MessageType").GetString(), out var messageType))
-                    return null;
-                var jsonString = json.ToString();
-                if (jsonString is null) return null;
-
-                return messageType switch
-                {
-                    MessageType.WorkflowSchedulerStarted   => JsonSerializer.Deserialize<WorkflowSchedulerStartedMessage>(jsonString, _jsonOptions),
-                    MessageType.WorkflowSchedulerStopped   => JsonSerializer.Deserialize<WorkflowSchedulerStoppedMessage>(jsonString, _jsonOptions),
-                    MessageType.WorkflowCancelled          => JsonSerializer.Deserialize<WorkflowCancelledMessage>(jsonString, _jsonOptions),
-                    MessageType.WorkflowCompleted          => JsonSerializer.Deserialize<WorkflowCompletedMessage>(jsonString, _jsonOptions),
-                    MessageType.WorkflowFaulted            => JsonSerializer.Deserialize<WorkflowFaultedMessage>(jsonString, _jsonOptions),
-                    MessageType.FeederEmpty                => JsonSerializer.Deserialize<FeederEmptyMessage>(jsonString, _jsonOptions),
-                    MessageType.EncoderLoaded              => JsonSerializer.Deserialize<EncoderLoadedMessage>(jsonString, _jsonOptions),
-                    MessageType.OcrExecuted                => JsonSerializer.Deserialize<OcrExecutedMessage>(jsonString, _jsonOptions),
-                    MessageType.HealthCheck                => JsonSerializer.Deserialize<WebhookReceiverHealthCheckMessage>(jsonString, _jsonOptions),
-                    _                                      => null
-                };
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return null;
             }
         }
     }

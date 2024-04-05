@@ -13,7 +13,8 @@ Name | Type | Description | Notes
 **ErrorDetails** | **string** |  | [optional] 
 **LastLoadedItemId** | **int** |  | [optional] 
 **UpTimeSeconds** | **int** |  | [optional] 
-**CurrentJobTemplate** | [**JobTemplateDto**](JobTemplateDto.md) |  | [optional] 
+**CurrentJobTemplateName** | **string** |  | [optional] [readonly] 
+**CurrentJobTemplateId** | **int?** |  | [optional] [readonly] 
 **WorkflowTypeName** | **string** |  | [optional] 
 **SessionId** | **string** |  | [optional] 
 
