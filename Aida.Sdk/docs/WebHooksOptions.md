@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AckTimeout** | [**TimeSpan**](TimeSpan.md) |  | [optional] 
-**ExecutionTimeout** | [**TimeSpan**](TimeSpan.md) |  | [optional] 
+**AckTimeout** | **string** |  | [optional] 
+**ExecutionTimeout** | **string** |  | [optional] 
 **MaxConnectionRetries** | **int?** |  | [optional] 
 **UseSystemWideWebhooks** | **bool** |  | [optional] 
 **SystemWideWebhookTarget** | **string** |  | [optional] 

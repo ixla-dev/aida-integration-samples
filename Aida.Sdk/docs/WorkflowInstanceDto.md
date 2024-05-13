@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **FinishedAt** | **DateTime?** |  | [optional] 
 **CancelledAt** | **DateTime?** |  | [optional] 
 **FaultedAt** | **DateTime?** |  | [optional] 
+**Metadata** | **Dictionary&lt;string, Object&gt;** |  | [optional] 
 **CurrentActivityId** | **string** |  | [optional] 
 **LastExecutedActivityId** | **string** |  | [optional] 
 **CurrentActivityName** | **string** |  | [optional] 

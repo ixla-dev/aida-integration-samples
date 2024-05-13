@@ -8,6 +8,7 @@ All URIs are relative to *http://localhost*
 | [**GetPersonalizationSession**](PersonalizationSessionApi.md#getpersonalizationsession) | **GET** /aida/v1/personalizationsession/personalization-session |  |
 | [**GetPersonalizationSessionEvents**](PersonalizationSessionApi.md#getpersonalizationsessionevents) | **GET** /aida/v1/personalizationsession/personalization-session-events |  |
 | [**GetPersonalizationSessions**](PersonalizationSessionApi.md#getpersonalizationsessions) | **GET** /aida/v1/personalizationsession/personalization-sessions |  |
+| [**Last30Days**](PersonalizationSessionApi.md#last30days) | **GET** /aida/v1/personalizationsession/personalization-session/last-30-days |  |
 
 <a name="deletepersonalizationsession"></a>
 # **DeletePersonalizationSession**
@@ -362,6 +363,95 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;PersonalizationSessionDto&gt;**](PersonalizationSessionDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="last30days"></a>
+# **Last30Days**
+> List&lt;PersoSessionAggregateDto&gt; Last30Days ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class Last30DaysExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new PersonalizationSessionApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                List<PersoSessionAggregateDto> result = apiInstance.Last30Days();
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling PersonalizationSessionApi.Last30Days: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the Last30DaysWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<List<PersoSessionAggregateDto>> response = apiInstance.Last30DaysWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling PersonalizationSessionApi.Last30DaysWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+[**List&lt;PersoSessionAggregateDto&gt;**](PersoSessionAggregateDto.md)
 
 ### Authorization
 

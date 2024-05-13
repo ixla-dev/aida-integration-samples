@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **LaserPower** | **double?** |  | [optional] 
 **MarkSpeed** | **double?** |  | [optional] 
 **Frequency** | **double?** |  | [optional] 
-**PulseLenght** | **double?** |  | [optional] 
+**PulseLength** | **double?** |  | [optional] 
 **FirstPulseLength** | **double?** |  | [optional] 
 **HalfPeriod** | **double?** |  | [optional] 
 **LongDelay** | **double?** |  | [optional] 

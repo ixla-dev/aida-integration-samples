@@ -4,8 +4,99 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**ChangeColor**](LaserBoardApi.md#changecolor) | **POST** /aida/v1/laser-board/change-lamp-color |  |
 | [**GetProperties**](LaserBoardApi.md#getproperties) | **GET** /aida/v1/laser-board/get-properties |  |
 | [**SetProperties**](LaserBoardApi.md#setproperties) | **PATCH** /aida/v1/laser-board/set-properties |  |
+
+<a name="changecolor"></a>
+# **ChangeColor**
+> void ChangeColor (LampColors? color = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class ChangeColorExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new LaserBoardApi(httpClient, config, httpClientHandler);
+            var color = (LampColors) "Auto";  // LampColors? |  (optional) 
+
+            try
+            {
+                apiInstance.ChangeColor(color);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling LaserBoardApi.ChangeColor: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ChangeColorWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.ChangeColorWithHttpInfo(color);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling LaserBoardApi.ChangeColorWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **color** | **LampColors?** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="getproperties"></a>
 # **GetProperties**

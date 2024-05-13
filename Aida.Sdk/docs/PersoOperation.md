@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **WorkflowInstanceId** | **string** |  | [optional] 
 **OperationType** | **PersoOperationTypes** |  | [optional] 
 **RequiredPositionId** | **string** |  | [optional] 
+**ParkingPositionId** | **string** |  | [optional] 
 **MaxRetries** | **int** |  | [optional] 
 **Outcome** | **PersoOperationOutcome** |  | [optional] 
 **IsDestructiveOperation** | **bool** |  | [optional] [readonly] 

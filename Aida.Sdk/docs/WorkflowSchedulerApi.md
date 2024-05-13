@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**AidaV1WorkflowSchedulerNamedLocksReleasePost**](WorkflowSchedulerApi.md#aidav1workflowschedulernamedlocksreleasepost) | **POST** /aida/v1/workflow-scheduler/named-locks/release |  |
 | [**CancelRunningWorkflowInstances**](WorkflowSchedulerApi.md#cancelrunningworkflowinstances) | **POST** /aida/v1/workflow-scheduler/workflow-instances/running/_cancel |  |
 | [**CancelSuspendedWorkflows**](WorkflowSchedulerApi.md#cancelsuspendedworkflows) | **POST** /aida/v1/workflow-scheduler/workflow-instances/suspended/cancel |  |
 | [**CancelWorkflowInstance**](WorkflowSchedulerApi.md#cancelworkflowinstance) | **POST** /aida/v1/workflow-scheduler/workflow-instances/{id}/_cancel |  |
@@ -22,11 +23,102 @@ All URIs are relative to *http://localhost*
 | [**GetWorkflowSchedulerState**](WorkflowSchedulerApi.md#getworkflowschedulerstate) | **GET** /aida/v1/workflow-scheduler/state |  |
 | [**ListNamedLocks**](WorkflowSchedulerApi.md#listnamedlocks) | **GET** /aida/v1/workflow-scheduler/named-locks |  |
 | [**ResumeWorkflowScheduler**](WorkflowSchedulerApi.md#resumeworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/resume |  |
-| [**RunTransportTestWorkflow**](WorkflowSchedulerApi.md#runtransporttestworkflow) | **GET** /aida/v1/workflow-scheduler/run-transport-test-workflow |  |
 | [**SignalExternalProcessCompleted**](WorkflowSchedulerApi.md#signalexternalprocesscompleted) | **POST** /aida/v1/workflow-scheduler/workflows/signal/external-process-completed | Notifies a suspended workflow instance when that the external process has completed execution |
 | [**StartWorkflowScheduler**](WorkflowSchedulerApi.md#startworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/start |  |
 | [**StopWorkflowScheduler**](WorkflowSchedulerApi.md#stopworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/stop |  |
 | [**UpdateInvalidDatabaseEntries**](WorkflowSchedulerApi.md#updateinvaliddatabaseentries) | **GET** /aida/v1/workflow-scheduler/update-invalid-database-entries |  |
+
+<a name="aidav1workflowschedulernamedlocksreleasepost"></a>
+# **AidaV1WorkflowSchedulerNamedLocksReleasePost**
+> void AidaV1WorkflowSchedulerNamedLocksReleasePost (int? ownerId = null, string name = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class AidaV1WorkflowSchedulerNamedLocksReleasePostExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
+            var ownerId = 56;  // int? |  (optional) 
+            var name = "name_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.AidaV1WorkflowSchedulerNamedLocksReleasePost(ownerId, name);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling WorkflowSchedulerApi.AidaV1WorkflowSchedulerNamedLocksReleasePost: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the AidaV1WorkflowSchedulerNamedLocksReleasePostWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.AidaV1WorkflowSchedulerNamedLocksReleasePostWithHttpInfo(ownerId, name);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling WorkflowSchedulerApi.AidaV1WorkflowSchedulerNamedLocksReleasePostWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **ownerId** | **int?** |  | [optional]  |
+| **name** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="cancelrunningworkflowinstances"></a>
 # **CancelRunningWorkflowInstances**
@@ -1475,7 +1567,7 @@ This endpoint does not need any parameter.
 
 <a name="listnamedlocks"></a>
 # **ListNamedLocks**
-> List&lt;Object&gt; ListNamedLocks ()
+> List&lt;Object&gt; ListNamedLocks (string ownerId = null, string resource = null, bool? locked = null)
 
 
 
@@ -1503,10 +1595,13 @@ namespace Example
             HttpClient httpClient = new HttpClient();
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
+            var ownerId = "ownerId_example";  // string |  (optional) 
+            var resource = "resource_example";  // string |  (optional) 
+            var locked = false;  // bool? |  (optional)  (default to false)
 
             try
             {
-                List<Object> result = apiInstance.ListNamedLocks();
+                List<Object> result = apiInstance.ListNamedLocks(ownerId, resource, locked);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -1526,7 +1621,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    ApiResponse<List<Object>> response = apiInstance.ListNamedLocksWithHttpInfo();
+    ApiResponse<List<Object>> response = apiInstance.ListNamedLocksWithHttpInfo(ownerId, resource, locked);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -1540,7 +1635,13 @@ catch (ApiException e)
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **ownerId** | **string** |  | [optional]  |
+| **resource** | **string** |  | [optional]  |
+| **locked** | **bool?** |  | [optional] [default to false] |
+
 ### Return type
 
 **List<Object>**
@@ -1564,7 +1665,7 @@ This endpoint does not need any parameter.
 
 <a name="resumeworkflowscheduler"></a>
 # **ResumeWorkflowScheduler**
-> List&lt;CollectedWorkflow&gt; ResumeWorkflowScheduler ()
+> List&lt;JobInstance&gt; ResumeWorkflowScheduler ()
 
 
 
@@ -1595,7 +1696,7 @@ namespace Example
 
             try
             {
-                List<CollectedWorkflow> result = apiInstance.ResumeWorkflowScheduler();
+                List<JobInstance> result = apiInstance.ResumeWorkflowScheduler();
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -1615,7 +1716,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    ApiResponse<List<CollectedWorkflow>> response = apiInstance.ResumeWorkflowSchedulerWithHttpInfo();
+    ApiResponse<List<JobInstance>> response = apiInstance.ResumeWorkflowSchedulerWithHttpInfo();
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -1632,7 +1733,7 @@ catch (ApiException e)
 This endpoint does not need any parameter.
 ### Return type
 
-[**List&lt;CollectedWorkflow&gt;**](CollectedWorkflow.md)
+[**List&lt;JobInstance&gt;**](JobInstance.md)
 
 ### Authorization
 
@@ -1651,94 +1752,9 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="runtransporttestworkflow"></a>
-# **RunTransportTestWorkflow**
-> void RunTransportTestWorkflow ()
-
-
-
-### Example
-```csharp
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using Aida.Sdk.Api;
-using Aida.Sdk.Client;
-using Aida.Sdk.Model;
-
-namespace Example
-{
-    public class RunTransportTestWorkflowExample
-    {
-        public static void Main()
-        {
-            Configuration config = new Configuration();
-            config.BasePath = "http://localhost";
-            // Configure Bearer token for authorization: Bearer
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-
-            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
-            HttpClient httpClient = new HttpClient();
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
-            var apiInstance = new WorkflowSchedulerApi(httpClient, config, httpClientHandler);
-
-            try
-            {
-                apiInstance.RunTransportTestWorkflow();
-            }
-            catch (ApiException  e)
-            {
-                Debug.Print("Exception when calling WorkflowSchedulerApi.RunTransportTestWorkflow: " + e.Message);
-                Debug.Print("Status Code: " + e.ErrorCode);
-                Debug.Print(e.StackTrace);
-            }
-        }
-    }
-}
-```
-
-#### Using the RunTransportTestWorkflowWithHttpInfo variant
-This returns an ApiResponse object which contains the response data, status code and headers.
-
-```csharp
-try
-{
-    apiInstance.RunTransportTestWorkflowWithHttpInfo();
-}
-catch (ApiException e)
-{
-    Debug.Print("Exception when calling WorkflowSchedulerApi.RunTransportTestWorkflowWithHttpInfo: " + e.Message);
-    Debug.Print("Status Code: " + e.ErrorCode);
-    Debug.Print(e.StackTrace);
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 <a name="signalexternalprocesscompleted"></a>
 # **SignalExternalProcessCompleted**
-> List&lt;CollectedWorkflow&gt; SignalExternalProcessCompleted (bool? waitForCompletion = null, ExternalProcessCompletedMessage externalProcessCompletedMessage = null)
+> List&lt;JobInstance&gt; SignalExternalProcessCompleted (bool? waitForCompletion = null, ExternalProcessCompletedMessage externalProcessCompletedMessage = null)
 
 Notifies a suspended workflow instance when that the external process has completed execution
 
@@ -1772,7 +1788,7 @@ namespace Example
             try
             {
                 // Notifies a suspended workflow instance when that the external process has completed execution
-                List<CollectedWorkflow> result = apiInstance.SignalExternalProcessCompleted(waitForCompletion, externalProcessCompletedMessage);
+                List<JobInstance> result = apiInstance.SignalExternalProcessCompleted(waitForCompletion, externalProcessCompletedMessage);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -1793,7 +1809,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Notifies a suspended workflow instance when that the external process has completed execution
-    ApiResponse<List<CollectedWorkflow>> response = apiInstance.SignalExternalProcessCompletedWithHttpInfo(waitForCompletion, externalProcessCompletedMessage);
+    ApiResponse<List<JobInstance>> response = apiInstance.SignalExternalProcessCompletedWithHttpInfo(waitForCompletion, externalProcessCompletedMessage);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -1815,7 +1831,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**List&lt;CollectedWorkflow&gt;**](CollectedWorkflow.md)
+[**List&lt;JobInstance&gt;**](JobInstance.md)
 
 ### Authorization
 

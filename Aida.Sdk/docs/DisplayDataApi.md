@@ -8,6 +8,7 @@ All URIs are relative to *http://localhost*
 | [**LaserStatus**](DisplayDataApi.md#laserstatus) | **GET** /aida/v1/display-data/laserstatus |  |
 | [**SystemStatus**](DisplayDataApi.md#systemstatus) | **GET** /aida/v1/display-data/systemstatus |  |
 | [**TransportStatus**](DisplayDataApi.md#transportstatus) | **GET** /aida/v1/display-data/transportstatus |  |
+| [**VerifyPin**](DisplayDataApi.md#verifypin) | **POST** /aida/v1/display-data/api-keys |  |
 
 <a name="issuancestatus"></a>
 # **IssuanceStatus**
@@ -347,6 +348,100 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**DisplayTransportStatusDto**](DisplayTransportStatusDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="verifypin"></a>
+# **VerifyPin**
+> bool VerifyPin (string enteredPin = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class VerifyPinExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new DisplayDataApi(httpClient, config, httpClientHandler);
+            var enteredPin = "enteredPin_example";  // string |  (optional) 
+
+            try
+            {
+                bool result = apiInstance.VerifyPin(enteredPin);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DisplayDataApi.VerifyPin: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the VerifyPinWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<bool> response = apiInstance.VerifyPinWithHttpInfo(enteredPin);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DisplayDataApi.VerifyPinWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **enteredPin** | **string** |  | [optional]  |
+
+### Return type
+
+**bool**
 
 ### Authorization
 

@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Discriminator** | **string** |  | 
+**SourceJobInstanceId** | **string** |  | [optional] 
 **MachineName** | **string** |  | [optional] 
 **MachineSerial** | **string** |  | [optional] 
 **HostName** | **string** |  | [optional] 
@@ -20,7 +21,6 @@ Name | Type | Description | Notes
 **AdditionalMetadata** | **Dictionary&lt;string, Object&gt;** |  | [optional] 
 **DocumentProduced** | **bool** |  | [optional] 
 **DestructiveOperationExecuted** | **bool** |  | [optional] 
-**SourceJobInstanceId** | **string** |  | [optional] 
 **StopReason** | **WorkflowSchedulerStopReason** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

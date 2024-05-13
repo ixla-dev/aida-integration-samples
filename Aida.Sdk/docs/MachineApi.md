@@ -8,7 +8,7 @@ All URIs are relative to *http://localhost*
 | [**GetMachineAddresses**](MachineApi.md#getmachineaddresses) | **GET** /aida/v1/machine/network/addresses |  |
 | [**GetMachineStatus**](MachineApi.md#getmachinestatus) | **GET** /aida/v1/machine/status |  |
 | [**GetSystemInformation**](MachineApi.md#getsysteminformation) | **GET** /aida/v1/machine/info |  |
-| [**ListDevices**](MachineApi.md#listdevices) | **GET** /aida/v1/machine/modules/{moduleId}/devices |  |
+| [**ListDevicesByModule**](MachineApi.md#listdevicesbymodule) | **GET** /aida/v1/machine/modules/{moduleId}/devices |  |
 | [**ListModules**](MachineApi.md#listmodules) | **GET** /aida/v1/machine/modules |  |
 | [**ListScanners**](MachineApi.md#listscanners) | **GET** /aida/v1/machine/scanners |  |
 
@@ -369,9 +369,9 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="listdevices"></a>
-# **ListDevices**
-> List&lt;DeviceDefinition&gt; ListDevices (string moduleId, List<DeviceType> deviceType = null)
+<a name="listdevicesbymodule"></a>
+# **ListDevicesByModule**
+> List&lt;DeviceDefinition&gt; ListDevicesByModule (string moduleId, List<DeviceType> deviceType = null)
 
 
 
@@ -386,7 +386,7 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class ListDevicesExample
+    public class ListDevicesByModuleExample
     {
         public static void Main()
         {
@@ -404,12 +404,12 @@ namespace Example
 
             try
             {
-                List<DeviceDefinition> result = apiInstance.ListDevices(moduleId, deviceType);
+                List<DeviceDefinition> result = apiInstance.ListDevicesByModule(moduleId, deviceType);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling MachineApi.ListDevices: " + e.Message);
+                Debug.Print("Exception when calling MachineApi.ListDevicesByModule: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -418,20 +418,20 @@ namespace Example
 }
 ```
 
-#### Using the ListDevicesWithHttpInfo variant
+#### Using the ListDevicesByModuleWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    ApiResponse<List<DeviceDefinition>> response = apiInstance.ListDevicesWithHttpInfo(moduleId, deviceType);
+    ApiResponse<List<DeviceDefinition>> response = apiInstance.ListDevicesByModuleWithHttpInfo(moduleId, deviceType);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling MachineApi.ListDevicesWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling MachineApi.ListDevicesByModuleWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }

@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **JobInstanceId** | **int** |  | [optional] 
 **Id** | **int** |  | [optional] 
+**Index** | **int** |  | [optional] 
 **OperationId** | **string** |  | [optional] 
 **CreatedAt** | **DateTime** |  | [optional] 
 **UpdatedAt** | **DateTime?** |  | [optional] 

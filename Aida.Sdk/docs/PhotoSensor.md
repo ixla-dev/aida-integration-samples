@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**DisplayName** | **string** |  | [optional] 
 **Name** | **string** |  | [optional] 
 **IsClosed** | **bool** |  | [optional] 
 

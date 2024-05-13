@@ -12,7 +12,7 @@ All URIs are relative to *http://localhost*
 
 <a name="getsystemmodel"></a>
 # **GetSystemModel**
-> void GetSystemModel ()
+> string GetSystemModel ()
 
 
 
@@ -43,7 +43,8 @@ namespace Example
 
             try
             {
-                apiInstance.GetSystemModel();
+                string result = apiInstance.GetSystemModel();
+                Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
@@ -62,7 +63,10 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    apiInstance.GetSystemModelWithHttpInfo();
+    ApiResponse<string> response = apiInstance.GetSystemModelWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
@@ -76,7 +80,7 @@ catch (ApiException e)
 This endpoint does not need any parameter.
 ### Return type
 
-void (empty response body)
+**string**
 
 ### Authorization
 
@@ -85,7 +89,7 @@ void (empty response body)
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: text/plain, application/json, text/json
 
 
 ### HTTP response details

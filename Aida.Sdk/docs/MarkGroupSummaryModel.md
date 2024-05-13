@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **SupportSide** | **string** |  | [optional] 
 **OffsetX** | **double** |  | [optional] 
 **OffsetY** | **double** |  | [optional] 
+**MirrorX** | **bool** |  | [optional] 
+**MirrorY** | **bool** |  | [optional] 
 **Entities** | **List&lt;string&gt;** |  | [optional] 
 **AutoPosSettings** | [**List&lt;AutoPosConfigSummaryModel&gt;**](AutoPosConfigSummaryModel.md) |  | [optional] 
 

@@ -249,9 +249,9 @@ namespace Aida.Samples.Integration.UI.Services
 
                     if ((job.MagStripeConfiguration?.Operations ?? MagneticStripeOperations.None) != MagneticStripeOperations.None)
                     {
-                        record.Fields.Add(new PersonalizationField("magnetic_track_1_w", "TRACK 1"));
-                        record.Fields.Add(new PersonalizationField("magnetic_track_2_w", "123456789"));
-                        record.Fields.Add(new PersonalizationField("magnetic_track_3_w", "1234"));
+                        record.Fields.Add(new PersonalizationField("magnetic_track_1_w", $"ID {id}"));
+                        record.Fields.Add(new PersonalizationField("magnetic_track_2_w", $"{id:00000000}"));
+                        record.Fields.Add(new PersonalizationField("magnetic_track_3_w", $"{id:0000}"));
                     }
 
                     record.Fields.Add(new PersonalizationField("batch_id", batchId));

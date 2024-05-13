@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**AidaV1TransportStateRealtimeGet**](TransportApi.md#aidav1transportstaterealtimeget) | **GET** /aida/v1/transport/state/realtime |  |
 | [**BoxTransportCpuReset**](TransportApi.md#boxtransportcpureset) | **GET** /aida/v1/transport/cpu-reset |  |
 | [**CanPerformMovement**](TransportApi.md#canperformmovement) | **GET** /aida/v1/transport/can-perform-movement |  |
 | [**ComputeShortestPathMovePlan**](TransportApi.md#computeshortestpathmoveplan) | **GET** /aida/v1/transport/path/shortest/plan |  |
@@ -18,6 +19,7 @@ All URIs are relative to *http://localhost*
 | [**GetBoxModuleTransportState**](TransportApi.md#getboxmoduletransportstate) | **GET** /aida/v1/transport/module/{moduleId}/state |  |
 | [**GetMachineExists**](TransportApi.md#getmachineexists) | **GET** /aida/v1/transport/machine-exits |  |
 | [**GetMachineInputs**](TransportApi.md#getmachineinputs) | **GET** /aida/v1/transport/machine-inputs |  |
+| [**GetModuleStatus**](TransportApi.md#getmodulestatus) | **GET** /aida/v1/transport/module/debug-info |  |
 | [**GetModules**](TransportApi.md#getmodules) | **GET** /aida/v1/transport/modules | Returns an object with the state of the whole transport |
 | [**GetShortestPath**](TransportApi.md#getshortestpath) | **GET** /aida/v1/transport/path/shortest |  |
 | [**GetTransportPosition**](TransportApi.md#gettransportposition) | **GET** /aida/v1/transport/{position} |  |
@@ -25,10 +27,100 @@ All URIs are relative to *http://localhost*
 | [**GetTransportState**](TransportApi.md#gettransportstate) | **GET** /aida/v1/transport/state | Returns a list of objects with the state of each module |
 | [**Move**](TransportApi.md#move) | **POST** /aida/v1/transport/move |  |
 | [**MoveFirstAvailableCardToPosition**](TransportApi.md#movefirstavailablecardtoposition) | **POST** /aida/v1/transport/move-first-available |  |
+| [**PathExist**](TransportApi.md#pathexist) | **GET** /aida/v1/transport/path/exist |  |
 | [**Reset**](TransportApi.md#reset) | **POST** /aida/v1/transport/reset |  |
 | [**ResetModule**](TransportApi.md#resetmodule) | **POST** /aida/v1/transport/{moduleId}/reset |  |
 | [**SetSerialNumber**](TransportApi.md#setserialnumber) | **POST** /aida/v1/transport/module/{id}/set-serial |  |
 | [**Shift**](TransportApi.md#shift) | **POST** /aida/v1/transport/shift |  |
+
+<a name="aidav1transportstaterealtimeget"></a>
+# **AidaV1TransportStateRealtimeGet**
+> TransportState AidaV1TransportStateRealtimeGet ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class AidaV1TransportStateRealtimeGetExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new TransportApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                TransportState result = apiInstance.AidaV1TransportStateRealtimeGet();
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling TransportApi.AidaV1TransportStateRealtimeGet: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the AidaV1TransportStateRealtimeGetWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<TransportState> response = apiInstance.AidaV1TransportStateRealtimeGetWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling TransportApi.AidaV1TransportStateRealtimeGetWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+[**TransportState**](TransportState.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="boxtransportcpureset"></a>
 # **BoxTransportCpuReset**
@@ -1020,7 +1112,7 @@ catch (ApiException e)
 
 <a name="getboxmoduletransportstate"></a>
 # **GetBoxModuleTransportState**
-> void GetBoxModuleTransportState (int moduleId)
+> void GetBoxModuleTransportState (string moduleId)
 
 
 
@@ -1048,7 +1140,7 @@ namespace Example
             HttpClient httpClient = new HttpClient();
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new TransportApi(httpClient, config, httpClientHandler);
-            var moduleId = 56;  // int | 
+            var moduleId = "moduleId_example";  // string | 
 
             try
             {
@@ -1085,7 +1177,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **moduleId** | **int** |  |  |
+| **moduleId** | **string** |  |  |
 
 ### Return type
 
@@ -1277,6 +1369,91 @@ This endpoint does not need any parameter.
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getmodulestatus"></a>
+# **GetModuleStatus**
+> void GetModuleStatus ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class GetModuleStatusExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new TransportApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                apiInstance.GetModuleStatus();
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling TransportApi.GetModuleStatus: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetModuleStatusWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.GetModuleStatusWithHttpInfo();
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling TransportApi.GetModuleStatusWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
@@ -1931,6 +2108,102 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="pathexist"></a>
+# **PathExist**
+> bool PathExist (string source = null, string target = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class PathExistExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new TransportApi(httpClient, config, httpClientHandler);
+            var source = "source_example";  // string |  (optional) 
+            var target = "target_example";  // string |  (optional) 
+
+            try
+            {
+                bool result = apiInstance.PathExist(source, target);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling TransportApi.PathExist: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the PathExistWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<bool> response = apiInstance.PathExistWithHttpInfo(source, target);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling TransportApi.PathExistWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **source** | **string** |  | [optional]  |
+| **target** | **string** |  | [optional]  |
+
+### Return type
+
+**bool**
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="reset"></a>
 # **Reset**
 > void Reset ()
@@ -2018,7 +2291,7 @@ void (empty response body)
 
 <a name="resetmodule"></a>
 # **ResetModule**
-> void ResetModule (int moduleId)
+> void ResetModule (string moduleId)
 
 
 
@@ -2046,7 +2319,7 @@ namespace Example
             HttpClient httpClient = new HttpClient();
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new TransportApi(httpClient, config, httpClientHandler);
-            var moduleId = 56;  // int | 
+            var moduleId = "moduleId_example";  // string | 
 
             try
             {
@@ -2083,7 +2356,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **moduleId** | **int** |  |  |
+| **moduleId** | **string** |  |  |
 
 ### Return type
 
@@ -2108,7 +2381,7 @@ void (empty response body)
 
 <a name="setserialnumber"></a>
 # **SetSerialNumber**
-> void SetSerialNumber (int id, string body = null)
+> void SetSerialNumber (string id, string body = null)
 
 
 
@@ -2136,7 +2409,7 @@ namespace Example
             HttpClient httpClient = new HttpClient();
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new TransportApi(httpClient, config, httpClientHandler);
-            var id = 56;  // int | 
+            var id = "id_example";  // string | 
             var body = "body_example";  // string |  (optional) 
 
             try
@@ -2174,7 +2447,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **id** | **int** |  |  |
+| **id** | **string** |  |  |
 | **body** | **string** |  | [optional]  |
 
 ### Return type

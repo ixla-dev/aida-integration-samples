@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
 | [**AddAutoPosSettings**](AutoPosApi.md#addautopossettings) | **POST** /aida/v1/autopos | Creates a new XY Auto-Position configuration |
-| [**AutoPosConfigDebugLive**](AutoPosApi.md#autoposconfigdebuglive) | **GET** /aida/v1/autopos/job/{jobTemplateId}/layout/{layoutId}/scanner/{scannerId}/debug/live | Motion JPEG stream of the camera with XY Auto-Pos overlay |
+| [**AutoPosConfigDebugLive**](AutoPosApi.md#autoposconfigdebuglive) | **GET** /aida/v1/autopos/job/{jobTemplateId}/layout/{layoutId}/scanner/{scannerId}/debug/live/{cameraId} | Motion JPEG stream of the camera with XY Auto-Pos overlay |
 | [**AutoPosDebug**](AutoPosApi.md#autoposdebug) | **GET** /aida/v1/autopos/{id}/debug.jpg | Draws search area and best match rectangles on a camera frame and returns it as a jpeg image |
 | [**AutoPosDebugLive**](AutoPosApi.md#autoposdebuglive) | **GET** /aida/v1/autopos/{id}/debug/live | Motion JPEG stream of the camera with XY Auto-Pos overlay |
 | [**CreateTemplateMatchingConfiguration**](AutoPosApi.md#createtemplatematchingconfiguration) | **POST** /aida/v1/autopos/template-matching-configuration |  |
