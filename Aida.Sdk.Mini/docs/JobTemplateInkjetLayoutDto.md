@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **LayoutId** | **int** |  | [optional] 
 **JobTemplateId** | **int** |  | [optional] 
 **SupportSide** | **string** |  | [optional] 
+**PrintSettings** | [**PrintSettingsDto**](PrintSettingsDto.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

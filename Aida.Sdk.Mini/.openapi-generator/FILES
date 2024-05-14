@@ -12,6 +12,7 @@ docs/BoxModuleTransportStatus.md
 docs/BoxModuleTransportStatusChangedNotification.md
 docs/ChipEncodingConfigurationDto.md
 docs/ChipReadBackConfigurationDto.md
+docs/ChipReadBackMessage.md
 docs/CreateJobTemplateDto.md
 docs/DRectangleDto.md
 docs/DataExchangeTableDefinition.md
@@ -65,6 +66,7 @@ docs/NpgSqlDataSourceConfigurationDto.md
 docs/OCRResult.md
 docs/OcrExecutedMessage.md
 docs/OcrReadBackConfigurationDto.md
+docs/OcrReadBackMessage.md
 docs/OcrSettingsDto.md
 docs/PCSCActionResultDto.md
 docs/PageSegmentationMode.md
@@ -75,6 +77,7 @@ docs/PersoOperationOutcome.md
 docs/PersoOperationStatus.md
 docs/PersoOperationTypes.md
 docs/PhotoSensorsFlags.md
+docs/PrintSettingsDto.md
 docs/ReadBackConfigurationDto.md
 docs/ReadBackType.md
 docs/ReaderAccessType.md
@@ -145,6 +148,7 @@ src/Aida.Sdk.Mini.Test/Model/BoxModuleTransportStatusChangedNotificationTests.cs
 src/Aida.Sdk.Mini.Test/Model/BoxModuleTransportStatusTests.cs
 src/Aida.Sdk.Mini.Test/Model/ChipEncodingConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ChipReadBackConfigurationDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/ChipReadBackMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/CreateJobTemplateDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/DRectangleDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/DataExchangeTableDefinitionTests.cs
@@ -197,6 +201,7 @@ src/Aida.Sdk.Mini.Test/Model/NpgSqlDataSourceConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/OCRResultTests.cs
 src/Aida.Sdk.Mini.Test/Model/OcrExecutedMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/OcrReadBackConfigurationDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/OcrReadBackMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/OcrSettingsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/PCSCActionResultDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/PageSegmentationModeTests.cs
@@ -207,6 +212,7 @@ src/Aida.Sdk.Mini.Test/Model/PersoOperationOutcomeTests.cs
 src/Aida.Sdk.Mini.Test/Model/PersoOperationStatusTests.cs
 src/Aida.Sdk.Mini.Test/Model/PersoOperationTypesTests.cs
 src/Aida.Sdk.Mini.Test/Model/PhotoSensorsFlagsTests.cs
+src/Aida.Sdk.Mini.Test/Model/PrintSettingsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ReadBackConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ReadBackTypeTests.cs
 src/Aida.Sdk.Mini.Test/Model/ReaderAccessTypeTests.cs
@@ -294,6 +300,7 @@ src/Aida.Sdk.Mini/Model/BoxModuleTransportStatus.cs
 src/Aida.Sdk.Mini/Model/BoxModuleTransportStatusChangedNotification.cs
 src/Aida.Sdk.Mini/Model/ChipEncodingConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/ChipReadBackConfigurationDto.cs
+src/Aida.Sdk.Mini/Model/ChipReadBackMessage.cs
 src/Aida.Sdk.Mini/Model/CreateJobTemplateDto.cs
 src/Aida.Sdk.Mini/Model/DRectangleDto.cs
 src/Aida.Sdk.Mini/Model/DataExchangeTableDefinition.cs
@@ -346,6 +353,7 @@ src/Aida.Sdk.Mini/Model/NpgSqlDataSourceConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/OCRResult.cs
 src/Aida.Sdk.Mini/Model/OcrExecutedMessage.cs
 src/Aida.Sdk.Mini/Model/OcrReadBackConfigurationDto.cs
+src/Aida.Sdk.Mini/Model/OcrReadBackMessage.cs
 src/Aida.Sdk.Mini/Model/OcrSettingsDto.cs
 src/Aida.Sdk.Mini/Model/PCSCActionResultDto.cs
 src/Aida.Sdk.Mini/Model/PageSegmentationMode.cs
@@ -356,6 +364,7 @@ src/Aida.Sdk.Mini/Model/PersoOperationOutcome.cs
 src/Aida.Sdk.Mini/Model/PersoOperationStatus.cs
 src/Aida.Sdk.Mini/Model/PersoOperationTypes.cs
 src/Aida.Sdk.Mini/Model/PhotoSensorsFlags.cs
+src/Aida.Sdk.Mini/Model/PrintSettingsDto.cs
 src/Aida.Sdk.Mini/Model/ReadBackConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/ReadBackType.cs
 src/Aida.Sdk.Mini/Model/ReaderAccessType.cs

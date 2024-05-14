@@ -211,7 +211,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                 var outcome   = value < errorRate ? ExternalProcessOutcome.Faulted : ExternalProcessOutcome.Completed;
 
                 var duration = TimeSpan.Parse(configuration.GetValue<string>("MockEncodingDuration"));
-                logger.LogInformation("Mocking chip encoding, jobId = {JobId}, duration = {Duration}", message.JobId, duration);
+                // logger.LogInformation("Mocking chip encoding, jobId = {JobId}, duration = {Duration}", message.JobId, duration);
                 await Task.Delay(duration, cancellationToken).ConfigureAwait(false);
 
                 var responseMessage = new ExternalProcessCompletedMessage

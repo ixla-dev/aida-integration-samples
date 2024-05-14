@@ -11,6 +11,7 @@ All URIs are relative to *http://localhost*
 | [**CreateTemplateMatchingConfiguration**](AutoPosApi.md#createtemplatematchingconfiguration) | **POST** /aida/v1/autopos/template-matching-configuration |  |
 | [**DeleteJobTemplateLayoutAutoPosSettings**](AutoPosApi.md#deletejobtemplatelayoutautopossettings) | **DELETE** /aida/v1/autopos/{autoPosSettingsId} |  |
 | [**DeleteTemplateMatchingConfiguration**](AutoPosApi.md#deletetemplatematchingconfiguration) | **DELETE** /aida/v1/autopos/template-matching-configuration/{id} |  |
+| [**ExecuteTemplateMatching**](AutoPosApi.md#executetemplatematching) | **POST** /aida/v1/autopos/template-matching-configuration/{templateMatchingConfigurationId}/execute |  |
 | [**FindTemplateMatchingConfigurations**](AutoPosApi.md#findtemplatematchingconfigurations) | **GET** /aida/v1/autopos/template-matching-configuration/search |  |
 | [**GetOffset**](AutoPosApi.md#getoffset) | **POST** /aida/v1/autopos/{autoPosSettingsId}/execute | Run template matching and return the distance between the reference template and  the matched template (if any) in millimeters |
 | [**GetTemplateMatchingConfigurationById**](AutoPosApi.md#gettemplatematchingconfigurationbyid) | **GET** /aida/v1/autopos/template-matching-configuration/{id} |  |
@@ -679,6 +680,104 @@ catch (ApiException e)
 ### Return type
 
 [**TemplateMatchingConfigurationDto**](TemplateMatchingConfigurationDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="executetemplatematching"></a>
+# **ExecuteTemplateMatching**
+> TemplateMatchingResult ExecuteTemplateMatching (int templateMatchingConfigurationId, float? threshold = null, string scannerId = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class ExecuteTemplateMatchingExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new AutoPosApi(httpClient, config, httpClientHandler);
+            var templateMatchingConfigurationId = 56;  // int | 
+            var threshold = 0.9F;  // float? |  (optional)  (default to 0.9F)
+            var scannerId = "\"\"";  // string |  (optional)  (default to "")
+
+            try
+            {
+                TemplateMatchingResult result = apiInstance.ExecuteTemplateMatching(templateMatchingConfigurationId, threshold, scannerId);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling AutoPosApi.ExecuteTemplateMatching: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ExecuteTemplateMatchingWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<TemplateMatchingResult> response = apiInstance.ExecuteTemplateMatchingWithHttpInfo(templateMatchingConfigurationId, threshold, scannerId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling AutoPosApi.ExecuteTemplateMatchingWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **templateMatchingConfigurationId** | **int** |  |  |
+| **threshold** | **float?** |  | [optional] [default to 0.9F] |
+| **scannerId** | **string** |  | [optional] [default to &quot;&quot;] |
+
+### Return type
+
+[**TemplateMatchingResult**](TemplateMatchingResult.md)
 
 ### Authorization
 

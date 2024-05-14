@@ -196,6 +196,7 @@ docs/PixelMapDto.md
 docs/Point2fDto.md
 docs/PrintCycleModes.md
 docs/PrintSettingsDto.md
+docs/PrintStatus.md
 docs/PrinterStateDto.md
 docs/PropertyDto.md
 docs/ReadBackConfigurationDto.md
@@ -266,8 +267,10 @@ docs/TaskAllocationBucket.md
 docs/TaskDescriptor.md
 docs/TemperatureReadingsDto.md
 docs/TemperatureStatus.md
+docs/TemplateMatchOccurence.md
 docs/TemplateMatchingConfiguration.md
 docs/TemplateMatchingConfigurationDto.md
+docs/TemplateMatchingResult.md
 docs/TestAutoposStartParams.md
 docs/TestMagStripeStartParams.md
 docs/TestOcrStartParams.md
@@ -526,6 +529,7 @@ src/Aida.Sdk.Test/Model/PixelMapDtoTests.cs
 src/Aida.Sdk.Test/Model/Point2fDtoTests.cs
 src/Aida.Sdk.Test/Model/PrintCycleModesTests.cs
 src/Aida.Sdk.Test/Model/PrintSettingsDtoTests.cs
+src/Aida.Sdk.Test/Model/PrintStatusTests.cs
 src/Aida.Sdk.Test/Model/PrinterStateDtoTests.cs
 src/Aida.Sdk.Test/Model/PropertyDtoTests.cs
 src/Aida.Sdk.Test/Model/ReadBackConfigurationDtoTests.cs
@@ -592,8 +596,10 @@ src/Aida.Sdk.Test/Model/TaskAllocationBucketTests.cs
 src/Aida.Sdk.Test/Model/TaskDescriptorTests.cs
 src/Aida.Sdk.Test/Model/TemperatureReadingsDtoTests.cs
 src/Aida.Sdk.Test/Model/TemperatureStatusTests.cs
+src/Aida.Sdk.Test/Model/TemplateMatchOccurenceTests.cs
 src/Aida.Sdk.Test/Model/TemplateMatchingConfigurationDtoTests.cs
 src/Aida.Sdk.Test/Model/TemplateMatchingConfigurationTests.cs
+src/Aida.Sdk.Test/Model/TemplateMatchingResultTests.cs
 src/Aida.Sdk.Test/Model/TestAutoposStartParamsTests.cs
 src/Aida.Sdk.Test/Model/TestMagStripeStartParamsTests.cs
 src/Aida.Sdk.Test/Model/TestOcrStartParamsTests.cs
@@ -866,6 +872,7 @@ src/Aida.Sdk/Model/PixelMapDto.cs
 src/Aida.Sdk/Model/Point2fDto.cs
 src/Aida.Sdk/Model/PrintCycleModes.cs
 src/Aida.Sdk/Model/PrintSettingsDto.cs
+src/Aida.Sdk/Model/PrintStatus.cs
 src/Aida.Sdk/Model/PrinterStateDto.cs
 src/Aida.Sdk/Model/PropertyDto.cs
 src/Aida.Sdk/Model/ReadBackConfigurationDto.cs
@@ -932,8 +939,10 @@ src/Aida.Sdk/Model/TaskAllocationBucket.cs
 src/Aida.Sdk/Model/TaskDescriptor.cs
 src/Aida.Sdk/Model/TemperatureReadingsDto.cs
 src/Aida.Sdk/Model/TemperatureStatus.cs
+src/Aida.Sdk/Model/TemplateMatchOccurence.cs
 src/Aida.Sdk/Model/TemplateMatchingConfiguration.cs
 src/Aida.Sdk/Model/TemplateMatchingConfigurationDto.cs
+src/Aida.Sdk/Model/TemplateMatchingResult.cs
 src/Aida.Sdk/Model/TestAutoposStartParams.cs
 src/Aida.Sdk/Model/TestMagStripeStartParams.cs
 src/Aida.Sdk/Model/TestOcrStartParams.cs

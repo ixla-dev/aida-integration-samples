@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **ReadBackType** | [**ReadBackType**](ReadBackType.md) |  | [optional] 
 **RequiredSide** | [**SupportSide**](SupportSide.md) |  | [optional] 
 **JobTemplateId** | **int** |  | [optional] 
+**HighCoercivity** | **bool** |  | [optional] 
 **ReadFromTrack1** | **bool** |  | [optional] 
 **ReadFromTrack2** | **bool** |  | [optional] 
 **ReadFromTrack3** | **bool** |  | [optional] 

@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **ReadBackType** | [**ReadBackType**](ReadBackType.md) |  | [optional] 
 **RequiredSide** | [**SupportSide**](SupportSide.md) |  | [optional] 
 **JobTemplateId** | **int** |  | [optional] 
+**ReaderAccessType** | **ReaderAccessType** |  | [optional] 
+**ReaderInterfaceType** | **ReaderInterfaceType** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
