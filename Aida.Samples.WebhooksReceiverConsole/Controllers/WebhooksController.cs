@@ -44,7 +44,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
 
             // log the received message from AIDA
             if (configuration.GetValue<bool>("LogMessagePayload"))
-                _logger.LogInformation("[{IPAddress}] Received Message {@WebhookMessage}", address, JsonSerializer.Serialize(receivedMessage, new JsonSerializerOptions
+                _logger.LogTrace("[{IPAddress}] Received Message {@WebhookMessage}", address, JsonSerializer.Serialize(receivedMessage, new JsonSerializerOptions
                 {
                     WriteIndented = true,
                     Converters = { new JsonStringEnumConverter() },

@@ -55,7 +55,11 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
 
                     var eventMessage = aidaMessage.Message;
                     if (eventMessage.JobId is null)
-                        logger.LogInformation("Message {MessageType}", eventMessage.MessageType);
+                    {
+                        if (eventMessage.MessageType != MessageType.HealthCheck)
+                            logger.LogInformation("Message {MessageType}", eventMessage.MessageType);
+                    }
+
                     if (eventMessage.JobId is not null)
                         logger.LogInformation(
                             "CorrelationId: {CorrelationId} job id: {JobId}, event: {WorkflowEvent} status: {Status}, error code: {ErrorCode}, document produced: {DocumentProduced}",
@@ -80,7 +84,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                                 stopped.SourceJobInstanceId);
                             break;
 
-                        case WorkflowSchedulerStartedMessage started:
+                        case WorkflowSchedulerStartedMessage:
                             logger.LogInformation("Workflow Scheduler started");
                             break;
                         // These are notifications that indicate that the workflow was suspended
@@ -101,6 +105,12 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                             }
 
                             break;
+                        case OcrReadBackMessage readBackMessage:
+                            logger.LogInformation("CorrelationId: {CorrelationId}, JobId: {JobId},  Confidence: {Confidence}, Text: \n'{Text}'", readBackMessage.CorrelationId,
+                                readBackMessage.JobId,
+                                readBackMessage.Text, readBackMessage.MeanConfidence);
+                            _ = MockOcrReadBackValidation(readBackMessage, client);
+                            break;
                         // These are fire and forget for AIDA. 
                         case WorkflowCancelledMessage: break;
                         case WorkflowCompletedMessage: break;
@@ -108,7 +118,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
 
                         case MagneticStripeReadBackMessage readBack:
                             logger.LogInformation("MAGNETIC READ_BACK RECEIVED");
-                            _ = MockReadBackValidation(readBack, client);
+                            _ = MockMagneticReadBackValidation(readBack, client);
                             break;
 
                         // These events require the receiving application to invoke SignalExternalProcessCompleted.
@@ -136,7 +146,23 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        public async Task MockReadBackValidation(MagneticStripeReadBackMessage readBack, IntegrationApi api)
+        public async Task MockOcrReadBackValidation(OcrReadBackMessage readBackMessage, IntegrationApi api)
+        {
+            try
+            {
+                var response = new ExternalProcessCompletedMessage()
+                {
+                    Outcome = ExternalProcessOutcome.Completed,
+                    WorkflowInstanceId = readBackMessage.WorkflowInstanceId
+                };
+                await api.SignalExternalProcessCompletedAsync(false, response).ConfigureAwait(false);
+            }
+            catch
+            {
+            }
+        }
+
+        public async Task MockMagneticReadBackValidation(MagneticStripeReadBackMessage readBack, IntegrationApi api)
         {
             try
             {
@@ -170,7 +196,8 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                     WorkflowInstanceId = message.WorkflowInstanceId,
                 };
 
-                logger.LogInformation("Ocr Validation completed {Validation}", JsonSerializer.Serialize(message, _jsonSerializerOptions));
+                logger.LogInformation("OCR Text: {OcrText}", message.Results.FirstOrDefault()?.OcrResult?.Text);
+                logger.LogDebug("Ocr Validation completed {Validation}", JsonSerializer.Serialize(message, _jsonSerializerOptions));
                 // tell AIDA to dispatch the completion signal and resume 
                 await api.SignalExternalProcessCompletedAsync(
                         // waitForCompletion = false tells aida to return immediately the
@@ -181,7 +208,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                         cancellationToken)
                     .ConfigureAwait(false);
 
-                logger.LogInformation("Message published. Outcome = {Outcome}, WorkflowId = {WorkflowId}, {Message}",
+                logger.LogDebug("Message published. Outcome = {Outcome}, WorkflowId = {WorkflowId}, {Message}",
                     responseMessage.Outcome,
                     responseMessage.WorkflowInstanceId,
                     JsonSerializer.Serialize(message, _jsonSerializerOptions));
@@ -198,7 +225,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
         /// <param name="message"></param>
         /// <param name="api"></param>
         /// <param name="cancellationToken"></param>
-        private async Task MockChipEncodingPersonalization(WorkflowMessage message, IntegrationApi api, CancellationToken cancellationToken)
+        private async Task MockChipEncodingPersonalization(EncoderLoadedMessage message, IntegrationApi api, CancellationToken cancellationToken)
         {
             try
             {
@@ -210,8 +237,11 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                 var value     = rnd.Next(0, 100);
                 var outcome   = value < errorRate ? ExternalProcessOutcome.Faulted : ExternalProcessOutcome.Completed;
 
-                var duration = TimeSpan.Parse(configuration.GetValue<string>("MockEncodingDuration"));
-                // logger.LogInformation("Mocking chip encoding, jobId = {JobId}, duration = {Duration}", message.JobId, duration);
+                var configuredDuration = configuration.GetValue<string>("MockEncodingDuration");
+                var encoderId          = message.EncoderId;
+                var duration           = TimeSpan.Parse(encoderId.Contains("qa") ? "00:00:02" : configuredDuration);
+
+                logger.LogInformation("Mocking chip encoding, jobId = {JobId}, duration = {Duration}, encoderId = {EncoderId}", message.JobId, duration, encoderId);
                 await Task.Delay(duration, cancellationToken).ConfigureAwait(false);
 
                 var responseMessage = new ExternalProcessCompletedMessage
@@ -222,7 +252,8 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                     WorkflowInstanceId = message.WorkflowInstanceId
                 };
 
-                logger.LogInformation("CorrelationId: {CorrelationId}, job id: {JobId}, Chip Perso: {OperationOutcome}", message.CorrelationId, message.JobId, outcome);
+                logger.LogInformation("CorrelationId: {CorrelationId}, job id: {JobId}, Chip Perso: {OperationOutcome}, workflow: {WorkflowInstanceId}", message.CorrelationId,
+                    message.JobId, outcome, message.WorkflowInstanceId);
                 // tell AIDA to dispatch the completion signal and resume 
                 await api.SignalExternalProcessCompletedAsync(
                     // waitForCompletion = false tells aida to return immediately the HTTP response without waiting the workflow to finish 

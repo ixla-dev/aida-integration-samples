@@ -31,6 +31,8 @@ namespace Aida.Samples.Integration.Webhooks
                     MessageType.OcrExecuted                => JsonSerializer.Deserialize<OcrExecutedMessage>(jsonString, serializerOptions),
                     MessageType.HealthCheck                => JsonSerializer.Deserialize<WebhookReceiverHealthCheckMessage>(jsonString, serializerOptions),
                     MessageType.MagneticStripeReadBack     => JsonSerializer.Deserialize<MagneticStripeReadBackMessage>(jsonString, serializerOptions),
+                    MessageType.OcrReadBack                => JsonSerializer.Deserialize<OcrReadBackMessage>(jsonString, serializerOptions),
+                    MessageType.ChipReadBack               => JsonSerializer.Deserialize<ChipReadBackMessage>(jsonString, serializerOptions),
                     _                                      => null
                 };
                 return message != null;

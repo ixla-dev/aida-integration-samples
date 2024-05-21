@@ -12,7 +12,7 @@
     <Description>A library generated from a OpenAPI doc</Description>
     <Copyright>No Copyright</Copyright>
     <RootNamespace>Aida.Sdk.Mini</RootNamespace>
-    <Version>1.0.692</Version>
+    <Version>1.0.696</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Aida.Sdk.Mini.xml</DocumentationFile>
     <RepositoryUrl>https://github.com/-/-.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

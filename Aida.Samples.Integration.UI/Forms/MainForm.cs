@@ -372,8 +372,8 @@ namespace Aida.Samples.Integration.UI.Forms
                 return;
             }
 
-            var id = item.Id;
-            await _machineInterface.InsertMockRecord(id, txtBatchId.Text).ConfigureAwait(false);
+            var templateId = item.Id;
+            await _machineInterface.InsertBatch(templateId, txtBatchId.Text, 1).ConfigureAwait(false);
         }
 
         private void cmbJobTemplates_SelectedIndexChanged(object sender, EventArgs e) { AppState.SelectedJobTemplate = (JobTemplateItem)cmbJobTemplates.SelectedItem; }

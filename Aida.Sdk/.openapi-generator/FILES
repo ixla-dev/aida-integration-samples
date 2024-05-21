@@ -270,7 +270,7 @@ docs/TemperatureStatus.md
 docs/TemplateMatchOccurence.md
 docs/TemplateMatchingConfiguration.md
 docs/TemplateMatchingConfigurationDto.md
-docs/TemplateMatchingResult.md
+docs/TemplateMatchingResultDto.md
 docs/TestAutoposStartParams.md
 docs/TestMagStripeStartParams.md
 docs/TestOcrStartParams.md
@@ -599,7 +599,7 @@ src/Aida.Sdk.Test/Model/TemperatureStatusTests.cs
 src/Aida.Sdk.Test/Model/TemplateMatchOccurenceTests.cs
 src/Aida.Sdk.Test/Model/TemplateMatchingConfigurationDtoTests.cs
 src/Aida.Sdk.Test/Model/TemplateMatchingConfigurationTests.cs
-src/Aida.Sdk.Test/Model/TemplateMatchingResultTests.cs
+src/Aida.Sdk.Test/Model/TemplateMatchingResultDtoTests.cs
 src/Aida.Sdk.Test/Model/TestAutoposStartParamsTests.cs
 src/Aida.Sdk.Test/Model/TestMagStripeStartParamsTests.cs
 src/Aida.Sdk.Test/Model/TestOcrStartParamsTests.cs
@@ -942,7 +942,7 @@ src/Aida.Sdk/Model/TemperatureStatus.cs
 src/Aida.Sdk/Model/TemplateMatchOccurence.cs
 src/Aida.Sdk/Model/TemplateMatchingConfiguration.cs
 src/Aida.Sdk/Model/TemplateMatchingConfigurationDto.cs
-src/Aida.Sdk/Model/TemplateMatchingResult.cs
+src/Aida.Sdk/Model/TemplateMatchingResultDto.cs
 src/Aida.Sdk/Model/TestAutoposStartParams.cs
 src/Aida.Sdk/Model/TestMagStripeStartParams.cs
 src/Aida.Sdk/Model/TestOcrStartParams.cs

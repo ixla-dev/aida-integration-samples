@@ -700,7 +700,7 @@ catch (ApiException e)
 
 <a name="executetemplatematching"></a>
 # **ExecuteTemplateMatching**
-> TemplateMatchingResult ExecuteTemplateMatching (int templateMatchingConfigurationId, float? threshold = null, string scannerId = null)
+> TemplateMatchingResultDto ExecuteTemplateMatching (int templateMatchingConfigurationId, float? threshold = null, string scannerId = null)
 
 
 
@@ -734,7 +734,7 @@ namespace Example
 
             try
             {
-                TemplateMatchingResult result = apiInstance.ExecuteTemplateMatching(templateMatchingConfigurationId, threshold, scannerId);
+                TemplateMatchingResultDto result = apiInstance.ExecuteTemplateMatching(templateMatchingConfigurationId, threshold, scannerId);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -754,7 +754,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    ApiResponse<TemplateMatchingResult> response = apiInstance.ExecuteTemplateMatchingWithHttpInfo(templateMatchingConfigurationId, threshold, scannerId);
+    ApiResponse<TemplateMatchingResultDto> response = apiInstance.ExecuteTemplateMatchingWithHttpInfo(templateMatchingConfigurationId, threshold, scannerId);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -777,7 +777,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**TemplateMatchingResult**](TemplateMatchingResult.md)
+[**TemplateMatchingResultDto**](TemplateMatchingResultDto.md)
 
 ### Authorization
 
