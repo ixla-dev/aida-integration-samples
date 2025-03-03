@@ -4,8 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**JobTemplateInkjetLayoutId** | **int?** |  | [optional] 
-**Id** | **int** |  | [optional] 
 **PrintSpeed** | **int** |  | [optional] 
 **VerticalMirrorEnabled** | **bool** |  | [optional] 
 **HorizontalMirrorEnabled** | **bool** |  | [optional] 
@@ -15,9 +13,8 @@ Name | Type | Description | Notes
 **EnableY** | **bool** |  | [optional] 
 **EnableK** | **bool** |  | [optional] 
 **DropSize** | **int** |  | [optional] 
-**Multipass** | **bool** |  | [optional] 
-**NumberOfPasses** | **int** |  | [optional] 
 **DataPageId** | **int** |  | [optional] 
+**PrintQuality** | **PrintQuality** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

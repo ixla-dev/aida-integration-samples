@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **UpdatedAt** | **DateTime?** |  | [optional] 
 **ExpectedMarkDuration** | **string** |  | [optional] 
 **WorkingArea** | [**DRectangleDto**](DRectangleDto.md) |  | [optional] 
+**CardOrientationTemplateMatchingSettings** | [**TemplateMatchingConfigurationDto**](TemplateMatchingConfigurationDto.md) |  | [optional] 
 **ReadBackConfiguration** | [**ReadBackConfigurationDto**](ReadBackConfigurationDto.md) |  | [optional] 
 **ChipEncodingConfiguration** | [**ChipEncodingConfigurationDto**](ChipEncodingConfigurationDto.md) |  | [optional] 
 **MagStripeConfiguration** | [**MagneticStripeConfigurationDto**](MagneticStripeConfigurationDto.md) |  | [optional] 

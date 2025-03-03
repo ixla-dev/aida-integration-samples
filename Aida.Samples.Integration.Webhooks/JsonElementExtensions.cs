@@ -21,6 +21,7 @@ namespace Aida.Samples.Integration.Webhooks
                 message = messageType switch
                 {
                     MessageType.WorkflowSchedulerSuspended => JsonSerializer.Deserialize<WorkflowSchedulerProcessSuspendedMessage>(jsonString, serializerOptions),
+                    MessageType.WorkflowSchedulerStopping  => JsonSerializer.Deserialize<WorkflowSchedulerStoppingMessage>(jsonString, serializerOptions),
                     MessageType.WorkflowSchedulerStarted   => JsonSerializer.Deserialize<WorkflowSchedulerStartedMessage>(jsonString, serializerOptions),
                     MessageType.WorkflowSchedulerStopped   => JsonSerializer.Deserialize<WorkflowSchedulerStoppedMessage>(jsonString, serializerOptions),
                     MessageType.WorkflowStarted            => JsonSerializer.Deserialize<WorkflowStartedMessage>(jsonString, serializerOptions),

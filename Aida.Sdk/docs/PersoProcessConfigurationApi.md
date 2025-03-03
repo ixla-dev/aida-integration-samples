@@ -10,6 +10,7 @@ All URIs are relative to *http://localhost*
 | [**GetPersoProcessPreview**](PersoProcessConfigurationApi.md#getpersoprocesspreview) | **GET** /aida/v1/workflows/perso-process/{jobTemplateId} |  |
 | [**GetPersoSteps**](PersoProcessConfigurationApi.md#getpersosteps) | **GET** /aida/v1/workflows/{jobTemplateId}/perso-process-steps |  |
 | [**GetTestPersoProcessStatus**](PersoProcessConfigurationApi.md#gettestpersoprocessstatus) | **GET** /aida/v1/workflows/get-test-perso-process-status |  |
+| [**PurgeWorkflowData**](PersoProcessConfigurationApi.md#purgeworkflowdata) | **POST** /aida/v1/workflows/purge-workflow-data |  |
 | [**SetPersoProcessConfiguration**](PersoProcessConfigurationApi.md#setpersoprocessconfiguration) | **POST** /aida/v1/workflows/{jobTemplateId}/configuration |  |
 | [**StartTestPersoProcess**](PersoProcessConfigurationApi.md#starttestpersoprocess) | **GET** /aida/v1/workflows/start-test-perso-process |  |
 | [**StopTestPersoProcess**](PersoProcessConfigurationApi.md#stoptestpersoprocess) | **GET** /aida/v1/workflows/stop-test-perso-process |  |
@@ -572,6 +573,91 @@ This endpoint does not need any parameter.
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="purgeworkflowdata"></a>
+# **PurgeWorkflowData**
+> void PurgeWorkflowData ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class PurgeWorkflowDataExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new PersoProcessConfigurationApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                apiInstance.PurgeWorkflowData();
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling PersoProcessConfigurationApi.PurgeWorkflowData: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the PurgeWorkflowDataWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.PurgeWorkflowDataWithHttpInfo();
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling PersoProcessConfigurationApi.PurgeWorkflowDataWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details

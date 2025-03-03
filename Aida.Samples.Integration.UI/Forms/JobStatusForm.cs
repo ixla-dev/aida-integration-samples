@@ -23,7 +23,8 @@ namespace Aida.Samples.Integration.UI.Forms
 
         public JobStatusForm(
             AppState appState,
-            MachineInterface machineInterface)
+            MachineInterface machineInterface
+            )
         {
             _appState = appState;
             _machineInterface = machineInterface;

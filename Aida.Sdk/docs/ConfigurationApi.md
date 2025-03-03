@@ -5,7 +5,8 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
 | [**GetConfigurationKeys**](ConfigurationApi.md#getconfigurationkeys) | **GET** /aida/v1/configuration/keys |  |
-| [**UploadConfigFilePost**](ConfigurationApi.md#uploadconfigfilepost) | **POST** /upload_config_file |  |
+| [**ReloadConfiguration**](ConfigurationApi.md#reloadconfiguration) | **POST** /aida/v1/configuration/reload |  |
+| [**UpdateConfigFile**](ConfigurationApi.md#updateconfigfile) | **POST** /aida/v1/configuration/upload |  |
 
 <a name="getconfigurationkeys"></a>
 # **GetConfigurationKeys**
@@ -96,9 +97,9 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="uploadconfigfilepost"></a>
-# **UploadConfigFilePost**
-> void UploadConfigFilePost (string scannerId = null, string apiVersion = null, List<FileParameter> fileParameter = null)
+<a name="reloadconfiguration"></a>
+# **ReloadConfiguration**
+> void ReloadConfiguration ()
 
 
 
@@ -113,7 +114,92 @@ using Aida.Sdk.Model;
 
 namespace Example
 {
-    public class UploadConfigFilePostExample
+    public class ReloadConfigurationExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new ConfigurationApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                apiInstance.ReloadConfiguration();
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling ConfigurationApi.ReloadConfiguration: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ReloadConfigurationWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.ReloadConfigurationWithHttpInfo();
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling ConfigurationApi.ReloadConfigurationWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="updateconfigfile"></a>
+# **UpdateConfigFile**
+> void UpdateConfigFile (string scannerId = null, List<FileParameter> fileParameter = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class UpdateConfigFileExample
     {
         public static void Main()
         {
@@ -127,16 +213,15 @@ namespace Example
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new ConfigurationApi(httpClient, config, httpClientHandler);
             var scannerId = "scannerId_example";  // string |  (optional) 
-            var apiVersion = "apiVersion_example";  // string |  (optional) 
             var fileParameter = new List<FileParameter>(); // List<FileParameter> |  (optional) 
 
             try
             {
-                apiInstance.UploadConfigFilePost(scannerId, apiVersion, fileParameter);
+                apiInstance.UpdateConfigFile(scannerId, fileParameter);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling ConfigurationApi.UploadConfigFilePost: " + e.Message);
+                Debug.Print("Exception when calling ConfigurationApi.UpdateConfigFile: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -145,17 +230,17 @@ namespace Example
 }
 ```
 
-#### Using the UploadConfigFilePostWithHttpInfo variant
+#### Using the UpdateConfigFileWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    apiInstance.UploadConfigFilePostWithHttpInfo(scannerId, apiVersion, fileParameter);
+    apiInstance.UpdateConfigFileWithHttpInfo(scannerId, fileParameter);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling ConfigurationApi.UploadConfigFilePostWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling ConfigurationApi.UpdateConfigFileWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
@@ -166,7 +251,6 @@ catch (ApiException e)
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
 | **scannerId** | **string** |  | [optional]  |
-| **apiVersion** | **string** |  | [optional]  |
 | **fileParameter** | [**List&lt;FileParameter&gt;**](FileParameter.md) |  | [optional]  |
 
 ### Return type

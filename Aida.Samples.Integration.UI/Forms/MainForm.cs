@@ -78,7 +78,8 @@ namespace Aida.Samples.Integration.UI.Forms
 
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-            var btn = sender as Control;
+            if (!(sender is Control btn))
+                return;
             btn.Enabled = false;
             try
             {
@@ -93,16 +94,18 @@ namespace Aida.Samples.Integration.UI.Forms
                 await _machineInterface.ConnectAsync(timeout: defaultTimeout);
                 _machineInterface.StartPollingState();
 
-                //retrieve the list of JobTemplates to allow the user to choose the JobTemplate he'll working with
-                var jobTemplates     = await _machineInterface.GetAvailableJobTemplatesAsync();
+                //retrieve the list of JobTemplates to allow the users to choose the JobTemplate they'll be working with
+                var jobTemplates = await _machineInterface.GetAvailableJobTemplatesAsync();
+                jobTemplates = jobTemplates.ToList();
+                
                 var workflows        = await _machineInterface.GetWorkflowsAsync();
-                var workflowItems    = workflows.Select(_ => new WorkflowItem(_.Name, _.DisplayName)).ToArray();
-                var jobTemplateItems = jobTemplates.Select(_ => new JobTemplateItem(_.Id!.Value, _.Name, _.Description)).ToArray();
+                var workflowItems    = workflows.Select(wf => new WorkflowItem(wf.Name, wf.DisplayName)).ToArray();
+                var jobTemplateItems = jobTemplates.Select(jt => new JobTemplateItem(jt.Id!.Value, jt.Name, jt.Description)).ToArray();
 
                 UiThreadExec(() =>
                 {
-                    cmbBoxWorkflows.Items.AddRange(workflowItems);
-                    cmbJobTemplates.Items.AddRange(jobTemplateItems);
+                    cmbBoxWorkflows.Items.AddRange(workflowItems as WorkflowItem[] ?? []);
+                    cmbJobTemplates.Items.AddRange(jobTemplateItems as JobTemplateItem[] ?? []);
 
                     if (_machineInterface.WorkflowSchedulerState is null)
                         return;
@@ -193,7 +196,7 @@ namespace Aida.Samples.Integration.UI.Forms
             cmbJobTemplates.Enabled = false;
             AppState.SelectedJobTemplate = (JobTemplateItem)cmbJobTemplates.SelectedItem;
             pnlDataControls.Enabled = true;
-            UpdateUi(_machineInterface.WorkflowSchedulerState.Status);
+            UpdateUi(_machineInterface.WorkflowSchedulerState?.Status);
         }
 
         private async void btnStop_Click(object sender, EventArgs e) { await _machineInterface.StopPersonalizationCycleAsync().ConfigureAwait(false); }
@@ -203,6 +206,7 @@ namespace Aida.Samples.Integration.UI.Forms
             var selectedJobTemplate = (JobTemplateItem)cmbJobTemplates.SelectedItem;
             var batchId             = txtBatchId.Text.Trim();
             var dryRun              = checkBoxDryRun.Checked;
+
             if (selectedJobTemplate is null)
             {
                 MessageBox.Show("Please select a job template from the drop down menu");
@@ -217,7 +221,8 @@ namespace Aida.Samples.Integration.UI.Forms
                     if (state.Status == WorkflowSchedulerStatus.Running && state.CurrentJobTemplateName != selectedJobTemplate.Name)
                         await _machineInterface.StopPersonalizationCycleAsync().ConfigureAwait(false);
                     //Starts the workflow scheduler for the given JobTemplate, the system will now start personalizing supports
-                    await _machineInterface.StartWorkflowSchedulerAsync(jobTemplateName: selectedJobTemplate.Name,
+                    await _machineInterface.StartWorkflowSchedulerAsync(
+                        jobTemplateName: selectedJobTemplate.Name,
                         batchId: batchId,
                         workflowTypeName: selectedWorkflow.TypeName,
                         dryRun: dryRun).ConfigureAwait(false);
@@ -259,7 +264,7 @@ namespace Aida.Samples.Integration.UI.Forms
                     break;
                 case MachineInterfaceConnectionState.Connected:
                     EnableJobTemplateSelection(true);
-                    SetWindowTitle($"Connected (Scheduler: {_machineInterface.WorkflowSchedulerState.Status})");
+                    SetWindowTitle($"Connected (Scheduler: {_machineInterface.WorkflowSchedulerState?.Status})");
                     break;
                 case MachineInterfaceConnectionState.Disconnected:
                     EnableJobTemplateSelection(false);
@@ -272,9 +277,10 @@ namespace Aida.Samples.Integration.UI.Forms
 
         private void SetWindowTitle(string text) => UiThreadExec(() => Text = text);
 
-        private async Task WorkflowScheduler_StateChanged(object sender, WorkflowSchedulerStateChangedEventArgs args)
+        private Task WorkflowScheduler_StateChanged(object sender, WorkflowSchedulerStateChangedEventArgs args)
         {
             UpdateUi(args.Current.Status, args.Current.CurrentJobTemplateId);
+            return Task.CompletedTask;
         }
 
         private void UpdateUi(WorkflowSchedulerStatus? status, int? currentJobId = null)

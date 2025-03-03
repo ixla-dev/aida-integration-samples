@@ -27,7 +27,7 @@ namespace Aida.Samples.PcScGatewayApiUsageDemo
                 Readers.Values,
                 textSelector: sCardReader => $"{sCardReader.ReaderName} [{sCardReader.ReaderState.CurrentState.ToString()}]");
 
-            var selectedSharMode = Prompt.Select("Select share mode", new[]
+            var selectedShareMode = Prompt.Select("Select share mode", new[]
             {
                 SCardShare.Shared,
                 SCardShare.Exclusive
@@ -43,7 +43,7 @@ namespace Aida.Samples.PcScGatewayApiUsageDemo
             var result = await _api.SmartCardConnectAsync(reader.Index, new SCardConnectParamsDto
             {
                 PreferredProtocol = protocol,
-                Share = selectedSharMode
+                Share = selectedShareMode
             });
 
             if (result.Success)
@@ -54,7 +54,6 @@ namespace Aida.Samples.PcScGatewayApiUsageDemo
                 var atr = await _api.GetSmartCardAtrAsync(reader.Index);
                 var mf = await _api.TransmitAsync(0, new byte[] { 0x00, 0xa4, 0x04, 0x00, 0x00 });
                 var cpLcData = await _api.TransmitAsync(0, new byte[] { 0x00, 0xca, 0x9f, 0x7f, 0x00 });
-
                 var separator = new string('-', 54);
 
                 Console.WriteLine(@$"

@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | [optional] [readonly] 
 **PositionName** | **string** |  | [optional] 
-**ModuleId** | **int** |  | [optional] 
+**ModuleId** | **int** |  | [optional] [readonly] 
 **IsAlias** | **bool** |  | [optional] 
 **RealPosition** | **string** |  | [optional] 
 **IsMachineInput** | **bool** |  | [optional] 

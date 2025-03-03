@@ -57,4 +57,11 @@
         <ProjectReference Include="..\Aida.Samples.Integration.Webhooks\Aida.Samples.Integration.Webhooks.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="publish\web.config" />
+      <_ContentIncludedByDefault Remove="publish\Aida.Samples.Integration.UI.deps.json" />
+      <_ContentIncludedByDefault Remove="publish\Aida.Samples.Integration.UI.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+    </ItemGroup>
+
 </Project>

@@ -10,7 +10,10 @@ Name | Type | Description | Notes
 **LayoutId** | **int** |  | [optional] 
 **JobTemplateId** | **int** |  | [optional] 
 **SupportSide** | **string** |  | [optional] 
+**AutoPosSettings** | [**List&lt;JobTemplateInkjetLayoutAutoPosSettingsDto&gt;**](JobTemplateInkjetLayoutAutoPosSettingsDto.md) |  | [optional] 
 **PrintSettings** | [**PrintSettingsDto**](PrintSettingsDto.md) |  | [optional] 
+**PinningSettings** | [**PinningSettingsDto**](PinningSettingsDto.md) |  | [optional] 
+**CuringSettings** | [**CuringSettingsDto**](CuringSettingsDto.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

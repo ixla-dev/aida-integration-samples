@@ -14,7 +14,8 @@ namespace Aida.Samples.WebhooksReceiverConsole
 
     public class Startup
     {
-        public Startup(IConfiguration configuration) { }
+        private readonly IConfiguration _configuration;
+        public Startup(IConfiguration configuration) { _configuration = configuration; }
 
         /// <summary>
         /// </summary>
@@ -34,13 +35,15 @@ namespace Aida.Samples.WebhooksReceiverConsole
                 var url = $"http://{machineAddress}:5000";
                 return new IntegrationApi(url);
             });
+            services.AddSingleton<SessionCounters>();
+            services.AddSingleton<GlobalCounters>();
             // enable options pattern
             services.AddOptions();
             // register controllers in the service collection
             services.AddControllers()
                 // json serializer options for asp netcore
                 .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-            // this services handles messages that are stored stored in a blocking collection
+            // this services handles messages that are stored in a blocking collection
             services.AddHostedService<MessagesBackgroundWorker>();
         }
 
@@ -51,6 +54,7 @@ namespace Aida.Samples.WebhooksReceiverConsole
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
+            app.UseStaticFiles(new StaticFileOptions());
             // enable routing
             app.UseRouting();
             // map controllers to routes

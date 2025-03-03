@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **TemperatureStatus** | **TemperatureStatus** |  | [optional] 
 **CleanAtStartupStatus** | **CleanAtStartupStatus** |  | [optional] 
+**ClearAfterAutoParkStatus** | **ClearAfterAutoParkStatus** |  | [optional] 
 **CanPrint** | **bool** |  | [optional] 
 **CantPrintReason** | **string** |  | [optional] 
 **RemainingPrintsBeforeCleaning** | **int** |  | [optional] 

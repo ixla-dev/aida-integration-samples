@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**InputFeeder** | **InputFeeders** |  | [optional] 
 **FeedSide** | **SupportSide** |  | [optional] 
 **ReadBack** | **ReadBackType** |  | [optional] 
 

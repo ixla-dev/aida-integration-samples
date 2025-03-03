@@ -5,10 +5,13 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
 | [**AddAutoPosSettings**](AutoPosApi.md#addautopossettings) | **POST** /aida/v1/autopos | Creates a new XY Auto-Position configuration |
+| [**AddInkjetAutoPosSettings**](AutoPosApi.md#addinkjetautopossettings) | **POST** /aida/v1/autopos/inkjet |  |
+| [**AidaV1AutoposInkjetCopyFromPost**](AutoPosApi.md#aidav1autoposinkjetcopyfrompost) | **POST** /aida/v1/autopos/inkjet/copy-from |  |
 | [**AutoPosConfigDebugLive**](AutoPosApi.md#autoposconfigdebuglive) | **GET** /aida/v1/autopos/job/{jobTemplateId}/layout/{layoutId}/scanner/{scannerId}/debug/live/{cameraId} | Motion JPEG stream of the camera with XY Auto-Pos overlay |
 | [**AutoPosDebug**](AutoPosApi.md#autoposdebug) | **GET** /aida/v1/autopos/{id}/debug.jpg | Draws search area and best match rectangles on a camera frame and returns it as a jpeg image |
 | [**AutoPosDebugLive**](AutoPosApi.md#autoposdebuglive) | **GET** /aida/v1/autopos/{id}/debug/live | Motion JPEG stream of the camera with XY Auto-Pos overlay |
 | [**CreateTemplateMatchingConfiguration**](AutoPosApi.md#createtemplatematchingconfiguration) | **POST** /aida/v1/autopos/template-matching-configuration |  |
+| [**DeleteJobTemplateInkjetLayoutAutoPosSettings**](AutoPosApi.md#deletejobtemplateinkjetlayoutautopossettings) | **DELETE** /aida/v1/autopos/inkjet/{autoPosSettingsId} |  |
 | [**DeleteJobTemplateLayoutAutoPosSettings**](AutoPosApi.md#deletejobtemplatelayoutautopossettings) | **DELETE** /aida/v1/autopos/{autoPosSettingsId} |  |
 | [**DeleteTemplateMatchingConfiguration**](AutoPosApi.md#deletetemplatematchingconfiguration) | **DELETE** /aida/v1/autopos/template-matching-configuration/{id} |  |
 | [**ExecuteTemplateMatching**](AutoPosApi.md#executetemplatematching) | **POST** /aida/v1/autopos/template-matching-configuration/{templateMatchingConfigurationId}/execute |  |
@@ -18,6 +21,7 @@ All URIs are relative to *http://localhost*
 | [**TemplateMatchingConfigurationDebugLivePage**](AutoPosApi.md#templatematchingconfigurationdebuglivepage) | **GET** /aida/v1/autopos/template-matching-configuration/{templateMatchingConfigurationId}/debug/live.html |  |
 | [**TemplateMatchingDebugLive**](AutoPosApi.md#templatematchingdebuglive) | **GET** /aida/v1/autopos/template-matching-configuration/{templateMatchingConfigurationId}/debug/live |  |
 | [**UpdateAutoPosSettings**](AutoPosApi.md#updateautopossettings) | **PUT** /aida/v1/autopos |  |
+| [**UpdateInkjetAutoPosSettings**](AutoPosApi.md#updateinkjetautopossettings) | **PUT** /aida/v1/autopos/inkjet |  |
 | [**UpdateTemplateMatchingConfiguration**](AutoPosApi.md#updatetemplatematchingconfiguration) | **PUT** /aida/v1/autopos/template-matching-configuration |  |
 
 <a name="addautopossettings"></a>
@@ -108,6 +112,198 @@ catch (ApiException e)
 ### HTTP request headers
 
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="addinkjetautopossettings"></a>
+# **AddInkjetAutoPosSettings**
+> JobTemplateInkjetLayoutAutoPosSettingsDto AddInkjetAutoPosSettings (string scannerId = null, JobTemplateInkjetLayoutAutoPosSettingsDto jobTemplateInkjetLayoutAutoPosSettingsDto = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class AddInkjetAutoPosSettingsExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new AutoPosApi(httpClient, config, httpClientHandler);
+            var scannerId = "\"\"";  // string |  (optional)  (default to "")
+            var jobTemplateInkjetLayoutAutoPosSettingsDto = new JobTemplateInkjetLayoutAutoPosSettingsDto(); // JobTemplateInkjetLayoutAutoPosSettingsDto |  (optional) 
+
+            try
+            {
+                JobTemplateInkjetLayoutAutoPosSettingsDto result = apiInstance.AddInkjetAutoPosSettings(scannerId, jobTemplateInkjetLayoutAutoPosSettingsDto);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling AutoPosApi.AddInkjetAutoPosSettings: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the AddInkjetAutoPosSettingsWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<JobTemplateInkjetLayoutAutoPosSettingsDto> response = apiInstance.AddInkjetAutoPosSettingsWithHttpInfo(scannerId, jobTemplateInkjetLayoutAutoPosSettingsDto);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling AutoPosApi.AddInkjetAutoPosSettingsWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **scannerId** | **string** |  | [optional] [default to &quot;&quot;] |
+| **jobTemplateInkjetLayoutAutoPosSettingsDto** | [**JobTemplateInkjetLayoutAutoPosSettingsDto**](JobTemplateInkjetLayoutAutoPosSettingsDto.md) |  | [optional]  |
+
+### Return type
+
+[**JobTemplateInkjetLayoutAutoPosSettingsDto**](JobTemplateInkjetLayoutAutoPosSettingsDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="aidav1autoposinkjetcopyfrompost"></a>
+# **AidaV1AutoposInkjetCopyFromPost**
+> JobTemplateInkjetLayoutAutoPosSettingsDto AidaV1AutoposInkjetCopyFromPost (int? sourceAutoPosSettingsId = null, int? jobTemplateInkjetLayoutId = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class AidaV1AutoposInkjetCopyFromPostExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new AutoPosApi(httpClient, config, httpClientHandler);
+            var sourceAutoPosSettingsId = 56;  // int? |  (optional) 
+            var jobTemplateInkjetLayoutId = 56;  // int? |  (optional) 
+
+            try
+            {
+                JobTemplateInkjetLayoutAutoPosSettingsDto result = apiInstance.AidaV1AutoposInkjetCopyFromPost(sourceAutoPosSettingsId, jobTemplateInkjetLayoutId);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling AutoPosApi.AidaV1AutoposInkjetCopyFromPost: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the AidaV1AutoposInkjetCopyFromPostWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<JobTemplateInkjetLayoutAutoPosSettingsDto> response = apiInstance.AidaV1AutoposInkjetCopyFromPostWithHttpInfo(sourceAutoPosSettingsId, jobTemplateInkjetLayoutId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling AutoPosApi.AidaV1AutoposInkjetCopyFromPostWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **sourceAutoPosSettingsId** | **int?** |  | [optional]  |
+| **jobTemplateInkjetLayoutId** | **int?** |  | [optional]  |
+
+### Return type
+
+[**JobTemplateInkjetLayoutAutoPosSettingsDto**](JobTemplateInkjetLayoutAutoPosSettingsDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
 
@@ -500,6 +696,100 @@ catch (ApiException e)
 ### HTTP request headers
 
  - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="deletejobtemplateinkjetlayoutautopossettings"></a>
+# **DeleteJobTemplateInkjetLayoutAutoPosSettings**
+> JobTemplateInkjetLayoutAutoPosSettingsDto DeleteJobTemplateInkjetLayoutAutoPosSettings (int autoPosSettingsId)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class DeleteJobTemplateInkjetLayoutAutoPosSettingsExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new AutoPosApi(httpClient, config, httpClientHandler);
+            var autoPosSettingsId = 56;  // int | 
+
+            try
+            {
+                JobTemplateInkjetLayoutAutoPosSettingsDto result = apiInstance.DeleteJobTemplateInkjetLayoutAutoPosSettings(autoPosSettingsId);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling AutoPosApi.DeleteJobTemplateInkjetLayoutAutoPosSettings: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the DeleteJobTemplateInkjetLayoutAutoPosSettingsWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<JobTemplateInkjetLayoutAutoPosSettingsDto> response = apiInstance.DeleteJobTemplateInkjetLayoutAutoPosSettingsWithHttpInfo(autoPosSettingsId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling AutoPosApi.DeleteJobTemplateInkjetLayoutAutoPosSettingsWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **autoPosSettingsId** | **int** |  |  |
+
+### Return type
+
+[**JobTemplateInkjetLayoutAutoPosSettingsDto**](JobTemplateInkjetLayoutAutoPosSettingsDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: text/plain, application/json, text/json
 
 
@@ -1288,7 +1578,7 @@ void (empty response body)
 
 <a name="updateautopossettings"></a>
 # **UpdateAutoPosSettings**
-> JobTemplateLayoutAutoPosSettingsDto UpdateAutoPosSettings (string scannerId = null, JobTemplateLayoutAutoPosSettings jobTemplateLayoutAutoPosSettings = null)
+> JobTemplateLayoutAutoPosSettingsDto UpdateAutoPosSettings (string scannerId = null, JobTemplateLayoutAutoPosSettingsDto jobTemplateLayoutAutoPosSettingsDto = null)
 
 
 
@@ -1317,11 +1607,11 @@ namespace Example
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             var apiInstance = new AutoPosApi(httpClient, config, httpClientHandler);
             var scannerId = "\"\"";  // string |  (optional)  (default to "")
-            var jobTemplateLayoutAutoPosSettings = new JobTemplateLayoutAutoPosSettings(); // JobTemplateLayoutAutoPosSettings |  (optional) 
+            var jobTemplateLayoutAutoPosSettingsDto = new JobTemplateLayoutAutoPosSettingsDto(); // JobTemplateLayoutAutoPosSettingsDto |  (optional) 
 
             try
             {
-                JobTemplateLayoutAutoPosSettingsDto result = apiInstance.UpdateAutoPosSettings(scannerId, jobTemplateLayoutAutoPosSettings);
+                JobTemplateLayoutAutoPosSettingsDto result = apiInstance.UpdateAutoPosSettings(scannerId, jobTemplateLayoutAutoPosSettingsDto);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -1341,7 +1631,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    ApiResponse<JobTemplateLayoutAutoPosSettingsDto> response = apiInstance.UpdateAutoPosSettingsWithHttpInfo(scannerId, jobTemplateLayoutAutoPosSettings);
+    ApiResponse<JobTemplateLayoutAutoPosSettingsDto> response = apiInstance.UpdateAutoPosSettingsWithHttpInfo(scannerId, jobTemplateLayoutAutoPosSettingsDto);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -1359,11 +1649,107 @@ catch (ApiException e)
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
 | **scannerId** | **string** |  | [optional] [default to &quot;&quot;] |
-| **jobTemplateLayoutAutoPosSettings** | [**JobTemplateLayoutAutoPosSettings**](JobTemplateLayoutAutoPosSettings.md) |  | [optional]  |
+| **jobTemplateLayoutAutoPosSettingsDto** | [**JobTemplateLayoutAutoPosSettingsDto**](JobTemplateLayoutAutoPosSettingsDto.md) |  | [optional]  |
 
 ### Return type
 
 [**JobTemplateLayoutAutoPosSettingsDto**](JobTemplateLayoutAutoPosSettingsDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="updateinkjetautopossettings"></a>
+# **UpdateInkjetAutoPosSettings**
+> JobTemplateInkjetLayoutAutoPosSettingsDto UpdateInkjetAutoPosSettings (string scannerId = null, JobTemplateInkjetLayoutAutoPosSettingsDto jobTemplateInkjetLayoutAutoPosSettingsDto = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class UpdateInkjetAutoPosSettingsExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new AutoPosApi(httpClient, config, httpClientHandler);
+            var scannerId = "\"\"";  // string |  (optional)  (default to "")
+            var jobTemplateInkjetLayoutAutoPosSettingsDto = new JobTemplateInkjetLayoutAutoPosSettingsDto(); // JobTemplateInkjetLayoutAutoPosSettingsDto |  (optional) 
+
+            try
+            {
+                JobTemplateInkjetLayoutAutoPosSettingsDto result = apiInstance.UpdateInkjetAutoPosSettings(scannerId, jobTemplateInkjetLayoutAutoPosSettingsDto);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling AutoPosApi.UpdateInkjetAutoPosSettings: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the UpdateInkjetAutoPosSettingsWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<JobTemplateInkjetLayoutAutoPosSettingsDto> response = apiInstance.UpdateInkjetAutoPosSettingsWithHttpInfo(scannerId, jobTemplateInkjetLayoutAutoPosSettingsDto);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling AutoPosApi.UpdateInkjetAutoPosSettingsWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **scannerId** | **string** |  | [optional] [default to &quot;&quot;] |
+| **jobTemplateInkjetLayoutAutoPosSettingsDto** | [**JobTemplateInkjetLayoutAutoPosSettingsDto**](JobTemplateInkjetLayoutAutoPosSettingsDto.md) |  | [optional]  |
+
+### Return type
+
+[**JobTemplateInkjetLayoutAutoPosSettingsDto**](JobTemplateInkjetLayoutAutoPosSettingsDto.md)
 
 ### Authorization
 

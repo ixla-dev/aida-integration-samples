@@ -4,11 +4,102 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**GetSystemInfo**](SystemApi.md#getsysteminfo) | **GET** /aida/v1/system/info |  |
 | [**GetSystemModel**](SystemApi.md#getsystemmodel) | **GET** /aida/v1/system/get-system-model |  |
 | [**GetSystemSerial**](SystemApi.md#getsystemserial) | **GET** /aida/v1/system/get-system-serial |  |
-| [**GetSystemStatus**](SystemApi.md#getsystemstatus) | **GET** /aida/v1/system/system-status |  |
+| [**GetSystemStatus**](SystemApi.md#getsystemstatus) | **GET** /aida/v1/system/status |  |
 | [**SetSystemModel**](SystemApi.md#setsystemmodel) | **POST** /aida/v1/system/set-system-model |  |
 | [**SetSystemSerial**](SystemApi.md#setsystemserial) | **POST** /aida/v1/system/set-system-serial |  |
+| [**SystemReset**](SystemApi.md#systemreset) | **POST** /aida/v1/system/reset |  |
+
+<a name="getsysteminfo"></a>
+# **GetSystemInfo**
+> SystemInfoDto GetSystemInfo ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class GetSystemInfoExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new SystemApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                SystemInfoDto result = apiInstance.GetSystemInfo();
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling SystemApi.GetSystemInfo: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetSystemInfoWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<SystemInfoDto> response = apiInstance.GetSystemInfoWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling SystemApi.GetSystemInfoWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+[**SystemInfoDto**](SystemInfoDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="getsystemmodel"></a>
 # **GetSystemModel**
@@ -190,7 +281,7 @@ This endpoint does not need any parameter.
 
 <a name="getsystemstatus"></a>
 # **GetSystemStatus**
-> void GetSystemStatus ()
+> SystemStatusDto GetSystemStatus ()
 
 
 
@@ -221,7 +312,8 @@ namespace Example
 
             try
             {
-                apiInstance.GetSystemStatus();
+                SystemStatusDto result = apiInstance.GetSystemStatus();
+                Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
@@ -240,7 +332,10 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    apiInstance.GetSystemStatusWithHttpInfo();
+    ApiResponse<SystemStatusDto> response = apiInstance.GetSystemStatusWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
@@ -254,7 +349,7 @@ catch (ApiException e)
 This endpoint does not need any parameter.
 ### Return type
 
-void (empty response body)
+[**SystemStatusDto**](SystemStatusDto.md)
 
 ### Authorization
 
@@ -263,7 +358,7 @@ void (empty response body)
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: Not defined
+ - **Accept**: text/plain, application/json, text/json
 
 
 ### HTTP response details
@@ -444,6 +539,95 @@ void (empty response body)
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="systemreset"></a>
+# **SystemReset**
+> SystemStatusDto SystemReset ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Api;
+using Aida.Sdk.Client;
+using Aida.Sdk.Model;
+
+namespace Example
+{
+    public class SystemResetExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new SystemApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                SystemStatusDto result = apiInstance.SystemReset();
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling SystemApi.SystemReset: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the SystemResetWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<SystemStatusDto> response = apiInstance.SystemResetWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling SystemApi.SystemResetWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+[**SystemStatusDto**](SystemStatusDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
 
 
 ### HTTP response details

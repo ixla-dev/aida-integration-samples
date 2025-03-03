@@ -14,6 +14,7 @@ docs/ChipEncodingConfigurationDto.md
 docs/ChipReadBackConfigurationDto.md
 docs/ChipReadBackMessage.md
 docs/CreateJobTemplateDto.md
+docs/CuringSettingsDto.md
 docs/DRectangleDto.md
 docs/DataExchangeTableDefinition.md
 docs/DataSourceConfigurationDto.md
@@ -43,6 +44,7 @@ docs/JobErrorCodes.md
 docs/JobInstance.md
 docs/JobStatus.md
 docs/JobTemplateDto.md
+docs/JobTemplateInkjetLayoutAutoPosSettingsDto.md
 docs/JobTemplateInkjetLayoutDto.md
 docs/JobTemplateLayoutAutoPosSettingsDto.md
 docs/JobTemplateLayoutDto.md
@@ -77,6 +79,8 @@ docs/PersoOperationOutcome.md
 docs/PersoOperationStatus.md
 docs/PersoOperationTypes.md
 docs/PhotoSensorsFlags.md
+docs/PinningSettingsDto.md
+docs/PrintQuality.md
 docs/PrintSettingsDto.md
 docs/ReadBackConfigurationDto.md
 docs/ReadBackType.md
@@ -107,9 +111,14 @@ docs/SearchJobLayoutsResultDto.md
 docs/SearchJobTemplatesResultDto.md
 docs/SearchLayoutsResultDto.md
 docs/SearchWebhooksTargetsResultDto.md
+docs/SimulateActivityMessage.md
 docs/SmartCardReaderState.md
 docs/SortDirection.md
 docs/SupportSide.md
+docs/SystemErrorCodes.md
+docs/SystemInfoDto.md
+docs/SystemStatus.md
+docs/SystemStatusDto.md
 docs/TemplateMatchingConfigurationDto.md
 docs/TransportStatusFlags.md
 docs/VersionOptions.md
@@ -134,6 +143,7 @@ docs/WorkflowSchedulerStateDto.md
 docs/WorkflowSchedulerStatus.md
 docs/WorkflowSchedulerStopReason.md
 docs/WorkflowSchedulerStoppedMessage.md
+docs/WorkflowSchedulerStoppingMessage.md
 docs/WorkflowStartedMessage.md
 docs/WorkflowStatus.md
 git_push.sh
@@ -150,6 +160,7 @@ src/Aida.Sdk.Mini.Test/Model/ChipEncodingConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ChipReadBackConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ChipReadBackMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/CreateJobTemplateDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/CuringSettingsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/DRectangleDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/DataExchangeTableDefinitionTests.cs
 src/Aida.Sdk.Mini.Test/Model/DataSourceConfigurationDtoTests.cs
@@ -178,6 +189,7 @@ src/Aida.Sdk.Mini.Test/Model/JobErrorCodesTests.cs
 src/Aida.Sdk.Mini.Test/Model/JobInstanceTests.cs
 src/Aida.Sdk.Mini.Test/Model/JobStatusTests.cs
 src/Aida.Sdk.Mini.Test/Model/JobTemplateDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/JobTemplateInkjetLayoutAutoPosSettingsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/JobTemplateInkjetLayoutDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/JobTemplateLayoutAutoPosSettingsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/JobTemplateLayoutDtoTests.cs
@@ -212,6 +224,8 @@ src/Aida.Sdk.Mini.Test/Model/PersoOperationOutcomeTests.cs
 src/Aida.Sdk.Mini.Test/Model/PersoOperationStatusTests.cs
 src/Aida.Sdk.Mini.Test/Model/PersoOperationTypesTests.cs
 src/Aida.Sdk.Mini.Test/Model/PhotoSensorsFlagsTests.cs
+src/Aida.Sdk.Mini.Test/Model/PinningSettingsDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/PrintQualityTests.cs
 src/Aida.Sdk.Mini.Test/Model/PrintSettingsDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ReadBackConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/ReadBackTypeTests.cs
@@ -242,9 +256,14 @@ src/Aida.Sdk.Mini.Test/Model/SearchJobLayoutsResultDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/SearchJobTemplatesResultDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/SearchLayoutsResultDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/SearchWebhooksTargetsResultDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/SimulateActivityMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/SmartCardReaderStateTests.cs
 src/Aida.Sdk.Mini.Test/Model/SortDirectionTests.cs
 src/Aida.Sdk.Mini.Test/Model/SupportSideTests.cs
+src/Aida.Sdk.Mini.Test/Model/SystemErrorCodesTests.cs
+src/Aida.Sdk.Mini.Test/Model/SystemInfoDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/SystemStatusDtoTests.cs
+src/Aida.Sdk.Mini.Test/Model/SystemStatusTests.cs
 src/Aida.Sdk.Mini.Test/Model/TemplateMatchingConfigurationDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/TransportStatusFlagsTests.cs
 src/Aida.Sdk.Mini.Test/Model/VersionOptionsTests.cs
@@ -269,6 +288,7 @@ src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStateDtoTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStatusTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStopReasonTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStoppedMessageTests.cs
+src/Aida.Sdk.Mini.Test/Model/WorkflowSchedulerStoppingMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowStartedMessageTests.cs
 src/Aida.Sdk.Mini.Test/Model/WorkflowStatusTests.cs
 src/Aida.Sdk.Mini/Aida.Sdk.Mini.csproj
@@ -302,6 +322,7 @@ src/Aida.Sdk.Mini/Model/ChipEncodingConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/ChipReadBackConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/ChipReadBackMessage.cs
 src/Aida.Sdk.Mini/Model/CreateJobTemplateDto.cs
+src/Aida.Sdk.Mini/Model/CuringSettingsDto.cs
 src/Aida.Sdk.Mini/Model/DRectangleDto.cs
 src/Aida.Sdk.Mini/Model/DataExchangeTableDefinition.cs
 src/Aida.Sdk.Mini/Model/DataSourceConfigurationDto.cs
@@ -330,6 +351,7 @@ src/Aida.Sdk.Mini/Model/JobErrorCodes.cs
 src/Aida.Sdk.Mini/Model/JobInstance.cs
 src/Aida.Sdk.Mini/Model/JobStatus.cs
 src/Aida.Sdk.Mini/Model/JobTemplateDto.cs
+src/Aida.Sdk.Mini/Model/JobTemplateInkjetLayoutAutoPosSettingsDto.cs
 src/Aida.Sdk.Mini/Model/JobTemplateInkjetLayoutDto.cs
 src/Aida.Sdk.Mini/Model/JobTemplateLayoutAutoPosSettingsDto.cs
 src/Aida.Sdk.Mini/Model/JobTemplateLayoutDto.cs
@@ -364,6 +386,8 @@ src/Aida.Sdk.Mini/Model/PersoOperationOutcome.cs
 src/Aida.Sdk.Mini/Model/PersoOperationStatus.cs
 src/Aida.Sdk.Mini/Model/PersoOperationTypes.cs
 src/Aida.Sdk.Mini/Model/PhotoSensorsFlags.cs
+src/Aida.Sdk.Mini/Model/PinningSettingsDto.cs
+src/Aida.Sdk.Mini/Model/PrintQuality.cs
 src/Aida.Sdk.Mini/Model/PrintSettingsDto.cs
 src/Aida.Sdk.Mini/Model/ReadBackConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/ReadBackType.cs
@@ -394,9 +418,14 @@ src/Aida.Sdk.Mini/Model/SearchJobLayoutsResultDto.cs
 src/Aida.Sdk.Mini/Model/SearchJobTemplatesResultDto.cs
 src/Aida.Sdk.Mini/Model/SearchLayoutsResultDto.cs
 src/Aida.Sdk.Mini/Model/SearchWebhooksTargetsResultDto.cs
+src/Aida.Sdk.Mini/Model/SimulateActivityMessage.cs
 src/Aida.Sdk.Mini/Model/SmartCardReaderState.cs
 src/Aida.Sdk.Mini/Model/SortDirection.cs
 src/Aida.Sdk.Mini/Model/SupportSide.cs
+src/Aida.Sdk.Mini/Model/SystemErrorCodes.cs
+src/Aida.Sdk.Mini/Model/SystemInfoDto.cs
+src/Aida.Sdk.Mini/Model/SystemStatus.cs
+src/Aida.Sdk.Mini/Model/SystemStatusDto.cs
 src/Aida.Sdk.Mini/Model/TemplateMatchingConfigurationDto.cs
 src/Aida.Sdk.Mini/Model/TransportStatusFlags.cs
 src/Aida.Sdk.Mini/Model/VersionOptions.cs
@@ -421,5 +450,6 @@ src/Aida.Sdk.Mini/Model/WorkflowSchedulerStateDto.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStatus.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStopReason.cs
 src/Aida.Sdk.Mini/Model/WorkflowSchedulerStoppedMessage.cs
+src/Aida.Sdk.Mini/Model/WorkflowSchedulerStoppingMessage.cs
 src/Aida.Sdk.Mini/Model/WorkflowStartedMessage.cs
 src/Aida.Sdk.Mini/Model/WorkflowStatus.cs

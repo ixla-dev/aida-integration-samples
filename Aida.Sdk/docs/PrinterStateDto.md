@@ -5,14 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **VacuumPressureMillibar** | **float** |  | [optional] 
-**Positions** | **TransportAxisPositionFlags** |  | [optional] 
-**HeadPosition** | **HeadAxisPositionFlags** |  | [optional] 
+**XPrintHeadPosition** | **XPrintHeadAxisPositionFlags** |  | [optional] 
+**PositionsFlags** | **XPrintTransportAxisPositionFlags** |  | [optional] 
 **TemperatureReadings** | [**TemperatureReadingsDto**](TemperatureReadingsDto.md) |  | [optional] 
 **VoltageReadings** | [**VoltageReadingsDto**](VoltageReadingsDto.md) |  | [optional] 
-**TransportStatus** | **XPrintTransportStatus** |  | [optional] 
-**InkLevelStatus** | **InkLevelStatusFlags** |  | [optional] 
-**SystemStatus** | **SystemStatusFlags** |  | [optional] 
-**DoorsStatus** | **XPrintDoorStatus** |  | [optional] 
+**DoorsStatusFlags** | **XPrintDoorStatusFlags** |  | [optional] 
+**MainSystemStatus** | **XPrintMainSystemStatus** |  | [optional] 
+**MainSubSystemStatus** | **XPrintMainSubsystemStatus** |  | [optional] 
 **XAxis** | **int** |  | [optional] 
 **YAxis** | **int** |  | [optional] 
 

@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **Threshold** | **float?** |  | [optional] 
 **DebugUrl** | **string** |  | [optional] 
 **TemplateMatchingConfiguration** | [**TemplateMatchingConfigurationDto**](TemplateMatchingConfigurationDto.md) |  | [optional] 
+**TemplateMatchingConfigurationId** | **int?** |  | [optional] 
 **IsConfigured** | **bool** |  | [optional] [readonly] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

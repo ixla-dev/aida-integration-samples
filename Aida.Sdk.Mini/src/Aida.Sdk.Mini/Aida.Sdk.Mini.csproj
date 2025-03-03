@@ -12,11 +12,13 @@
     <Description>A library generated from a OpenAPI doc</Description>
     <Copyright>No Copyright</Copyright>
     <RootNamespace>Aida.Sdk.Mini</RootNamespace>
-    <Version>1.0.696</Version>
+    <Version>1.0.722-rc.3+496a5e11f6297a76e2b83a2b26e743e21a1c18c1</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Aida.Sdk.Mini.xml</DocumentationFile>
     <RepositoryUrl>https://github.com/-/-.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>Minor update</PackageReleaseNotes>
+    <DebugType Condition="'$(Configuration)' == 'Release'">None</DebugType>
+    <DebugSymbols Condition="'$(Configuration)' == 'Release'">False</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
@@ -38,5 +38,12 @@
     <ItemGroup>
         <ProjectReference Include="..\Aida.Samples.Integration.Webhooks\Aida.Samples.Integration.Webhooks.csproj" />
         <ProjectReference Include="..\Aida.Sdk.Mini\src\Aida.Sdk.Mini\Aida.Sdk.Mini.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="receiver\web.config" />
+      <_ContentIncludedByDefault Remove="receiver\Aida.Samples.WebhooksReceiverConsole.deps.json" />
+      <_ContentIncludedByDefault Remove="receiver\Aida.Samples.WebhooksReceiverConsole.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="receiver\appsettings.json" />
     </ItemGroup>
 </Project>

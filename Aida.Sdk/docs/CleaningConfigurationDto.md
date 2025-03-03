@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 **SpittingOffset** | **int** |  | [optional] 
 **AutoPark** | **bool** |  | [optional] 
 **AutoClean** | **bool** |  | [optional] 
-**CleanAtStartup** | **bool** |  | [optional] 
+**CleanAfterAutoPark** | **bool** |  | [optional] 
 **CleanFrequency** | **int** |  | [optional] 
 **SecondsOfSleepBeforeAutoPark** | **int** |  | [optional] 
 
