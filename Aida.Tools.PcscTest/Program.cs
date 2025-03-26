@@ -132,7 +132,7 @@ for (var i = 1; i <= cardCount; i++)
     var readers = await pcsc.GetReadersAsync();
 
     var selectedReaderInterface = readerInterface == "contact" ? ReaderInterfaceType.Contact : ReaderInterfaceType.Contactless;
-    var reader  = readers.FirstOrDefault(r => r.ReaderInterfaceType == selectedReaderInterface);
+    var reader                  = readers.FirstOrDefault(r => r.ReaderInterfaceType == selectedReaderInterface);
 
     if (reader is null)
     {
@@ -159,6 +159,15 @@ for (var i = 1; i <= cardCount; i++)
     else
     {
         LogError($"[Card:{i:###}] SmartCard connection failed. ErrorCode = {result.ErrorCode}");
+    }
+
+
+    var disconnectResult = await pcsc.SmartCardDisconnectAsync(reader.Index);
+    if (!disconnectResult.Success)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine($"[Card:{i:###}] SCardDisconnect call failed. ErrorCode = {result.ErrorCode}");
+        Console.ResetColor();
     }
 
     await transport.MoveAsync(encoderPosition, "00_exit");
@@ -199,7 +208,7 @@ void PrintUsage()
 
         Usage: 
 
-        .\pcsc-test.exe --IpAddress=[MACHINE_IP_ADDRESS] --CardCount=[NUMBER_OF_CARDS_TO_TEST] --InterfaceType=[contact/contactless]
+        .\pcsc_test.exe --IpAddress=[MACHINE_IP_ADDRESS] --CardCount=[NUMBER_OF_CARDS_TO_TEST] --InterfaceType=[contact/contactless]
 
         Parameters: 
         
@@ -217,13 +226,13 @@ void PrintUsage()
         HELP:
           Use the following command to display this message:
           
-          .\pcsc-test.exe --help
+          .\pcsc_test.exe --help
 
         EXAMPLE: 
         
           Read the ATR 10 consecutive cards, on machine 192.168.3.103 using the contactless interface: 
           
-          .\pcsc-test.exe --IpAddress=192.168.3.103 --CardCount=10 --InterfaceType=contactless
+          .\pcsc_test.exe --IpAddress=192.168.3.103 --CardCount=10 --InterfaceType=contactless
         """
     );
 }
