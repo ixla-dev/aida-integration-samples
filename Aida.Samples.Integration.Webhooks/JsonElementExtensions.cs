@@ -34,6 +34,7 @@ namespace Aida.Samples.Integration.Webhooks
                     MessageType.MagneticStripeReadBack     => JsonSerializer.Deserialize<MagneticStripeReadBackMessage>(jsonString, serializerOptions),
                     MessageType.OcrReadBack                => JsonSerializer.Deserialize<OcrReadBackMessage>(jsonString, serializerOptions),
                     MessageType.ChipReadBack               => JsonSerializer.Deserialize<ChipReadBackMessage>(jsonString, serializerOptions),
+                    MessageType.BarcodeReadBack            => JsonSerializer.Deserialize<BarcodeReadBackMessage>(jsonString, serializerOptions),
                     _                                      => null
                 };
                 return message != null;

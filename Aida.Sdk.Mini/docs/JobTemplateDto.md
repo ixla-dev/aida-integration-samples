@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **UpdatedAt** | **DateTime?** |  | [optional] 
 **ExpectedMarkDuration** | **string** |  | [optional] 
 **WorkingArea** | [**DRectangleDto**](DRectangleDto.md) |  | [optional] 
+**FeedSide** | **SupportSide** |  | [optional] 
 **CardOrientationTemplateMatchingSettings** | [**TemplateMatchingConfigurationDto**](TemplateMatchingConfigurationDto.md) |  | [optional] 
 **ReadBackConfiguration** | [**ReadBackConfigurationDto**](ReadBackConfigurationDto.md) |  | [optional] 
 **ChipEncodingConfiguration** | [**ChipEncodingConfigurationDto**](ChipEncodingConfigurationDto.md) |  | [optional] 
@@ -22,6 +23,7 @@ Name | Type | Description | Notes
 **InkjetLayouts** | [**List&lt;JobTemplateInkjetLayoutDto&gt;**](JobTemplateInkjetLayoutDto.md) |  | [optional] 
 **MarkGroups** | [**List&lt;ScannerMarkGroupDto&gt;**](ScannerMarkGroupDto.md) |  | [optional] 
 **OcrSettings** | [**List&lt;JobTemplateOcrSettingsDto&gt;**](JobTemplateOcrSettingsDto.md) |  | [optional] 
+**BarcodeReadSettings** | [**List&lt;JobTemplateBarcodeReadSettingsDto&gt;**](JobTemplateBarcodeReadSettingsDto.md) |  | [optional] 
 **AutoPosEnabled** | **bool** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

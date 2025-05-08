@@ -179,14 +179,12 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                                 case JobErrorCodes.CardJam:
                                     break;
                                 case JobErrorCodes.FeederEmpty:
-                                    // Intentionally block until we receive user input 
                                     logger.LogWarning("\n\nFeeder empty\nLoad the input feeder with cards and press the 'Resume' button");
                                     break;
                                 case JobErrorCodes.OpenInterlock:
                                     logger.LogWarning("\n\n Open interlocks detected. Please verify all interlocks are properly locked, then click the 'Resume'");
                                     break;
                             }
-
                             break;
                         case OcrReadBackMessage readBackMessage:
                             logger.LogInformation(
@@ -215,6 +213,13 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                                     : ""
                             );
                             _ = MockMagneticReadBackValidation(readBack, client);
+                            break;
+
+
+                        case BarcodeReadBackMessage barcodeReadBackMessage:
+
+                            _ = HandleBarcodeReadBackMessage(barcodeReadBackMessage, client);
+
                             break;
 
                         // These events require the receiving application to invoke SignalExternalProcessCompleted.
@@ -247,6 +252,16 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+        public async Task HandleBarcodeReadBackMessage(BarcodeReadBackMessage message, IntegrationApi api)
+        {
+            var response = new ExternalProcessCompletedMessage
+            {
+                Outcome = ExternalProcessOutcome.Completed,
+                WorkflowInstanceId = message.WorkflowInstanceId
+            };
+            await api.SignalExternalProcessCompletedAsync(false, response).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// </summary>

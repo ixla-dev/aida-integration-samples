@@ -1,9 +1,10 @@
-# Aida.Sdk.Mini.Model.SimulateActivityMessage
+# Aida.Sdk.Mini.Model.BarcodeReadExecutedMessage
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Discriminator** | **string** |  | 
 **SourceJobInstanceId** | **string** |  | [optional] 
 **MachineName** | **string** |  | [optional] 
 **MachineSerial** | **string** |  | [optional] 
@@ -14,14 +15,13 @@ Name | Type | Description | Notes
 **MessageId** | **string** |  | [optional] 
 **WorkflowInstanceId** | **string** |  | [optional] 
 **WorkflowInstanceName** | **string** |  | [optional] 
-**MessageType** | **MessageType** |  | [optional] 
-**JobStatus** | **JobStatus** |  | [optional] 
-**ErrorCode** | **JobErrorCodes** |  | [optional] 
+**MessageType** | [**MessageType**](MessageType.md) |  | [optional] 
+**JobStatus** | [**JobStatus**](JobStatus.md) |  | [optional] 
+**ErrorCode** | [**JobErrorCodes**](JobErrorCodes.md) |  | [optional] 
 **AdditionalMetadata** | **Dictionary&lt;string, Object&gt;** |  | [optional] 
 **DocumentProduced** | **bool** |  | [optional] 
 **DestructiveOperationExecuted** | **bool** |  | [optional] 
-**Discriminator** | **string** |  | [optional] 
-**DurationMilliseconds** | **int** |  | [optional] [readonly] 
+**Results** | [**List&lt;RuntimeOcrInspectionResult&gt;**](RuntimeOcrInspectionResult.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
