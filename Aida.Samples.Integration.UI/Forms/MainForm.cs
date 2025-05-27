@@ -76,28 +76,52 @@ namespace Aida.Samples.Integration.UI.Forms
             form.Show();
         }
 
+
+        /// <summary>
+        /// Handles the click event for the "Connect" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks>
+        /// When the user presses the connect button, the application does the following:
+        /// <para>
+        /// Checks if the machine can be reached via HTTP
+        /// </para>
+        /// <para>
+        /// Opens a connection to the PostgreSQL instance hosted by the machine
+        /// </para>
+        /// <para>
+        /// Starts a background thread to poll the Workflow Scheduler State. The workflow
+        /// scheduler state indicates if the machine is looking for data in data exchange tables
+        /// for a particular job template
+        /// </para>
+        /// </remarks>
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-            if (!(sender is Control btn))
+            if (sender is not Control btn)
                 return;
             btn.Enabled = false;
             try
             {
                 var defaultTimeout = TimeSpan.FromSeconds(1);
-                //Create an instance of MachineInterface class, used to interact with the system
+
+                // Get connection information from the UI
                 AppState.ApiBaseUrl = TxtIpAddress.Text.TrimEnd('/');
                 AppState.DbConnectionString = TxtConnectionString.Text;
-
+                // Create an instance of the machine interface class.
                 _machineInterface = new MachineInterface(TxtIpAddress.Text, TxtConnectionString.Text, _configuration);
                 _machineInterface.WorkflowSchedulerStateChanged += WorkflowScheduler_StateChanged;
                 _machineInterface.ConnectionStateChanged += MachineInterface_ConnectionStateChanged;
+                // Connect async checks if the machine API can be reached by invoking GetWorkflowSchedulerState and
+                // tries to establish a connection to the hosted database. If any of those operations fail an exception
+                // will be thrown.
                 await _machineInterface.ConnectAsync(timeout: defaultTimeout);
                 _machineInterface.StartPollingState();
 
                 //retrieve the list of JobTemplates to allow the users to choose the JobTemplate they'll be working with
                 var jobTemplates = await _machineInterface.GetAvailableJobTemplatesAsync();
                 jobTemplates = jobTemplates.ToList();
-                
+
                 var workflows        = await _machineInterface.GetWorkflowsAsync();
                 var workflowItems    = workflows.Select(wf => new WorkflowItem(wf.Name, wf.DisplayName)).ToArray();
                 var jobTemplateItems = jobTemplates.Select(jt => new JobTemplateItem(jt.Id!.Value, jt.Name, jt.Description)).ToArray();
@@ -224,7 +248,7 @@ namespace Aida.Samples.Integration.UI.Forms
                     await _machineInterface.StartWorkflowSchedulerAsync(
                         jobTemplateName: selectedJobTemplate.Name,
                         batchId: batchId,
-                        workflowTypeName: selectedWorkflow.TypeName,
+                        workflowTypeName: "",
                         dryRun: dryRun).ConfigureAwait(false);
                 }
                 catch (Exception e)
@@ -234,6 +258,14 @@ namespace Aida.Samples.Integration.UI.Forms
             }).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Populates UI elements with data extracted from appsettings.json
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks>
+        /// appsettings.json is located in the bin folder fo the application
+        /// </remarks>
         private async void MainForm_Load(object sender, EventArgs e)
         {
             var dbUser     = _configuration.GetSection("MachineInterface:DbUser").Get<string>();
@@ -254,6 +286,15 @@ namespace Aida.Samples.Integration.UI.Forms
             TxtConnectionString.Text = builder.ToString();
             TxtIpAddress.Text = baseUrl;
         }
+
+        /// <summary>
+        /// Event handler for connection state changed event triggerd
+        /// by MachineInterface
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        /// <returns>
+        /// </returns>
 
         private Task MachineInterface_ConnectionStateChanged(object sender, MachineInterfaceConnectionStateChangedArgs args)
         {

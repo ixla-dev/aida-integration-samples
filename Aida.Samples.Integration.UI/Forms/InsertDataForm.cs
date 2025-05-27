@@ -39,11 +39,11 @@ namespace Aida.Samples.Integration.UI.Forms
 
                 if (e.ValueType == EntityFieldValueType.String)
                 {
-                    data = new TextBox() { Text = e.DisplayName, Name = $"Txt{e.DisplayName}", Width = 250 };
+                    data = new TextBox { Text = e.DisplayName, Name = $"Txt{e.DisplayName}", Width = 250 };
                 }
                 else
                 {
-                    data = new PictureBox()
+                    data = new PictureBox
                     {
                         Name = $"Img{e.DisplayName}",
                         SizeMode = PictureBoxSizeMode.Zoom,

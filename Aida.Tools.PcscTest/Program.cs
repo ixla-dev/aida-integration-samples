@@ -18,14 +18,17 @@ if (args.Contains("--help") || args.Contains("-h"))
     return;
 }
 
-var ipAddress       = configuration.GetValue<string>("IpAddress");
-var cardCount       = configuration.GetValue<int>("CardCount");
-var readerInterface = configuration.GetValue<string>("InterfaceType")?.ToLower();
-var basePath        = $"http://{ipAddress}:5000";
-var apiConfig       = new Configuration { BasePath = basePath };
-var healthCheckApi  = new HealthCheckApi(apiConfig);
-var pcsc            = new PCSCGatewayApi(apiConfig);
-var transport       = new TransportApi(apiConfig);
+var ipAddress        = configuration.GetValue<string>("IpAddress");
+var cardCount        = configuration.GetValue<int>("CardCount");
+var readerInterface  = configuration.GetValue<string>("InterfaceType")?.ToLower();
+var hasDoubleStacker = configuration.GetValue("DoubleStacker", false);
+var systemType       = configuration.GetValue<string>("System", "ID5");
+
+var basePath         = $"http://{ipAddress}:5000";
+var apiConfig        = new Configuration { BasePath = basePath };
+var healthCheckApi   = new HealthCheckApi(apiConfig);
+var pcsc             = new PCSCGatewayApi(apiConfig);
+var transport        = new TransportApi(apiConfig);
 
 if (string.IsNullOrEmpty(ipAddress))
 {
@@ -74,8 +77,21 @@ catch (ApiException)
     return;
 }
 
-
-var encoderPosition = readerInterface == "contact" ? "00_encodercontact" : "00_encodercontactless";
+string exitPosition;
+string encoderPosition;
+switch (systemType)
+{
+    case "ID7":
+        encoderPosition = readerInterface == "contact" ? "00_chipencoder" : "00_chipencoder";
+            // : "00_chipencodercl";
+        exitPosition = hasDoubleStacker ? "00_double_stacker_exit_1" : "00_exit";
+        break;
+    case "ID5":
+    default:
+        encoderPosition = readerInterface == "contact" ? "00_encodercontact" : "00_encodercontactless";
+        exitPosition = "00_exit";
+        break;
+}
 
 for (var i = 1; i <= cardCount; i++)
 {
@@ -170,7 +186,7 @@ for (var i = 1; i <= cardCount; i++)
         Console.ResetColor();
     }
 
-    await transport.MoveAsync(encoderPosition, "00_exit");
+    await transport.MoveAsync(encoderPosition, exitPosition);
 }
 
 __exit:
@@ -208,10 +224,10 @@ void PrintUsage()
 
         Usage: 
 
-        .\pcsc_test.exe --IpAddress=[MACHINE_IP_ADDRESS] --CardCount=[NUMBER_OF_CARDS_TO_TEST] --InterfaceType=[contact/contactless]
+        .\pcsc_test.exe --IpAddress=[MACHINE_IP_ADDRESS] --CardCount=[NUMBER_OF_CARDS_TO_TEST] --InterfaceType=[contact/contactless] --System=[ID5/ID7]
 
         Parameters: 
-        
+
           IpAddress:
             The IP address of the machine 
           
@@ -223,16 +239,42 @@ void PrintUsage()
             
             Accepted values: contact, contactless
             
+          System:
+            Specifies the system type
+           
+            Accepted values: ID5, ID7
+            
+          DoubleStacker:
+            Set this parameter to true if the system has a double stacker. If the machine has a single stacker
+            this parameter can be omitted. 
+            
+            Accepted Value: true, false
+            
         HELP:
           Use the following command to display this message:
           
           .\pcsc_test.exe --help
 
-        EXAMPLE: 
-        
-          Read the ATR 10 consecutive cards, on machine 192.168.3.103 using the contactless interface: 
+        EXAMPLE 1: 
+
+          Read the ATR for 10 consecutive cards, on an ID5 with ip address 192.168.3.103 using the contactless interface on an ID5: 
           
-          .\pcsc_test.exe --IpAddress=192.168.3.103 --CardCount=10 --InterfaceType=contactless
+          .\pcsc_test.exe --IpAddress=192.168.3.103 --CardCount=10 --InterfaceType=contactless --System=ID5
+        
+        EXAMPLE 2:
+        
+          Read the ATR for 10 consecutive cards, on an ID7 with ip address 192.168.3.103 using the contactless interface: 
+          
+          .\pcsc_test.exe --IpAddress=192.168.3.103 --CardCount=10 --InterfaceType=contactless --System=ID7
+          
+        
+        EXAMPLE 3:
+        
+          Read the ATR for 10 consecutive cards, on an ID7 with ip address 192.168.3.103 using the contactless interface on an ID7 with double stacker: 
+          
+          .\pcsc_test.exe --IpAddress=192.168.3.103 --CardCount=10 --InterfaceType=contactless --System=ID7 --DoubleStacker=true
+          
+        
         """
     );
 }

@@ -33,27 +33,6 @@ namespace Aida.Samples.WebhooksReceiverConsole.Controllers
             _logger = logger;
         }
 
-        [HttpGet("/file")]
-        public ActionResult GetFile() => Ok($"bytea IMG_PHOTO\n" +
-                                            $"text  TYPE\n" +
-                                            $"text  COUNTRY_CODE\n" +
-                                            $"text  PASSPORT_NUMBER\n" +
-                                            $"text  SURNAME\n" +
-                                            $"text  GIVEN_NAMES\n" +
-                                            $"text  NATIONALITY\n" +
-                                            $"text  IDNRL\n" +
-                                            $"text  IDNRLL2\n" +
-                                            $"text  PERSONAL_NUMBER\n" +
-                                            $"text  DATE_OF_BIRTH\n" +
-                                            $"text  SEX\n" +
-                                            $"text  PLACE_OF_BIRTH\n" +
-                                            $"text  DATE_OF_ISSUE\n" +
-                                            $"text  DATE_OF_EXPIRY\n" +
-                                            $"bytea IMG_SIGNATURE\n" +
-                                            $"text  MRZ_1\n" +
-                                            $"text  MRZ_2\n" +
-                                            $"bytea PHOTO_1");
-
         [HttpGet]
         [Route("/")]
         public ActionResult Home() => Ok("Webhooks handler");
