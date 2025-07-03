@@ -199,12 +199,15 @@ namespace Aida.Samples.Integration.UI.Forms
         {
             if (e.Button != MouseButtons.Right) return;
             var grid = (DataGridView)sender;
+            
             if (e.RowIndex > grid.Rows.Count - 1)
                 return;
+            
             var row = grid.Rows[e.RowIndex];
             var job = row.DataBoundItem as AidaJobViewModel;
             if (job?.WorkflowStatus is not WorkflowStatus.Suspended)
                 return;
+            
             grid.ClearSelection();
             row.Selected = true;
             grid.Refresh();

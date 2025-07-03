@@ -338,7 +338,7 @@ namespace Aida.Samples.Integration.UI.Forms
 
                 if (currentJobId is not null) UpdateSelectedJob(currentJobId.Value);
                 EnableJobTemplateSelection(status is WorkflowSchedulerStatus.Stopped or null);
-                EnableDataControls(status == WorkflowSchedulerStatus.Running);
+                EnableDataControls(true);
 
                 var isConnected = _machineInterface.ConnectionState is MachineInterfaceConnectionState.Connected;
 
@@ -380,7 +380,7 @@ namespace Aida.Samples.Integration.UI.Forms
         {
             UiThreadExec(() =>
             {
-                pnlJobTemplate.Enabled = enabled;
+                // pnlJobTemplate.Enabled = enabled;
                 foreach (Control c in pnlJobTemplate.Controls)
                     c.Enabled = enabled;
             });

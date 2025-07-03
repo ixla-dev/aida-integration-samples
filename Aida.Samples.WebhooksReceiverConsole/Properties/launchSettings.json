@@ -6,7 +6,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "commandLineArgs": "--MockEncodingDuration=00:00:02 --Port=7654",
+      "commandLineArgs": "--MockEncodingDuration=00:00:02 --Port=7654 --LogMessagePayload=true",
       "applicationUrl": "http://0.0.0.0:7654"
     }
   }
