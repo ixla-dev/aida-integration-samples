@@ -185,6 +185,7 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                                     logger.LogWarning("\n\n Open interlocks detected. Please verify all interlocks are properly locked, then click the 'Resume'");
                                     break;
                             }
+
                             break;
                         case OcrReadBackMessage readBackMessage:
                             logger.LogInformation(
@@ -312,14 +313,17 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
         /// <param name="cancellationToken"></param>
         private async Task MockOcrValidation(OcrExecutedMessage message, IntegrationApi api, CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested) 
+            if (cancellationToken.IsCancellationRequested)
                 return;
             try
             {
-                var shouldFail = _random.Next(0, 100) < 0;
-                var outcome = shouldFail
-                    ? ExternalProcessOutcome.Faulted
-                    : ExternalProcessOutcome.Completed;
+                // var shouldFail = _random.Next(0, 100) < 0;
+                // var outcome = shouldFail
+                // ? ExternalProcessOutcome.Faulted
+                // : ExternalProcessOutcome.Completed;
+
+                var outcome       = ExternalProcessOutcome.Completed;
+                const float minConfidence = 0.9f;
 
                 var responseMessage = new ExternalProcessCompletedMessage
                 {
@@ -329,17 +333,17 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                     WorkflowInstanceId = message.WorkflowInstanceId,
                 };
 
-                if (message.Results.Any(r => r.OcrResult.MeanConfidence < 8.0))
+                if (message.Results.Any(r => r.OcrResult.MeanConfidence < minConfidence))
                 {
                     responseMessage.Outcome = ExternalProcessOutcome.Faulted;
                 }
-                
+
                 logger.LogDebug("[{JobId}][{WorkflowId}] {ResultCount}", message.JobId, message.WorkflowInstanceId, message.Results.Count);
-                
+
                 foreach (var r in message.Results)
                 {
                     var ocrResult = r.OcrResult;
-                    if (ocrResult.MeanConfidence < 0.8)
+                    if (ocrResult.MeanConfidence < minConfidence)
                     {
                         logger.LogWarning("[{JobId}][{WorkflowId}] {Confidence} {Text}", message.JobId, message.WorkflowInstanceId, ocrResult.MeanConfidence, ocrResult.Text);
                     }
@@ -347,7 +351,6 @@ namespace Aida.Samples.WebhooksReceiverConsole.HostedServices
                     {
                         logger.LogInformation("[{JobId}][{WorkflowId}] {Confidence} {Text}", message.JobId, message.WorkflowInstanceId, ocrResult.MeanConfidence, ocrResult.Text);
                     }
-                    
                 }
 
                 logger.LogDebug("Ocr Validation completed {Validation}", JsonSerializer.Serialize(message, _jsonSerializerOptions));
