@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**CancelJobsByCorrelationId**](IntegrationApi.md#canceljobsbycorrelationid) | **POST** /aida/v1/workflow-scheduler/workflows/_cancel |  |
 | [**Check**](IntegrationApi.md#check) | **GET** /aida/v1/health-check |  |
 | [**CreateJobTemplate**](IntegrationApi.md#createjobtemplate) | **POST** /aida/v1/scanner/job-templates |  |
 | [**CreateWebhooksTarget**](IntegrationApi.md#createwebhookstarget) | **POST** /aida/v1/webhooks-targets |  |
@@ -22,6 +23,7 @@ All URIs are relative to *http://localhost*
 | [**GetDataExchangeTableDefinition**](IntegrationApi.md#getdataexchangetabledefinition) | **GET** /aida/v1/etl/{jobId}/exchange-table-ddl |  |
 | [**GetEntityDescriptorsByJobTemplateId**](IntegrationApi.md#getentitydescriptorsbyjobtemplateid) | **GET** /aida/v1/etl/{jobId}/entities |  |
 | [**GetInkjetSystemStatus**](IntegrationApi.md#getinkjetsystemstatus) | **GET** /aida/v1/inkjet-diagnostics/status |  |
+| [**GetJobInstanceByCorrelationId**](IntegrationApi.md#getjobinstancebycorrelationid) | **GET** /aida/v1/workflows/job-instances/correlation-id/{correlationId} |  |
 | [**GetJobInstances**](IntegrationApi.md#getjobinstances) | **GET** /aida/v1/workflows/job-instances |  |
 | [**GetJobTemplateById**](IntegrationApi.md#getjobtemplatebyid) | **GET** /aida/v1/scanner/job-templates/{id} |  |
 | [**GetLayoutById**](IntegrationApi.md#getlayoutbyid) | **GET** /aida/v1/scanner/layouts/{id} |  |
@@ -33,6 +35,8 @@ All URIs are relative to *http://localhost*
 | [**GetRunningWorkflows**](IntegrationApi.md#getrunningworkflows) | **GET** /aida/v1/workflow-scheduler/workflows/running |  |
 | [**GetSmartCardAtr**](IntegrationApi.md#getsmartcardatr) | **GET** /api/v1/pcsc-gateway/{readerIndex}/smart-card/atr | Invokes SCardConnect on the specified reader and tries to read the ATR  from the card currently present in the reader |
 | [**GetSmartCardStatus**](IntegrationApi.md#getsmartcardstatus) | **GET** /api/v1/pcsc-gateway/{readerIndex}/smart-card/status | Invoke SCardStatus on the specified reader |
+| [**GetSnapshot**](IntegrationApi.md#getsnapshot) | **GET** /aida/v1/scanner/camera/get-snapshot |  |
+| [**GetSnapshotImage**](IntegrationApi.md#getsnapshotimage) | **GET** /aida/v1/scanner/camera/get-snapshot.{format} |  |
 | [**GetSystemInfo**](IntegrationApi.md#getsysteminfo) | **GET** /aida/v1/system/info |  |
 | [**GetSystemStatus**](IntegrationApi.md#getsystemstatus) | **GET** /aida/v1/system/status |  |
 | [**GetWebhooksTargetById**](IntegrationApi.md#getwebhookstargetbyid) | **GET** /aida/v1/webhooks-targets/{id} |  |
@@ -40,10 +44,13 @@ All URIs are relative to *http://localhost*
 | [**GetWorkflowSchedulerState**](IntegrationApi.md#getworkflowschedulerstate) | **GET** /aida/v1/workflow-scheduler/state |  |
 | [**ImportLayoutFile**](IntegrationApi.md#importlayoutfile) | **POST** /aida/v1/scanner/layouts/import |  |
 | [**ImportLayoutFileValidation**](IntegrationApi.md#importlayoutfilevalidation) | **GET** /aida/v1/scanner/layouts/import/_validate |  |
+| [**ReadCartridgeHolder**](IntegrationApi.md#readcartridgeholder) | **GET** /aida/v1/inkjet/cartridge/read-holder |  |
 | [**ReleaseContext**](IntegrationApi.md#releasecontext) | **POST** /api/v1/pcsc-gateway/release-context |  |
 | [**RenameInkjetLayout**](IntegrationApi.md#renameinkjetlayout) | **PUT** /aida/v1/inkjet/layouts/{id} |  |
+| [**RenameJobTemplate**](IntegrationApi.md#renamejobtemplate) | **POST** /aida/v1/scanner/job-templates/rename |  |
 | [**RenameLayout**](IntegrationApi.md#renamelayout) | **PUT** /aida/v1/scanner/layouts/{id} |  |
 | [**ResumeWorkflowScheduler**](IntegrationApi.md#resumeworkflowscheduler) | **POST** /aida/v1/workflow-scheduler/resume |  |
+| [**SetJobDataAvailable**](IntegrationApi.md#setjobdataavailable) | **POST** /aida/v1/workflow-scheduler/job/set-data-available |  |
 | [**SetPersoProcessConfiguration**](IntegrationApi.md#setpersoprocessconfiguration) | **POST** /aida/v1/workflows/{jobTemplateId}/configuration |  |
 | [**SignalExternalProcessCompleted**](IntegrationApi.md#signalexternalprocesscompleted) | **POST** /aida/v1/workflow-scheduler/workflows/signal/external-process-completed | Notifies a suspended workflow instance when that the external process has completed execution |
 | [**SmartCardConnect**](IntegrationApi.md#smartcardconnect) | **POST** /api/v1/pcsc-gateway/{readerIndex}/smart-card/connect | Invoke SCardConnect on the specified reader. The card handle (hCard) is held server side  until the next time Connect is invoked |
@@ -59,6 +66,100 @@ All URIs are relative to *http://localhost*
 | [**ValidateInkjetLayoutName**](IntegrationApi.md#validateinkjetlayoutname) | **POST** /aida/v1/inkjet/layouts/validate-name |  |
 | [**ValidateJobTemplateName**](IntegrationApi.md#validatejobtemplatename) | **POST** /aida/v1/scanner/job-templates/validate-name |  |
 | [**ValidateLayoutName**](IntegrationApi.md#validatelayoutname) | **POST** /aida/v1/scanner/layouts/validate-name |  |
+
+<a name="canceljobsbycorrelationid"></a>
+# **CancelJobsByCorrelationId**
+> List&lt;QueueItem&gt; CancelJobsByCorrelationId (CancelJobByCorrelationIdRequest cancelJobByCorrelationIdRequest = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class CancelJobsByCorrelationIdExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var cancelJobByCorrelationIdRequest = new CancelJobByCorrelationIdRequest(); // CancelJobByCorrelationIdRequest |  (optional) 
+
+            try
+            {
+                List<QueueItem> result = apiInstance.CancelJobsByCorrelationId(cancelJobByCorrelationIdRequest);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.CancelJobsByCorrelationId: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the CancelJobsByCorrelationIdWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<List<QueueItem>> response = apiInstance.CancelJobsByCorrelationIdWithHttpInfo(cancelJobByCorrelationIdRequest);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.CancelJobsByCorrelationIdWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **cancelJobByCorrelationIdRequest** | [**CancelJobByCorrelationIdRequest**](CancelJobByCorrelationIdRequest.md) |  | [optional]  |
+
+### Return type
+
+[**List&lt;QueueItem&gt;**](QueueItem.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a name="check"></a>
 # **Check**
@@ -1796,6 +1897,100 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="getjobinstancebycorrelationid"></a>
+# **GetJobInstanceByCorrelationId**
+> JobInstance GetJobInstanceByCorrelationId (string correlationId)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class GetJobInstanceByCorrelationIdExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var correlationId = "correlationId_example";  // string | 
+
+            try
+            {
+                JobInstance result = apiInstance.GetJobInstanceByCorrelationId(correlationId);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.GetJobInstanceByCorrelationId: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetJobInstanceByCorrelationIdWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<JobInstance> response = apiInstance.GetJobInstanceByCorrelationIdWithHttpInfo(correlationId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.GetJobInstanceByCorrelationIdWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **correlationId** | **string** |  |  |
+
+### Return type
+
+[**JobInstance**](JobInstance.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="getjobinstances"></a>
 # **GetJobInstances**
 > List&lt;JobInstance&gt; GetJobInstances (int? page = null, int? pageSize = null, string query = null, string sortCriteriaPropertyName = null, SortDirection? sortCriteriaDirection = null)
@@ -2830,6 +3025,214 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="getsnapshot"></a>
+# **GetSnapshot**
+> void GetSnapshot (string format, string scannerId = null, string cameraId = null, int? width = null, int? height = null, bool? warpPerspective = null, bool? undistort = null, string preset = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class GetSnapshotExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var format = "format_example";  // string | 
+            var scannerId = "\"\"";  // string |  (optional)  (default to "")
+            var cameraId = "\"\"";  // string |  (optional)  (default to "")
+            var width = 56;  // int? |  (optional) 
+            var height = 56;  // int? |  (optional) 
+            var warpPerspective = true;  // bool? |  (optional) 
+            var undistort = true;  // bool? |  (optional) 
+            var preset = "preset_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.GetSnapshot(format, scannerId, cameraId, width, height, warpPerspective, undistort, preset);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.GetSnapshot: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetSnapshotWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.GetSnapshotWithHttpInfo(format, scannerId, cameraId, width, height, warpPerspective, undistort, preset);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.GetSnapshotWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **format** | **string** |  |  |
+| **scannerId** | **string** |  | [optional] [default to &quot;&quot;] |
+| **cameraId** | **string** |  | [optional] [default to &quot;&quot;] |
+| **width** | **int?** |  | [optional]  |
+| **height** | **int?** |  | [optional]  |
+| **warpPerspective** | **bool?** |  | [optional]  |
+| **undistort** | **bool?** |  | [optional]  |
+| **preset** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getsnapshotimage"></a>
+# **GetSnapshotImage**
+> void GetSnapshotImage (string format, string scannerId = null, string cameraId = null, int? width = null, int? height = null, bool? warpPerspective = null, bool? undistort = null, string preset = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class GetSnapshotImageExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var format = "format_example";  // string | 
+            var scannerId = "\"\"";  // string |  (optional)  (default to "")
+            var cameraId = "\"\"";  // string |  (optional)  (default to "")
+            var width = 56;  // int? |  (optional) 
+            var height = 56;  // int? |  (optional) 
+            var warpPerspective = true;  // bool? |  (optional) 
+            var undistort = true;  // bool? |  (optional) 
+            var preset = "preset_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.GetSnapshotImage(format, scannerId, cameraId, width, height, warpPerspective, undistort, preset);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.GetSnapshotImage: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetSnapshotImageWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.GetSnapshotImageWithHttpInfo(format, scannerId, cameraId, width, height, warpPerspective, undistort, preset);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.GetSnapshotImageWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **format** | **string** |  |  |
+| **scannerId** | **string** |  | [optional] [default to &quot;&quot;] |
+| **cameraId** | **string** |  | [optional] [default to &quot;&quot;] |
+| **width** | **int?** |  | [optional]  |
+| **height** | **int?** |  | [optional]  |
+| **warpPerspective** | **bool?** |  | [optional]  |
+| **undistort** | **bool?** |  | [optional]  |
+| **preset** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="getsysteminfo"></a>
 # **GetSystemInfo**
 > SystemInfoDto GetSystemInfo ()
@@ -3470,6 +3873,95 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="readcartridgeholder"></a>
+# **ReadCartridgeHolder**
+> List&lt;CartridgeHolderSlotDto&gt; ReadCartridgeHolder ()
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class ReadCartridgeHolderExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+
+            try
+            {
+                List<CartridgeHolderSlotDto> result = apiInstance.ReadCartridgeHolder();
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.ReadCartridgeHolder: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the ReadCartridgeHolderWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<List<CartridgeHolderSlotDto>> response = apiInstance.ReadCartridgeHolderWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.ReadCartridgeHolderWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+### Return type
+
+[**List&lt;CartridgeHolderSlotDto&gt;**](CartridgeHolderSlotDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="releasecontext"></a>
 # **ReleaseContext**
 > void ReleaseContext ()
@@ -3641,6 +4133,100 @@ catch (ApiException e)
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: text/plain, application/json, text/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="renamejobtemplate"></a>
+# **RenameJobTemplate**
+> JobTemplateDto RenameJobTemplate (RenameJobTemplateDto renameJobTemplateDto = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class RenameJobTemplateExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var renameJobTemplateDto = new RenameJobTemplateDto(); // RenameJobTemplateDto |  (optional) 
+
+            try
+            {
+                JobTemplateDto result = apiInstance.RenameJobTemplate(renameJobTemplateDto);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.RenameJobTemplate: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the RenameJobTemplateWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    ApiResponse<JobTemplateDto> response = apiInstance.RenameJobTemplateWithHttpInfo(renameJobTemplateDto);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.RenameJobTemplateWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **renameJobTemplateDto** | [**RenameJobTemplateDto**](RenameJobTemplateDto.md) |  | [optional]  |
+
+### Return type
+
+[**JobTemplateDto**](JobTemplateDto.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/*+json
  - **Accept**: text/plain, application/json, text/json
 
 
@@ -3836,6 +4422,100 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a name="setjobdataavailable"></a>
+# **SetJobDataAvailable**
+> void SetJobDataAvailable (string workflowInstanceId = null, string jobId = null, string correlationId = null)
+
+
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Aida.Sdk.Mini.Api;
+using Aida.Sdk.Mini.Client;
+using Aida.Sdk.Mini.Model;
+
+namespace Example
+{
+    public class SetJobDataAvailableExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure Bearer token for authorization: Bearer
+            config.AccessToken = "YOUR_BEARER_TOKEN";
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new IntegrationApi(httpClient, config, httpClientHandler);
+            var workflowInstanceId = "workflowInstanceId_example";  // string |  (optional) 
+            var jobId = "jobId_example";  // string |  (optional) 
+            var correlationId = "correlationId_example";  // string |  (optional) 
+
+            try
+            {
+                apiInstance.SetJobDataAvailable(workflowInstanceId, jobId, correlationId);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling IntegrationApi.SetJobDataAvailable: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the SetJobDataAvailableWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    apiInstance.SetJobDataAvailableWithHttpInfo(workflowInstanceId, jobId, correlationId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling IntegrationApi.SetJobDataAvailableWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **workflowInstanceId** | **string** |  | [optional]  |
+| **jobId** | **string** |  | [optional]  |
+| **correlationId** | **string** |  | [optional]  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a name="setpersoprocessconfiguration"></a>
 # **SetPersoProcessConfiguration**
 > void SetPersoProcessConfiguration (int jobTemplateId, PersoProcessConfigurationDto persoProcessConfigurationDto = null)
@@ -3930,7 +4610,7 @@ void (empty response body)
 
 <a name="signalexternalprocesscompleted"></a>
 # **SignalExternalProcessCompleted**
-> List&lt;JobInstance&gt; SignalExternalProcessCompleted (bool? waitForCompletion = null, ExternalProcessCompletedMessage externalProcessCompletedMessage = null)
+> List&lt;JobInstanceDto&gt; SignalExternalProcessCompleted (bool? waitForCompletion = null, ExternalProcessCompletedMessage externalProcessCompletedMessage = null)
 
 Notifies a suspended workflow instance when that the external process has completed execution
 
@@ -3964,7 +4644,7 @@ namespace Example
             try
             {
                 // Notifies a suspended workflow instance when that the external process has completed execution
-                List<JobInstance> result = apiInstance.SignalExternalProcessCompleted(waitForCompletion, externalProcessCompletedMessage);
+                List<JobInstanceDto> result = apiInstance.SignalExternalProcessCompleted(waitForCompletion, externalProcessCompletedMessage);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -3985,7 +4665,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Notifies a suspended workflow instance when that the external process has completed execution
-    ApiResponse<List<JobInstance>> response = apiInstance.SignalExternalProcessCompletedWithHttpInfo(waitForCompletion, externalProcessCompletedMessage);
+    ApiResponse<List<JobInstanceDto>> response = apiInstance.SignalExternalProcessCompletedWithHttpInfo(waitForCompletion, externalProcessCompletedMessage);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -4007,7 +4687,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**List&lt;JobInstance&gt;**](JobInstance.md)
+[**List&lt;JobInstanceDto&gt;**](JobInstanceDto.md)
 
 ### Authorization
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading;
 using Aida.Sdk.Mini.Model;
 
 namespace Aida.Samples.WebhooksReceiverConsole.Services.Messaging
@@ -8,7 +9,8 @@ namespace Aida.Samples.WebhooksReceiverConsole.Services.Messaging
         public string IpAddress { get; set; }
         public WorkflowMessage Message { get; set; }
 
-        public MachineMessage(string ipAddress, WorkflowMessage message)
+        public MachineMessage(string ipAddress,
+            WorkflowMessage message)
         {
             IpAddress = ipAddress;
             Message = message;

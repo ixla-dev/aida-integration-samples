@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Discriminator** | **string** |  | 
 **Id** | **int?** |  | [optional] 
+**JobTemplateId** | **int?** |  | [optional] 
 **Name** | **string** |  | [optional] 
 **DataSourceType** | **DataSourceType** |  | [optional] 
 **CanBeDeleted** | **bool** |  | [optional] 

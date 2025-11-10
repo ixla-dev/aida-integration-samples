@@ -31,7 +31,23 @@ namespace Aida.Samples.WebhooksReceiverConsole
                 .AddCommandLine(args)
                 .Build();
 
-            Console.WriteLine($"Server listening on port: {configuration.GetValue("Port", 7654)}");
+            var port = configuration.GetValue("Port", 7654);
+            var abortOnError = configuration.GetValue("SendCancellationOnError", default(string));
+            var encodingDuration = configuration.GetValue("MockEncodingDuration", TimeSpan.Zero);
+            var encodingErrorRate = configuration.GetValue("EncodingErrorRate", 0);
+            var logPayload = configuration.GetValue("LogMessagesPayload", false);
+
+            Console.WriteLine($"Server listening on port: {port}");
+            Console.WriteLine($"""
+                               Configuration
+                                 log_payload = {logPayload}
+                                 listen_port = {port}
+                                 encoding 
+                                     error_rate = {encodingErrorRate}
+                                     duration   = {encodingDuration}
+                                 abort_on_error = {abortOnError}
+                               """);
+
 
             // This is just boilerplate to setup ASP .NETCore
             // the startup class is used by the dependency injection system
